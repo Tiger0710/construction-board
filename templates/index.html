@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="1800">
+  <title>工事予定表</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="board-header">
+    <div class="header-left">
+      <h1 class="header-title">工事予定表</h1>
+      <span class="header-subtitle">Construction Schedule</span>
+    </div>
+    <div class="header-center">
+      <div class="header-today" id="header-today"></div>
+    </div>
+    <div class="header-right">
+      <div id="clock" class="header-clock">00:00:00</div>
+      <div id="date" class="header-date"></div>
+    </div>
+  </header>
+
+  <div class="board-table-header">
+    <div class="col col-time">時間</div>
+    <div class="col col-name">工事名</div>
+    <div class="col col-location">場所</div>
+    <div class="col col-status">ステータス</div>
+    <div class="col col-person">担当者</div>
+    <div class="col col-progress">進捗</div>
+  </div>
+
+  <div class="board-body" id="board-body">
+    <!-- JSで動的生成 -->
+  </div>
+
+  <footer class="board-footer">
+    <div class="footer-left">
+      <span class="footer-live-dot"></span>
+      最終更新 <span id="update-time" class="footer-value">--:--:--</span>
+    </div>
+    <div class="footer-center" id="page-indicator"></div>
+    <div class="footer-right">
+      全 <span id="total-count" class="footer-value">0</span> 件
+    </div>
+  </footer>
+
+  <script>
+    const REFRESH_INTERVAL = {{ refresh_interval * 1000 }};
+  </script>
+  <script src="/static/js/board.js"></script>
+</body>
+</html>

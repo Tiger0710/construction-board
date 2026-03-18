@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+data/工事予定表.xlsx
+~$*.xlsx
