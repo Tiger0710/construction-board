@@ -19,10 +19,10 @@ def main():
     print("[1/3] 入力ファイル統合...")
     merged = merge_all()
     if not merged:
-        print("  データなし → 空のHTMLを生成します")
+        print("  データなし → 空のExcel/HTMLを生成します")
     else:
-        write_output(merged)
         print(f"  -> {len(merged)}件 統合完了")
+    write_output(merged or [])
 
     # 2. Generate HTML
     print("\n[2/3] HTML生成...")
@@ -36,12 +36,13 @@ def main():
         f.write(html)
     print(f"  -> {html_path} ({len(html):,} bytes)")
 
-    # 3. Copy upload page to deploy/
+    # 3. Copy static pages to deploy/
     print("\n[3/3] 静的ファイルコピー...")
-    upload_src = os.path.join(BASE_DIR, "static", "upload.html")
-    if os.path.exists(upload_src):
-        shutil.copy2(upload_src, os.path.join(config.DEPLOY_DIR, "upload.html"))
-        print("  -> upload.html")
+    for page in ("upload.html", "sample.html"):
+        src = os.path.join(BASE_DIR, "static", page)
+        if os.path.exists(src):
+            shutil.copy2(src, os.path.join(config.DEPLOY_DIR, page))
+            print(f"  -> {page}")
 
     item_count = len(data.get("items", []))
     print(f"\n完了! {item_count}件のデータ → deploy/ に配置済み")

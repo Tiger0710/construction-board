@@ -1,5 +1,11 @@
-"""入力ファイル統合: ガントチャート(案件情報) + 日次入力 → 工事予定表.xlsx"""
+"""入力ファイル統合: ガントチャート(案件情報) + 日次入力 → 工事予定表.xlsx
+
+ファイル名パターン:
+  入力_{担当者名}_{YYMM}.xlsm  → 月別ファイル (2604 = 2026年4月)
+  入力_{担当者名}.xlsm          → 月指定なし (常に読み込み)
+"""
 import os
+import re
 import sys
 import glob
 import datetime
@@ -10,6 +16,9 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 import config
+
+# ファイル名から月(YYMM)を抽出するパターン
+MONTH_RE = re.compile(r"^入力_.+_(\d{4})\.(xlsx|xlsm)$")
 
 
 # ---------- スタイル ----------
@@ -85,6 +94,33 @@ def load_input_file(fpath):
     return project_info, entries
 
 
+def get_target_months():
+    """読み込み対象の月(YYMM)リストを返す (当月 + 翌月)"""
+    today = datetime.date.today()
+    current = f"{today.year % 100:02d}{today.month:02d}"
+    # 翌月 (月末に明日のデータも表示するため)
+    next_month = today.replace(day=28) + datetime.timedelta(days=4)
+    next_m = f"{next_month.year % 100:02d}{next_month.month:02d}"
+    return [current, next_m]
+
+
+def filter_by_month(files):
+    """月別ファイルを当月+翌月でフィルタ。月指定なしファイルは常に含む"""
+    target_months = get_target_months()
+    result = []
+    for f in files:
+        fname = os.path.basename(f)
+        m = MONTH_RE.match(fname)
+        if m:
+            file_month = m.group(1)
+            if file_month in target_months:
+                result.append(f)
+        else:
+            # 月指定なし (旧形式) → 常に読み込み
+            result.append(f)
+    return result
+
+
 def merge_all():
     """全ファイル読み込み → ガントチャートJOIN → 統合リスト"""
     # DirectCloud (INPUT_DIR) + ローカル (DATA_DIR) 両方を探す
@@ -95,6 +131,10 @@ def merge_all():
         for ext in ("xlsx", "xlsm"):
             files.extend(glob.glob(os.path.join(d, f"入力_*.{ext}")))
     files = [f for f in files if not os.path.basename(f).startswith("~$")]
+
+    # 月フィルタ
+    files = filter_by_month(files)
+
     # 重複除去 (同名ファイルはINPUT_DIR優先)
     seen = {}
     for f in files:

@@ -1,0 +1,5945 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工事予定表</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+/* =============================================
+   工事予定表サイネージ - Clean Light Theme
+   50インチパネル (1920x1080) 最適化
+   全項目が途切れず表示されるデザイン
+   ============================================= */
+
+/* ---------- CSS Variables ---------- */
+:root {
+  --bg-main: #ffffff;
+  --bg-header: #ffffff;
+  --bg-table-header: #1a2e5a;
+  --bg-row-even: #ffffff;
+  --bg-row-odd: #f7f7f7;
+  --bg-priority: #f0f3fa;
+  --bg-priority-odd: #e8ecf6;
+
+  --text-primary: #111111;
+  --text-secondary: #333333;
+  --text-muted: #888888;
+  --text-on-dark: #ffffff;
+
+  --accent-navy: #1a2e5a;
+  --accent-navy-light: #2c4a8a;
+  --accent-green: #16a34a;
+  --accent-red: #dc2626;
+
+  --border-main: #d0d4de;
+  --border-row: #e4e6ec;
+
+  --header-height: 88px;
+  --table-header-height: 62px;
+  --footer-height: 40px;
+
+  --font-main: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  --font-en: "Inter", "Noto Sans JP", sans-serif;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Header ---------- */
+.board-header {
+  height: var(--header-height);
+  background: var(--bg-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 3px solid var(--accent-navy);
+  position: relative;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+
+.header-title {
+  font-family: var(--font-main);
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: 6px;
+}
+
+.header-subtitle {
+  font-family: var(--font-en);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.header-today {
+  font-family: var(--font-main);
+  font-size: 36px;
+  font-weight: 900;
+  color: var(--text-primary);
+  letter-spacing: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-today-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-navy);
+  color: var(--text-on-dark);
+  padding: 4px 20px;
+  border-radius: 6px;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+.header-today-label.label-tomorrow {
+  background: #0d9488;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.header-clock {
+  font-family: var(--font-en);
+  font-size: 40px;
+  font-weight: 300;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.header-date {
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: right;
+  line-height: 1.5;
+  padding-left: 20px;
+  border-left: 2px solid var(--border-main);
+}
+
+/* ---------- Table Header ---------- */
+.board-table-header {
+  height: var(--table-header-height);
+  background: var(--bg-table-header);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.board-table-header .col {
+  font-family: var(--font-main);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text-on-dark);
+  letter-spacing: 3px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ---------- Column Widths ---------- */
+.col-client         { width: 7%;  padding: 0 8px;  }
+.col-title          { width: 14%; padding: 0 10px; }
+.col-our-person     { width: 5%;  padding: 0 8px;  }
+.col-safety         { width: 5%;  padding: 0 8px;  }
+.col-partner        { width: 11%; padding: 0 8px;  }
+.col-partner-person { width: 5%;  padding: 0 8px;  }
+.col-work           { flex: 1;    padding: 0 10px; }
+.col-time           { width: 5%;  padding: 0 8px;  text-align: center; }
+.col-priority       { width: 8%;  padding: 0 8px;  text-align: center; }
+
+/* ---------- Board Body ---------- */
+.board-body {
+  height: calc(100vh - var(--header-height) - var(--table-header-height) - var(--footer-height));
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
+
+/* ---------- Board Rows ---------- */
+.board-row {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border-row);
+  transition: background-color 0.2s ease;
+}
+
+.board-row.row-even {
+  background: var(--bg-row-even);
+}
+
+.board-row.row-odd {
+  background: var(--bg-row-odd);
+}
+
+/* 重点作業行 */
+.board-row.row-priority.row-even {
+  background: var(--bg-priority);
+  border-left: 5px solid var(--accent-navy);
+}
+
+.board-row.row-priority.row-odd {
+  background: var(--bg-priority-odd);
+  border-left: 5px solid var(--accent-navy);
+}
+
+/* ---------- セル共通: 折り返し表示 ---------- */
+.board-row .col {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.4;
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.board-row .col-time {
+  white-space: nowrap;
+}
+
+/* ---------- Priority Badge ---------- */
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 16px;
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 2px;
+  min-width: 48px;
+}
+
+.priority-yes {
+  color: #ffffff;
+  background: var(--accent-navy);
+}
+
+.priority-no {
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-main);
+  font-weight: 400;
+}
+
+/* 夜間作業行 (22:00-5:00) */
+.board-row.row-night.row-even {
+  background: #fef3c7;
+  border-left: 5px solid #d97706;
+}
+
+.board-row.row-night.row-odd {
+  background: #fde68a;
+  border-left: 5px solid #d97706;
+}
+
+.board-row.row-night .col {
+  color: #78350f;
+}
+
+.board-row.row-night .priority-badge.priority-yes {
+  background: #d97706;
+}
+
+.board-row.row-night .priority-badge.priority-no {
+  color: #92400e;
+  border-color: #d97706;
+}
+
+/* ---------- Row Entrance Animation ---------- */
+.board-row {
+  animation: rowFadeIn 0.3s ease both;
+}
+.board-row:nth-child(1) { animation-delay: 0.02s; }
+.board-row:nth-child(2) { animation-delay: 0.04s; }
+.board-row:nth-child(3) { animation-delay: 0.06s; }
+.board-row:nth-child(4) { animation-delay: 0.08s; }
+.board-row:nth-child(5) { animation-delay: 0.10s; }
+.board-row:nth-child(6) { animation-delay: 0.12s; }
+
+@keyframes rowFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Flip Animation ---------- */
+.flip-enter {
+  animation: flipIn 0.3s ease-out;
+}
+
+@keyframes flipIn {
+  0%   { opacity: 0; transform: translateY(-4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Page Transition ---------- */
+.board-body.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.board-body.fade-in {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+
+/* ---------- Footer ---------- */
+.board-footer {
+  height: var(--footer-height);
+  background: var(--bg-header);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-top: 2px solid var(--accent-navy);
+  font-family: var(--font-main);
+  font-size: 13px;
+  color: var(--text-muted);
+  position: relative;
+  z-index: 10;
+}
+
+.footer-live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  margin-right: 8px;
+  vertical-align: middle;
+  animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+.footer-value {
+  font-family: var(--font-en);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-center {
+  font-family: var(--font-en);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Date Section Header ---------- */
+.date-section-header {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 52px;
+  background: var(--accent-navy);
+  color: var(--text-on-dark);
+  font-family: var(--font-main);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  gap: 16px;
+}
+
+.date-section-header.section-tomorrow {
+  background: var(--accent-navy-light);
+}
+
+.date-section-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 14px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.2);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.date-section-count {
+  font-family: var(--font-en);
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.7;
+  letter-spacing: 1px;
+  margin-left: auto;
+}
+
+/* ---------- Empty / Error States ---------- */
+.board-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: 24px;
+}
+
+.board-message-icon {
+  font-size: 48px;
+  opacity: 0.3;
+}
+
+.board-message-text {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 4px;
+}
+
+.board-message-error {
+  font-size: 18px;
+  color: var(--accent-red);
+  white-space: pre-wrap;
+  max-width: 60%;
+  line-height: 1.8;
+  padding: 24px 32px;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 4px;
+  background: rgba(220, 38, 38, 0.03);
+}
+
+  </style>
+</head>
+<body>
+
+  <header class="board-header">
+    <div class="header-left">
+      <h1 class="header-title">工事予定表</h1>
+      <span class="header-subtitle">Construction Schedule</span>
+    </div>
+    <div class="header-center">
+      <div class="header-today" id="header-today"></div>
+    </div>
+    <div class="header-right">
+      <div id="clock" class="header-clock">00:00:00</div>
+    </div>
+  </header>
+
+  <div class="board-table-header">
+    <div class="col col-client">客先</div>
+    <div class="col col-title">工事件名</div>
+    <div class="col col-our-person">現場</div>
+    <div class="col col-safety">安品</div>
+    <div class="col col-partner">協力会社</div>
+    <div class="col col-partner-person">担当</div>
+    <div class="col col-work">作業内容</div>
+    <div class="col col-time">昼/夜</div>
+    <div class="col col-priority">重点作業</div>
+  </div>
+
+  <div class="board-body" id="board-body"></div>
+
+  <footer class="board-footer">
+    <div class="footer-left">
+      <span class="footer-live-dot"></span>
+      最終更新 <span id="update-time" class="footer-value">--:--:--</span>
+    </div>
+    <div class="footer-center" id="page-indicator"></div>
+    <div class="footer-right">
+      全 <span id="total-count" class="footer-value">0</span> 件
+    </div>
+  </footer>
+
+  <script>
+    // ===== 埋め込みデータ =====
+    var BOARD_DATA = {
+  "items": [
+    {
+      "date": "2026-04-01",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "案内表示器撤去・仮設",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-01",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "基礎工事・アンカー打設",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-01",
+      "client": "NESIC",
+      "title": "横浜駅5G基地局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "アンテナ架台組立",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-01",
+      "client": "きんでん",
+      "title": "渋谷再開発ビル電気通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "ケーブルラック設置",
+      "work_time": "夜",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-01",
+      "client": "KDDI",
+      "title": "世田谷5G基地局新設工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "鉄塔基礎掘削",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-01",
+      "client": "ソフトバンク",
+      "title": "六本木ヒルズ屋上基地局更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "屋上防水養生・墨出し",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-01",
+      "client": "NESIC",
+      "title": "大宮基地局保守点検",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "点検・計測作業",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-01",
+      "client": "小田急",
+      "title": "町田駅構内LAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "既設配線撤去",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-01",
+      "client": "京王",
+      "title": "調布駅構内通信設備更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "伊藤",
+      "work_content": "機器搬入・仮設置",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "表示器取付・配線",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-02",
+      "client": "ソフトバンク",
+      "title": "六本木ヒルズ屋上基地局更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "アンテナ基礎アンカー施工",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-02",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "鉄骨組立・溶接",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-02",
+      "client": "きんでん",
+      "title": "渋谷再開発ビル電気通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "高圧配線作業",
+      "work_time": "夜",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-02",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "マンホール内作業・管路清掃",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-02",
+      "client": "KDDI",
+      "title": "世田谷5G基地局新設工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "アンテナポール建柱",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "NESIC",
+      "title": "大宮基地局保守点検",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "機器動作確認",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "NESIC",
+      "title": "横浜駅5G基地局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "同軸ケーブル敷設",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "小田急",
+      "title": "町田駅構内LAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "新規配線工事",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "東急",
+      "title": "自由が丘駅ホーム監視カメラ設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "カメラ本体据付・調整",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "京王",
+      "title": "調布駅構内通信設備更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "伊藤",
+      "work_content": "通信ケーブル敷設",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-02",
+      "client": "NTT",
+      "title": "豊島区光収容局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "ラック組立・据付",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "KDDI",
+      "title": "世田谷5G基地局新設工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "基礎コンクリート打設",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-03",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "アンテナ揚重・取付",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-03",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "アンテナブラケット取付",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-03",
+      "client": "きんでん",
+      "title": "池袋オフィスビル構内交換設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "交換機ラック据付",
+      "work_time": "夜",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-03",
+      "client": "きんでん",
+      "title": "渋谷再開発ビル電気通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "幹線ケーブル布設",
+      "work_time": "夜",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-03",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "光心線融着接続",
+      "work_time": "昼",
+      "priority": "有",
+      "is_priority": true
+    },
+    {
+      "date": "2026-04-03",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "通信試験・調整",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "ソフトバンク",
+      "title": "六本木ヒルズ屋上基地局更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "NESIC",
+      "title": "大宮基地局保守点検",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "NESIC",
+      "title": "横浜駅5G基地局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "コネクタ加工・測定",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "小田急",
+      "title": "町田駅構内LAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "HUB設置・パッチケーブル接続",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "小田急",
+      "title": "相模大野駅監視カメラ設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "小林",
+      "work_content": "カメラ本体据付・配線",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "東急",
+      "title": "自由が丘駅ホーム監視カメラ設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "映像確認・画角調整",
+      "work_time": "昼",
+      "priority": "無",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "京王",
+      "title": "調布駅構内通信設備更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "伊藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-03",
+      "client": "NTT",
+      "title": "豊島区光収容局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-04",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-04",
+      "client": "京王",
+      "title": "府中駅ホームドア通信設備工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-04",
+      "client": "京王",
+      "title": "新宿駅Wi-Fi設備設置工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-04",
+      "client": "小田急",
+      "title": "相模大野駅監視カメラ設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "小林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "京王",
+      "title": "八王子駅放送設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "京王",
+      "title": "府中駅ホームドア通信設備工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "京王",
+      "title": "新宿駅Wi-Fi設備設置工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "小田急",
+      "title": "相模大野駅監視カメラ設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "小林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "NTT",
+      "title": "豊島区光収容局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-05",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "KDDI",
+      "title": "世田谷5G基地局新設工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "京王",
+      "title": "八王子駅放送設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "ソフトバンク",
+      "title": "六本木ヒルズ屋上基地局更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "京王",
+      "title": "府中駅ホームドア通信設備工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "京王",
+      "title": "新宿駅Wi-Fi設備設置工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "きんでん",
+      "title": "池袋オフィスビル構内交換設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "きんでん",
+      "title": "渋谷再開発ビル電気通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "小田急",
+      "title": "町田駅構内LAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "小田急",
+      "title": "相模大野駅監視カメラ設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "小林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "東急",
+      "title": "自由が丘駅ホーム監視カメラ設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "NTT",
+      "title": "豊島区光収容局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-06",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "KDDI",
+      "title": "世田谷5G基地局新設工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "高橋",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "京王",
+      "title": "八王子駅放送設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "京王",
+      "title": "府中駅ホームドア通信設備工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "京王",
+      "title": "新宿駅Wi-Fi設備設置工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "きんでん",
+      "title": "池袋オフィスビル構内交換設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "きんでん",
+      "title": "渋谷再開発ビル電気通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "小田急",
+      "title": "相模大野駅監視カメラ設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "小林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "東急",
+      "title": "自由が丘駅ホーム監視カメラ設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "NTT",
+      "title": "豊島区光収容局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-07",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "京王",
+      "title": "八王子駅放送設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "京王",
+      "title": "府中駅ホームドア通信設備工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "京王",
+      "title": "新宿駅Wi-Fi設備設置工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "小田急",
+      "title": "新百合ヶ丘駅構内放送設備更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "きんでん",
+      "title": "池袋オフィスビル構内交換設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "小田急",
+      "title": "相模大野駅監視カメラ設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "小林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NTT",
+      "title": "豊島区光収容局増設工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-08",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "JR東日本",
+      "title": "上野駅構内旅客案内表示器更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "京王",
+      "title": "八王子駅放送設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "京王",
+      "title": "府中駅ホームドア通信設備工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "京王",
+      "title": "新宿駅Wi-Fi設備設置工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "渡辺",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "小田急",
+      "title": "新百合ヶ丘駅構内放送設備更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NTT",
+      "title": "渋谷マンホール内ケーブル接続工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-09",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "楽天モバイル",
+      "title": "中野坂上ビル屋上アンテナ設置",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "京王",
+      "title": "八王子駅放送設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NESIC",
+      "title": "品川基地局アンテナ設置工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "鈴木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "小田急",
+      "title": "新百合ヶ丘駅構内放送設備更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NTT",
+      "title": "渋谷マンホール内ケーブル接続工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "京王",
+      "title": "聖蹟桜ヶ丘駅放送設備更新",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-10",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "小田急",
+      "title": "新百合ヶ丘駅構内放送設備更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "東急",
+      "title": "武蔵小杉駅改札IC通信設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "小田急",
+      "title": "海老名車両基地信号通信工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NTT",
+      "title": "渋谷マンホール内ケーブル接続工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "京王",
+      "title": "聖蹟桜ヶ丘駅放送設備更新",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-11",
+      "client": "NTT",
+      "title": "足立区光クロージャ交換工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "小田急",
+      "title": "新百合ヶ丘駅構内放送設備更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "東急",
+      "title": "武蔵小杉駅改札IC通信設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NTT",
+      "title": "渋谷マンホール内ケーブル接続工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "KDDI",
+      "title": "目黒区マンション共用部通信工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "佐々木",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "京王",
+      "title": "聖蹟桜ヶ丘駅放送設備更新",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-12",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "きんでん",
+      "title": "新宿三丁目ビル受変電設備更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "小田急",
+      "title": "新百合ヶ丘駅構内放送設備更新",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "KDDI",
+      "title": "横浜みなとみらいスモールセル設置",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "東急",
+      "title": "武蔵小杉駅改札IC通信設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NTT",
+      "title": "渋谷マンホール内ケーブル接続工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "NTT",
+      "title": "港区光ファイバー幹線敷設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "森",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "京王",
+      "title": "聖蹟桜ヶ丘駅放送設備更新",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-13",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "KDDI",
+      "title": "北区王子ビル屋上基地局新設",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "KDDI",
+      "title": "横浜みなとみらいスモールセル設置",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "東急",
+      "title": "武蔵小杉駅改札IC通信設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "NTT",
+      "title": "渋谷マンホール内ケーブル接続工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "山田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "京王",
+      "title": "聖蹟桜ヶ丘駅放送設備更新",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "林",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-14",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "NESIC",
+      "title": "さいたま新都心ビルLAN配線工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "NESIC",
+      "title": "川崎データセンター電源増設工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "吉田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "NESIC",
+      "title": "東京駅八重洲地下街Wi-Fi増設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "KDDI",
+      "title": "横浜みなとみらいスモールセル設置",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "東急",
+      "title": "武蔵小杉駅改札IC通信設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-15",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "NTT",
+      "title": "文京区地下管路ケーブル布設工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "ソフトバンク",
+      "title": "新橋局舎無線機器更新工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "加藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "KDDI",
+      "title": "横浜みなとみらいスモールセル設置",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "東急",
+      "title": "武蔵小杉駅改札IC通信設備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-16",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "NTT",
+      "title": "千代田区電話交換機撤去工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "KDDI",
+      "title": "横浜みなとみらいスモールセル設置",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "京王",
+      "title": "橋本駅改札機通信設備工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-17",
+      "client": "JR東日本",
+      "title": "赤羽駅ホームドア通信連動工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "NTT",
+      "title": "千代田区電話交換機撤去工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "NTT",
+      "title": "墨田区マンホール内光接続工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "KDDI",
+      "title": "横浜みなとみらいスモールセル設置",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "井上",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-18",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "NTT",
+      "title": "千代田区電話交換機撤去工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "楽天モバイル",
+      "title": "大田区屋上基地局設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "松本",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "きんでん",
+      "title": "有楽町ビル高圧受電設備更新工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-19",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "ソフトバンク",
+      "title": "お台場商業施設DAS設置工事",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "NTT",
+      "title": "千代田区電話交換機撤去工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "きんでん",
+      "title": "池袋サンシャイン非常用発電機更新",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-20",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "NTT",
+      "title": "千代田区電話交換機撤去工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "京王",
+      "title": "多摩センター駅防犯カメラ増設",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "京王",
+      "title": "府中競馬場通信インフラ整備工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "KDDI",
+      "title": "練馬区鉄塔基地局補強工事",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-21",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "NTT",
+      "title": "千代田区電話交換機撤去工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "清水",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "京王",
+      "title": "多摩センター駅防犯カメラ増設",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-22",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "NTT",
+      "title": "中央区海底ケーブル陸揚局保守",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "京王",
+      "title": "多摩センター駅防犯カメラ増設",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "楽天モバイル",
+      "title": "板橋区コンビニ屋上小型基地局",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "NESIC",
+      "title": "立川駅北口再開発ビルLAN工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "木村",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "KDDI",
+      "title": "荒川区商業ビルスモールセル設置",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-23",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "NTT",
+      "title": "中央区海底ケーブル陸揚局保守",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "京王",
+      "title": "多摩センター駅防犯カメラ増設",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-24",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "NTT",
+      "title": "中央区海底ケーブル陸揚局保守",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "ソフトバンク",
+      "title": "二子玉川ライズ通信設備増強",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "NESIC",
+      "title": "品川インターシティ館内放送更新",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "東京通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "京王",
+      "title": "多摩センター駅防犯カメラ増設",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "楽天モバイル",
+      "title": "杉並区電柱共架基地局工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-25",
+      "client": "小田急",
+      "title": "藤沢駅デジタルサイネージ設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "藤田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "NTT",
+      "title": "中央区海底ケーブル陸揚局保守",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "ソフトバンク",
+      "title": "二子玉川ライズ通信設備増強",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "ソフトバンク",
+      "title": "品川シーサイドビル構内配線工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "大成電気",
+      "partner_person": "山口",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "京王",
+      "title": "多摩センター駅防犯カメラ増設",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "楽天モバイル",
+      "title": "杉並区電柱共架基地局工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "NESIC",
+      "title": "横須賀基地局鉄塔塗装・点検工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "金子",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-26",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "NTT",
+      "title": "中央区海底ケーブル陸揚局保守",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "ソフトバンク",
+      "title": "二子玉川ライズ通信設備増強",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "小田急",
+      "title": "本厚木駅Wi-Fi設備設置工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "中島",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "楽天モバイル",
+      "title": "杉並区電柱共架基地局工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "NESIC",
+      "title": "横須賀基地局鉄塔塗装・点検工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "金子",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "JR東日本",
+      "title": "浦和駅構内非常通報設備更新",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "大成電気",
+      "partner_person": "三浦",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "NESIC",
+      "title": "羽田空港第3ターミナル通信設備工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-27",
+      "client": "KDDI",
+      "title": "調布市鉄塔建替に伴うアンテナ移設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "NTT",
+      "title": "中央区海底ケーブル陸揚局保守",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "石井",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "ソフトバンク",
+      "title": "二子玉川ライズ通信設備増強",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "楽天モバイル",
+      "title": "杉並区電柱共架基地局工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "NESIC",
+      "title": "横須賀基地局鉄塔塗装・点検工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "金子",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "NESIC",
+      "title": "羽田空港第3ターミナル通信設備工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-28",
+      "client": "KDDI",
+      "title": "調布市鉄塔建替に伴うアンテナ移設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "東急",
+      "title": "中目黒駅構内Wi-Fi設備設置工事",
+      "our_person": "鈴木",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "松田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "ソフトバンク",
+      "title": "二子玉川ライズ通信設備増強",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "KDDI",
+      "title": "八王子中継局アンテナ交換工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "三和通信工業",
+      "partner_person": "前田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "楽天モバイル",
+      "title": "杉並区電柱共架基地局工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "NESIC",
+      "title": "横須賀基地局鉄塔塗装・点検工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "金子",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "NESIC",
+      "title": "羽田空港第3ターミナル通信設備工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-29",
+      "client": "KDDI",
+      "title": "調布市鉄塔建替に伴うアンテナ移設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-30",
+      "client": "ソフトバンク",
+      "title": "二子玉川ライズ通信設備増強",
+      "our_person": "山本",
+      "safety_person": "中村",
+      "partner": "関東電気工事",
+      "partner_person": "斎藤",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-30",
+      "client": "楽天モバイル",
+      "title": "杉並区電柱共架基地局工事",
+      "our_person": "田中",
+      "safety_person": "中村",
+      "partner": "共栄電設",
+      "partner_person": "小川",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-30",
+      "client": "NESIC",
+      "title": "横須賀基地局鉄塔塗装・点検工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "金子",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-30",
+      "client": "NESIC",
+      "title": "羽田空港第3ターミナル通信設備工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-04-30",
+      "client": "KDDI",
+      "title": "調布市鉄塔建替に伴うアンテナ移設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-05-01",
+      "client": "NESIC",
+      "title": "横須賀基地局鉄塔塗装・点検工事",
+      "our_person": "鈴木",
+      "safety_person": "中村",
+      "partner": "三和通信工業",
+      "partner_person": "金子",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-05-01",
+      "client": "NESIC",
+      "title": "羽田空港第3ターミナル通信設備工事",
+      "our_person": "田中",
+      "safety_person": "佐藤",
+      "partner": "東京通信工業",
+      "partner_person": "岡田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    },
+    {
+      "date": "2026-05-01",
+      "client": "KDDI",
+      "title": "調布市鉄塔建替に伴うアンテナ移設",
+      "our_person": "山本",
+      "safety_person": "佐藤",
+      "partner": "共栄電設",
+      "partner_person": "太田",
+      "work_content": "",
+      "work_time": "",
+      "priority": "",
+      "is_priority": false
+    }
+  ],
+  "updated_at": "2026-04-01T18:42:21.851249",
+  "total": 394,
+  "today": "2026-04-01",
+  "tomorrow": "2026-04-02",
+  "error": null
+};
+    var MIN_ROW_HEIGHT = 72;
+    var PAGE_ROTATE_SEC = 15;
+    var GROUP_ROTATE_CYCLES = 1;
+
+    // ===== グローバル変数 =====
+    var ROWS_PER_PAGE = 10;
+    var currentPage = 0;
+    var totalPages = 1;
+    var dateGroups = [];
+    var currentGroupIdx = 0;
+    var groupCycleCount = 0;
+    var pageRotateTimer = null;
+
+    var WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
+
+    // ===== HTMLエスケープ =====
+    function escapeHtml(str) {
+      if (str == null) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttr(str) {
+      return escapeHtml(str);
+    }
+
+    // ===== 時計機能 =====
+    function startClock() {
+      function update() {
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, "0");
+        var mm = String(now.getMinutes()).padStart(2, "0");
+        var ss = String(now.getSeconds()).padStart(2, "0");
+        document.getElementById("clock").textContent = hh + ":" + mm + ":" + ss;
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    // ===== 日付フォーマット =====
+    function formatDateLabel(dateStr) {
+      var parts = dateStr.split("-");
+      var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      var m = d.getMonth() + 1;
+      var day = d.getDate();
+      var w = WEEKDAYS[d.getDay()];
+      return m + "/" + day + " " + w + "曜日";
+    }
+
+    // ===== 今日+明日フィルタリング =====
+    function filterTodayTomorrow(items, todayStr, tomorrowStr) {
+      if (!items || items.length === 0) return [];
+      var filtered = items.filter(function(item) {
+        return item.date === todayStr || item.date === tomorrowStr;
+      });
+      if (filtered.length > 0) return filtered;
+      return items;
+    }
+
+    // ===== 日付グループ構築 =====
+    function buildDateGroups(items, todayStr, tomorrowStr) {
+      var todayItems = items.filter(function(item) { return item.date === todayStr; });
+      var tomorrowItems = items.filter(function(item) { return item.date === tomorrowStr; });
+      var otherItems = items.filter(function(item) {
+        return item.date !== todayStr && item.date !== tomorrowStr;
+      });
+      var groups = [];
+      if (todayItems.length > 0) {
+        groups.push({ date: todayStr, label: "本日", dateFormatted: formatDateLabel(todayStr), items: todayItems });
+      }
+      if (tomorrowItems.length > 0) {
+        groups.push({ date: tomorrowStr, label: "明日", dateFormatted: formatDateLabel(tomorrowStr), items: tomorrowItems });
+      }
+      if (otherItems.length > 0 && groups.length === 0) {
+        var dates = [];
+        otherItems.forEach(function(i) { if (dates.indexOf(i.date) === -1) dates.push(i.date); });
+        dates.sort();
+        dates.forEach(function(dt) {
+          groups.push({ date: dt, label: "", dateFormatted: formatDateLabel(dt), items: otherItems.filter(function(i) { return i.date === dt; }) });
+        });
+      }
+      return groups;
+    }
+
+    // ===== 表示件数を画面サイズから自動計算 =====
+    function calcRowsPerPage() {
+      var available = window.innerHeight - 88 - 62 - 40;
+      return Math.max(4, Math.floor(available / MIN_ROW_HEIGHT));
+    }
+
+    // ===== 夜間作業判定 =====
+    function isNightWork(workTime) {
+      return workTime === "夜";
+    }
+
+    // ===== 行レンダリング =====
+    function renderRow(item, index, rowHeight, rowId) {
+      var evenOdd = index % 2 === 0 ? "row-even" : "row-odd";
+      var priorityClass = item.is_priority ? " row-priority" : "";
+      var nightClass = isNightWork(item.work_time) ? " row-night" : "";
+      var priorityBadge = item.is_priority
+        ? '<span class="priority-badge priority-yes">有</span>'
+        : '<span class="priority-badge priority-no">無</span>';
+
+      return '<div class="board-row ' + evenOdd + priorityClass + nightClass + '" data-id="' + escapeAttr(rowId) + '" style="min-height:' + rowHeight + 'px;">' +
+        '<div class="col col-client">' + escapeHtml(item.client) + '</div>' +
+        '<div class="col col-title">' + escapeHtml(item.title) + '</div>' +
+        '<div class="col col-our-person">' + escapeHtml(item.our_person) + '</div>' +
+        '<div class="col col-safety">' + escapeHtml(item.safety_person) + '</div>' +
+        '<div class="col col-partner">' + escapeHtml(item.partner) + '</div>' +
+        '<div class="col col-partner-person">' + escapeHtml(item.partner_person) + '</div>' +
+        '<div class="col col-work">' + escapeHtml(item.work_content) + '</div>' +
+        '<div class="col col-time">' + escapeHtml(item.work_time) + '</div>' +
+        '<div class="col col-priority">' + priorityBadge + '</div>' +
+      '</div>';
+    }
+
+    // ===== ヘッダー日付表示更新 =====
+    function updateHeaderForGroup(group) {
+      var todayEl = document.getElementById("header-today");
+      if (!todayEl) return;
+      var labelClass = group.label === "明日" ? "header-today-label label-tomorrow" : "header-today-label";
+      var label = group.label || "";
+      todayEl.innerHTML = '<span class="' + labelClass + '">' + escapeHtml(label) + '</span>' + escapeHtml(group.dateFormatted);
+    }
+
+    // ===== ボード表示 =====
+    function renderBoard(data) {
+      var body = document.getElementById("board-body");
+
+      if (data.error) {
+        body.innerHTML =
+          '<div class="board-message">' +
+            '<div class="board-message-icon">&#9888;</div>' +
+            '<div class="board-message-error">' + escapeHtml(data.error) + '</div>' +
+          '</div>';
+        updateFooter(data, 0);
+        stopAllTimers();
+        return;
+      }
+
+      var tomorrowStr = data.tomorrow || "";
+      var filtered = filterTodayTomorrow(data.items, data.today, tomorrowStr);
+
+      if (filtered.length === 0) {
+        body.innerHTML =
+          '<div class="board-message">' +
+            '<div class="board-message-icon">&#128736;</div>' +
+            '<div class="board-message-text">本日の工事予定はありません</div>' +
+          '</div>';
+        updateFooter(data, 0);
+        stopAllTimers();
+        return;
+      }
+
+      dateGroups = buildDateGroups(filtered, data.today, tomorrowStr);
+      dateGroups.forEach(function(g) {
+        g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
+      });
+
+      if (currentGroupIdx >= dateGroups.length) currentGroupIdx = 0;
+      var group = dateGroups[currentGroupIdx];
+      totalPages = group.totalPages;
+      if (currentPage >= totalPages) currentPage = 0;
+
+      renderCurrentGroupPage();
+      updateHeaderForGroup(group);
+      updateFooter(data, filtered.length);
+
+      stopAllTimers();
+      if (totalPages > 1 || dateGroups.length > 1) {
+        startPageRotation();
+      }
+    }
+
+    // ===== 現在グループ・ページ描画 =====
+    function renderCurrentGroupPage() {
+      if (dateGroups.length === 0) return;
+      var group = dateGroups[currentGroupIdx];
+      var body = document.getElementById("board-body");
+      var start = currentPage * ROWS_PER_PAGE;
+      var pageItems = group.items.slice(start, start + ROWS_PER_PAGE);
+
+      var available = window.innerHeight - 88 - 62 - 40;
+      var rowHeight = pageItems.length > 0 ? Math.min(64, Math.floor(available / pageItems.length)) : 64;
+
+      var html = pageItems.map(function(item, idx) {
+        var rowId = item.title + "|" + item.date + "|" + item.partner;
+        return renderRow(item, idx, rowHeight, rowId);
+      });
+
+      body.innerHTML = html.join("");
+      updatePageIndicator();
+    }
+
+    // ===== ページローテーション =====
+    function startPageRotation() {
+      if (pageRotateTimer) return;
+      groupCycleCount = 0;
+      pageRotateTimer = setInterval(function() {
+        var body = document.getElementById("board-body");
+        var group = dateGroups[currentGroupIdx];
+        body.classList.add("fade-out");
+        body.classList.remove("fade-in");
+
+        setTimeout(function() {
+          var nextPage = currentPage + 1;
+          if (nextPage >= group.totalPages) {
+            groupCycleCount++;
+            if (dateGroups.length > 1 && groupCycleCount >= GROUP_ROTATE_CYCLES) {
+              groupCycleCount = 0;
+              currentGroupIdx = (currentGroupIdx + 1) % dateGroups.length;
+              currentPage = 0;
+              var newGroup = dateGroups[currentGroupIdx];
+              totalPages = newGroup.totalPages;
+              updateHeaderForGroup(newGroup);
+            } else {
+              currentPage = 0;
+            }
+          } else {
+            currentPage = nextPage;
+          }
+          renderCurrentGroupPage();
+          body.classList.remove("fade-out");
+          body.classList.add("fade-in");
+        }, 300);
+      }, PAGE_ROTATE_SEC * 1000);
+    }
+
+    function stopAllTimers() {
+      if (pageRotateTimer) {
+        clearInterval(pageRotateTimer);
+        pageRotateTimer = null;
+      }
+    }
+
+    function updatePageIndicator() {
+      var indicator = document.getElementById("page-indicator");
+      var group = dateGroups[currentGroupIdx];
+      if (!group) return;
+      if (group.totalPages > 1) {
+        indicator.textContent = (currentPage + 1) + " / " + group.totalPages;
+      } else {
+        indicator.textContent = "";
+      }
+    }
+
+    // ===== フッター更新 =====
+    function updateFooter(data, displayCount) {
+      if (data.updated_at) {
+        var dt = new Date(data.updated_at);
+        var hh = String(dt.getHours()).padStart(2, "0");
+        var mm = String(dt.getMinutes()).padStart(2, "0");
+        var ss = String(dt.getSeconds()).padStart(2, "0");
+        document.getElementById("update-time").textContent = hh + ":" + mm + ":" + ss;
+      }
+      document.getElementById("total-count").textContent = displayCount;
+      updatePageIndicator();
+    }
+
+    // ===== フルスクリーン =====
+    function requestFullscreen() {
+      var el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.msRequestFullscreen) el.msRequestFullscreen();
+    }
+
+    function toggleFullscreen() {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      } else {
+        requestFullscreen();
+      }
+    }
+
+    // ===== リサイズ対応 =====
+    function onResize() {
+      var newRows = calcRowsPerPage();
+      if (newRows !== ROWS_PER_PAGE) {
+        ROWS_PER_PAGE = newRows;
+        stopAllTimers();
+        if (dateGroups.length > 0) {
+          dateGroups.forEach(function(g) {
+            g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
+          });
+          var group = dateGroups[currentGroupIdx];
+          totalPages = group.totalPages;
+          if (currentPage >= totalPages) currentPage = 0;
+          renderCurrentGroupPage();
+          if (totalPages > 1 || dateGroups.length > 1) startPageRotation();
+        }
+      }
+    }
+
+    // ===== 初期化 =====
+    function initBoard() {
+      ROWS_PER_PAGE = calcRowsPerPage();
+      startClock();
+      renderBoard(BOARD_DATA);
+      window.addEventListener("resize", onResize);
+      document.addEventListener("click", toggleFullscreen);
+      requestFullscreen();
+    }
+
+    document.addEventListener("DOMContentLoaded", initBoard);
+  </script>
+</body>
+</html>
