@@ -38,7 +38,7 @@ def main():
 
     # 3. Copy static pages to deploy/
     print("\n[3/3] 静的ファイルコピー...")
-    for page in ("upload.html", "sample.html"):
+    for page in ("upload.html", "sample.html", "admin.html"):
         src = os.path.join(BASE_DIR, "static", page)
         if os.path.exists(src):
             shutil.copy2(src, os.path.join(config.DEPLOY_DIR, page))

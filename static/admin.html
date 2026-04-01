@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工事予定表 - 管理</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      min-height: 100vh; padding: 40px 20px;
+    }
+    .container { max-width: 560px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .header h1 { color: #1A2E5A; font-size: 24px; font-weight: 600; }
+    .header p { color: #666; margin-top: 8px; font-size: 14px; }
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(26,46,90,0.08);
+      padding: 28px; margin-bottom: 20px;
+    }
+    .card h2 { color: #1A2E5A; font-size: 17px; margin-bottom: 20px; font-weight: 600; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: 14px; font-weight: 500;
+      color: #333; margin-bottom: 6px;
+    }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 10px 12px; border: 1px solid #d0d5dd;
+      border-radius: 8px; font-size: 15px; font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: #1A2E5A;
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+    .form-group .hint { font-size: 12px; color: #888; margin-top: 4px; }
+    .btn {
+      display: block; width: 100%; margin-top: 20px;
+      background: #1A2E5A; color: white; border: none;
+      padding: 14px; border-radius: 8px; font-size: 16px;
+      font-weight: 500; cursor: pointer; transition: background 0.2s;
+    }
+    .btn:hover { background: #2a4070; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .status {
+      margin-top: 16px; padding: 14px 16px; border-radius: 8px;
+      font-size: 14px; display: none; line-height: 1.6;
+    }
+    .status.success { display: block; background: #d4edda; color: #155724; }
+    .status.error { display: block; background: #f8d7da; color: #721c24; }
+    .status.loading { display: block; background: #cce5ff; color: #004085; }
+    .links { list-style: none; }
+    .links li { margin-bottom: 12px; }
+    .links a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; background: #f8f9fb; border-radius: 8px;
+      color: #1A2E5A; text-decoration: none; font-size: 15px;
+      transition: background 0.2s;
+    }
+    .links a:hover { background: #f0f3fa; }
+    .links .icon { font-size: 20px; width: 28px; text-align: center; }
+    .links .desc { font-size: 12px; color: #888; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>工事予定表 管理ページ</h1>
+      <p>月別ファイルの作成・各種リンク</p>
+    </div>
+
+    <div class="card">
+      <h2>新規月ファイル作成</h2>
+      <div class="form-group">
+        <label>対象月 (YYMM)</label>
+        <input type="text" id="month-input" maxlength="4" placeholder="2605">
+        <div class="hint">例: 2605 = 2026年5月</div>
+      </div>
+      <div class="form-group">
+        <label>担当者名（1行に1名）</label>
+        <textarea id="persons-input" placeholder="田中&#10;山本&#10;鈴木"></textarea>
+      </div>
+      <button class="btn" id="create-btn">ファイル生成</button>
+      <div class="status" id="status"></div>
+    </div>
+
+    <div class="card">
+      <h2>リンク</h2>
+      <ul class="links">
+        <li>
+          <a href="/">
+            <span class="icon">&#128187;</span>
+            <div>
+              <div>工事予定表（本番サイネージ）</div>
+              <div class="desc">50インチパネル表示用</div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="/sample.html">
+            <span class="icon">&#128203;</span>
+            <div>
+              <div>サンプル表示</div>
+              <div class="desc">デモデータ付きサイネージ画面</div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="/upload.html">
+            <span class="icon">&#128228;</span>
+            <div>
+              <div>ファイルアップロード</div>
+              <div class="desc">DirectCloudを使わない場合の手動アップロード</div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // デフォルト: 翌月
+    (function() {
+      var now = new Date();
+      var nextM = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      var yy = String(nextM.getFullYear() % 100).padStart(2, "0");
+      var mm = String(nextM.getMonth() + 1).padStart(2, "0");
+      document.getElementById("month-input").value = yy + mm;
+    })();
+
+    var createBtn = document.getElementById("create-btn");
+    var statusEl = document.getElementById("status");
+
+    function showStatus(type, msg) {
+      statusEl.className = "status " + type;
+      statusEl.innerHTML = msg;
+    }
+
+    createBtn.addEventListener("click", function() {
+      var month = document.getElementById("month-input").value.trim();
+      var personsText = document.getElementById("persons-input").value.trim();
+
+      if (!month.match(/^\d{4}$/)) {
+        showStatus("error", "月はYYMM形式（4桁数字）で入力してください");
+        return;
+      }
+      var mm = parseInt(month.slice(2));
+      if (mm < 1 || mm > 12) {
+        showStatus("error", "月の値が不正です（01-12）");
+        return;
+      }
+
+      var persons = personsText.split("\n").map(function(s) { return s.trim(); }).filter(Boolean);
+      if (persons.length === 0) {
+        showStatus("error", "担当者名を1名以上入力してください");
+        return;
+      }
+
+      createBtn.disabled = true;
+      showStatus("loading", "ファイル生成をリクエスト中...");
+
+      fetch("/.netlify/functions/create-month", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ month: month, persons: persons }),
+      })
+      .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, data: d }; }); })
+      .then(function(result) {
+        if (result.ok && result.data.success) {
+          var files = persons.map(function(p) { return "入力_" + p + "_" + month + ".xlsx"; });
+          var fileList = files.map(function(f) { return "・" + f; }).join("<br>");
+          showStatus("success",
+            "生成リクエスト完了!<br><br>" +
+            "以下のファイルが約2分後にDirectCloudに配置されます:<br>" + fileList + "<br><br>" +
+            "※ GitHub Actionsで生成→自動配置"
+          );
+        } else {
+          showStatus("error", result.data.error || "不明なエラー");
+        }
+        createBtn.disabled = false;
+      })
+      .catch(function(err) {
+        showStatus("error", "通信エラー: " + err.message);
+        createBtn.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>

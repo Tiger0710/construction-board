@@ -1,8 +1,12 @@
-"""入力ファイル統合: ガントチャート(案件情報) + 日次入力 → 工事予定表.xlsx
+"""入力ファイル統合: ガントチャートから自動生成 + 日次入力オーバーレイ → 工事予定表.xlsx
 
 ファイル名パターン:
   入力_{担当者名}_{YYMM}.xlsm  → 月別ファイル (2604 = 2026年4月)
   入力_{担当者名}.xlsm          → 月指定なし (常に読み込み)
+
+ガントチャートの開始〜終了日から自動で日次エントリーを生成。
+日次入力シートに手入力データがあればそちらを優先。
+→ VBAマクロ不要。ガントチャートを埋めるだけで動く。
 """
 import os
 import re
@@ -37,60 +41,111 @@ PRIORITY_FILL = PatternFill(start_color="F0F3FA", end_color="F0F3FA", fill_type=
 NIGHT_FILL = PatternFill(start_color="FEF3C7", end_color="FEF3C7", fill_type="solid")
 
 
+def _to_date(val):
+    """各種日付型 → datetime.date に変換"""
+    if isinstance(val, datetime.datetime):
+        return val.date()
+    if isinstance(val, datetime.date):
+        return val
+    if isinstance(val, (int, float)):
+        return None
+    if isinstance(val, str):
+        try:
+            return datetime.date.fromisoformat(val.replace("/", "-").strip())
+        except ValueError:
+            return None
+    return None
+
+
 def load_input_file(fpath):
-    """1ファイルからガントチャート(案件情報) + 日次入力を読み込み"""
+    """1ファイルからガントチャート + 日次入力を読み込み、エントリーを自動生成
+
+    ガントチャートの開始〜終了日から全日分のエントリーを生成し、
+    日次入力シートの手入力データがあればオーバーレイする。
+    """
     fname = os.path.basename(fpath)
     wb = load_workbook(fpath, read_only=True, data_only=True)
 
-    # ガントチャートから案件情報を取得
-    # A=客先, B=工事件名, C=現場担当者, D=安品担当者, E=協力会社名, F=協力会社担当者
+    # ガントチャート: 案件情報 + 日付範囲
+    # A=客先, B=工事件名, C=現場担当者, D=安品担当者, E=協力会社名, F=協力会社担当者, G=開始, H=終了
     project_info = {}
+    gantt_ranges = []
+
     if "ガントチャート" in wb.sheetnames:
         for row in wb["ガントチャート"].iter_rows(min_row=3, values_only=True):
-            if not row[0] or not row[1]:
+            if not row or not row[0] or not row[1]:
                 continue
             client = str(row[0]).strip()
             title = str(row[1]).strip()
             key = (client, title)
             project_info[key] = {
-                "our_person": str(row[2] or "").strip(),
-                "safety_person": str(row[3] or "").strip(),
-                "partner": str(row[4] or "").strip(),
-                "partner_person": str(row[5] or "").strip(),
+                "our_person": str(row[2] or "").strip() if len(row) > 2 else "",
+                "safety_person": str(row[3] or "").strip() if len(row) > 3 else "",
+                "partner": str(row[4] or "").strip() if len(row) > 4 else "",
+                "partner_person": str(row[5] or "").strip() if len(row) > 5 else "",
             }
+            start = _to_date(row[6]) if len(row) > 6 else None
+            end = _to_date(row[7]) if len(row) > 7 else None
+            if start and end and end >= start:
+                gantt_ranges.append((client, title, start, end))
 
-    # 日次入力: A=日付, B=客先, C=工事件名, D=昼/夜, E=工事内容, F=重点工事
-    entries = []
+    # 日次入力: 手入力データ (lookup用)
+    # A=日付, B=客先, C=工事件名, D=昼/夜, E=工事内容, F=重点工事
+    daily_dict = {}
     if "日次入力" in wb.sheetnames:
         for row in wb["日次入力"].iter_rows(min_row=2, values_only=True):
-            if not row[0] or not row[1] or not row[2]:
+            if not row or not row[0] or not row[1] or not row[2]:
                 continue
-            date_val = row[0]
-            if isinstance(date_val, datetime.datetime):
-                date_val = date_val.date()
-            elif isinstance(date_val, str):
-                try:
-                    date_val = datetime.date.fromisoformat(date_val.replace("/", "-").strip())
-                except ValueError:
-                    continue
-
+            date_val = _to_date(row[0])
+            if not date_val:
+                continue
             client = str(row[1]).strip()
             title = str(row[2]).strip()
-            day_night = str(row[3] or "").strip()
-            work_content = str(row[4] or "").strip()
-            priority = str(row[5] or "").strip()
-
-            entries.append({
-                "date": date_val,
-                "client": client,
-                "title": title,
+            day_night = str(row[3] or "").strip() if len(row) > 3 else ""
+            work_content = str(row[4] or "").strip() if len(row) > 4 else ""
+            priority = str(row[5] or "").strip() if len(row) > 5 else ""
+            daily_dict[(date_val, client, title)] = {
                 "day_night": day_night,
                 "work_content": work_content,
                 "priority": priority,
-                "source_file": fname,
-            })
+            }
 
     wb.close()
+
+    # ガントの日付範囲からエントリー自動生成 + 日次入力オーバーレイ
+    entries = []
+    for client, title, start, end in gantt_ranges:
+        d = start
+        while d <= end:
+            user = daily_dict.pop((d, client, title), None)
+            if user:
+                entries.append({
+                    "date": d, "client": client, "title": title,
+                    "day_night": user["day_night"] or "昼",
+                    "work_content": user["work_content"],
+                    "priority": user["priority"],
+                    "source_file": fname,
+                })
+            else:
+                entries.append({
+                    "date": d, "client": client, "title": title,
+                    "day_night": "昼",
+                    "work_content": "",
+                    "priority": "",
+                    "source_file": fname,
+                })
+            d += datetime.timedelta(days=1)
+
+    # ガントに紐付かない日次入力（残り）も拾う
+    for (d, client, title), user in daily_dict.items():
+        entries.append({
+            "date": d, "client": client, "title": title,
+            "day_night": user["day_night"],
+            "work_content": user["work_content"],
+            "priority": user["priority"],
+            "source_file": fname,
+        })
+
     return project_info, entries
 
 
@@ -98,7 +153,6 @@ def get_target_months():
     """読み込み対象の月(YYMM)リストを返す (当月 + 翌月)"""
     today = datetime.date.today()
     current = f"{today.year % 100:02d}{today.month:02d}"
-    # 翌月 (月末に明日のデータも表示するため)
     next_month = today.replace(day=28) + datetime.timedelta(days=4)
     next_m = f"{next_month.year % 100:02d}{next_month.month:02d}"
     return [current, next_m]
@@ -112,18 +166,15 @@ def filter_by_month(files):
         fname = os.path.basename(f)
         m = MONTH_RE.match(fname)
         if m:
-            file_month = m.group(1)
-            if file_month in target_months:
+            if m.group(1) in target_months:
                 result.append(f)
         else:
-            # 月指定なし (旧形式) → 常に読み込み
             result.append(f)
     return result
 
 
 def merge_all():
     """全ファイル読み込み → ガントチャートJOIN → 統合リスト"""
-    # DirectCloud (INPUT_DIR) + ローカル (DATA_DIR) 両方を探す
     files = []
     for d in (config.INPUT_DIR, config.DATA_DIR):
         if not os.path.isdir(d):
@@ -132,7 +183,6 @@ def merge_all():
             files.extend(glob.glob(os.path.join(d, f"入力_*.{ext}")))
     files = [f for f in files if not os.path.basename(f).startswith("~$")]
 
-    # 月フィルタ
     files = filter_by_month(files)
 
     # 重複除去 (同名ファイルはINPUT_DIR優先)
@@ -154,10 +204,10 @@ def merge_all():
         print(f"  読み込み: {fname}")
         try:
             project_info, entries = load_input_file(fpath)
-            print(f"    案件: {len(project_info)}件, 日次入力: {len(entries)}件")
+            gantt_count = len(project_info)
+            print(f"    案件: {gantt_count}件, エントリー: {len(entries)}件")
 
             for e in entries:
-                # 「なし」= 工事なし → スキップ
                 if e["day_night"] == "なし":
                     continue
                 key = (e["client"], e["title"])

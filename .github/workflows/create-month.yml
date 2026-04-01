@@ -1,0 +1,43 @@
+name: Create Monthly Files
+
+on:
+  workflow_dispatch:
+    inputs:
+      month:
+        description: "Month (YYMM format, e.g. 2605)"
+        required: true
+      persons:
+        description: "Person names (comma-separated)"
+        required: true
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install openpyxl
+
+      - name: Generate monthly files
+        run: |
+          python create_input_system.py \
+            --month "${{ github.event.inputs.month }}" \
+            --persons "${{ github.event.inputs.persons }}" \
+            --empty
+        env:
+          PYTHONUTF8: "1"
+
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "Create ${{ github.event.inputs.month }} monthly files: ${{ github.event.inputs.persons }}"
+          git push
