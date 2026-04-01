@@ -83,7 +83,7 @@ def deploy_to_netlify(html_path):
         f.write(content)
 
     # 静的ページもコピー
-    for page in ("upload.html", "sample.html", "admin.html"):
+    for page in ("upload.html", "sample.html", "admin.html", "manual.html"):
         src = os.path.join(config.BASE_DIR, "static", page)
         if os.path.exists(src):
             import shutil
