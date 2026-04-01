@@ -50,137 +50,6 @@ GANTT_LEFT_COLS = len(GANTT_COLS)  # 8列 (A-H)
 DATE_START_COL = GANTT_LEFT_COLS + 1  # I列から日付
 GANTT_EMPTY_ROWS = 30  # 空ファイルの入力可能行数
 
-# ---------- VBA コード ----------
-VBA_MODULE = '''\
-Public Sub SyncGanttToDaily()
-    Dim wsG As Worksheet, wsD As Worksheet
-
-    On Error Resume Next
-    Set wsG = ThisWorkbook.Sheets("\u30ac\u30f3\u30c8\u30c1\u30e3\u30fc\u30c8")
-    Set wsD = ThisWorkbook.Sheets("\u65e5\u6b21\u5165\u529b")
-    On Error GoTo 0
-
-    If wsG Is Nothing Or wsD Is Nothing Then Exit Sub
-
-    Application.ScreenUpdating = False
-    Application.EnableEvents = False
-    On Error GoTo ErrHandler
-
-    Dim dict As Object
-    Set dict = CreateObject("Scripting.Dictionary")
-
-    Dim lastD As Long
-    lastD = wsD.Cells(wsD.Rows.Count, 1).End(xlUp).Row
-    If lastD < 2 Then lastD = 1
-
-    Dim i As Long
-    For i = 2 To lastD
-        If Not IsEmpty(wsD.Cells(i, 1).Value) And Not IsEmpty(wsD.Cells(i, 2).Value) Then
-            Dim k As String
-            k = Format(CDate(wsD.Cells(i, 1).Value), "yyyy-mm-dd") & "|" & _
-                Trim(CStr(wsD.Cells(i, 2).Value)) & "|" & Trim(CStr(wsD.Cells(i, 3).Value))
-            If Not dict.Exists(k) Then
-                dict.Add k, Array( _
-                    Trim(CStr(wsD.Cells(i, 4).Value & "")), _
-                    Trim(CStr(wsD.Cells(i, 5).Value & "")), _
-                    Trim(CStr(wsD.Cells(i, 6).Value & "")))
-            End If
-        End If
-    Next i
-
-    Dim lastG As Long
-    lastG = wsG.Cells(wsG.Rows.Count, 1).End(xlUp).Row
-    If lastG < 3 Then GoTo Done
-
-    Dim cnt As Long: cnt = 0
-    Dim s As Date, e As Date
-    For i = 3 To lastG
-        If Not IsEmpty(wsG.Cells(i, 1).Value) And Not IsEmpty(wsG.Cells(i, 2).Value) Then
-            If IsDate(wsG.Cells(i, 7).Value) And IsDate(wsG.Cells(i, 8).Value) Then
-                s = CDate(wsG.Cells(i, 7).Value)
-                e = CDate(wsG.Cells(i, 8).Value)
-                If e >= s Then cnt = cnt + CLng(e - s) + 1
-            End If
-        End If
-    Next i
-
-    If cnt = 0 Then GoTo Done
-
-    Dim tmpData() As Variant
-    ReDim tmpData(1 To cnt, 1 To 6)
-    Dim idx As Long: idx = 0
-
-    For i = 3 To lastG
-        If Not IsEmpty(wsG.Cells(i, 1).Value) And Not IsEmpty(wsG.Cells(i, 2).Value) Then
-            If IsDate(wsG.Cells(i, 7).Value) And IsDate(wsG.Cells(i, 8).Value) Then
-                s = CDate(wsG.Cells(i, 7).Value)
-                e = CDate(wsG.Cells(i, 8).Value)
-                If e >= s Then
-                    Dim d As Date
-                    Dim cl As String, tt As String
-                    cl = Trim(CStr(wsG.Cells(i, 1).Value))
-                    tt = Trim(CStr(wsG.Cells(i, 2).Value))
-                    For d = s To e
-                        idx = idx + 1
-                        tmpData(idx, 1) = d
-                        tmpData(idx, 2) = cl
-                        tmpData(idx, 3) = tt
-                        Dim ek As String
-                        ek = Format(d, "yyyy-mm-dd") & "|" & cl & "|" & tt
-                        If dict.Exists(ek) Then
-                            Dim prev As Variant
-                            prev = dict(ek)
-                            tmpData(idx, 4) = prev(0)
-                            tmpData(idx, 5) = prev(1)
-                            tmpData(idx, 6) = prev(2)
-                        Else
-                            tmpData(idx, 4) = ""
-                            tmpData(idx, 5) = ""
-                            tmpData(idx, 6) = ""
-                        End If
-                    Next d
-                End If
-            End If
-        End If
-    Next i
-
-    Dim clearEnd As Long
-    clearEnd = lastD
-    If idx + 1 > clearEnd Then clearEnd = idx + 1
-    If clearEnd >= 2 Then wsD.Range("A2:F" & clearEnd).ClearContents
-
-    wsD.Range("A2").Resize(idx, 6).Value = tmpData
-
-    Dim rng As Range
-    Set rng = wsD.Range("A2:F" & idx + 1)
-    rng.Font.Name = "Noto Sans JP"
-    rng.Font.Size = 11
-    rng.Borders.LineStyle = xlContinuous
-    rng.Borders.Weight = xlThin
-    rng.VerticalAlignment = xlCenter
-
-    wsD.Range("A2:A" & idx + 1).NumberFormat = "M/D"
-    wsD.Range("A2:A" & idx + 1).HorizontalAlignment = xlCenter
-    wsD.Range("D2:D" & idx + 1).HorizontalAlignment = xlCenter
-    wsD.Range("F2:F" & idx + 1).HorizontalAlignment = xlCenter
-
-    wsD.Range("A1:F" & idx + 1).Sort _
-        Key1:=wsD.Range("A2"), Order1:=xlAscending, _
-        Key2:=wsD.Range("B2"), Order2:=xlAscending, _
-        Key3:=wsD.Range("C2"), Order3:=xlAscending, _
-        Header:=xlYes
-
-Done:
-    Application.ScreenUpdating = True
-    Application.EnableEvents = True
-    Exit Sub
-
-ErrHandler:
-    Application.ScreenUpdating = True
-    Application.EnableEvents = True
-End Sub
-'''
-
 
 def parse_month(month_str):
     """'YYMM' 文字列 → (year, month) タプル"""
@@ -372,79 +241,6 @@ def create_input_file(person_name, month_str, projects=None, daily_data=None):
     return xlsx_path
 
 
-def convert_all_to_xlsm(xlsx_paths):
-    """全xlsxファイルを一括でxlsm変換 + VBA注入"""
-    try:
-        import win32com.client
-        import pythoncom
-    except ImportError:
-        print("  win32com未インストール → xlsxのまま (CI環境)")
-        return
-
-    pythoncom.CoInitialize()
-    excel = None
-    try:
-        excel = win32com.client.Dispatch("Excel.Application")
-        excel.Visible = False
-        excel.DisplayAlerts = False
-
-        for xlsx_path in xlsx_paths:
-            fname = os.path.basename(xlsx_path)
-            xlsm_path = xlsx_path.replace(".xlsx", ".xlsm")
-            try:
-                wb = excel.Workbooks.Open(os.path.abspath(xlsx_path))
-
-                # 標準モジュール追加
-                mod = wb.VBProject.VBComponents.Add(1)
-                mod.Name = "GanttSync"
-                mod.CodeModule.AddFromString(VBA_MODULE)
-
-                # ボタン追加
-                ws_gantt = wb.Sheets("\u30ac\u30f3\u30c8\u30c1\u30e3\u30fc\u30c8")
-                row1_h = ws_gantt.Rows(1).Height
-                header_w = ws_gantt.Cells(1, 8).Left + ws_gantt.Columns(8).Width
-                btn_w, btn_h = 170, 22
-                btn_left = (header_w - btn_w) / 2
-                btn_top = (row1_h - btn_h) / 2
-                shp = ws_gantt.Shapes.AddShape(5, btn_left, btn_top, btn_w, btn_h)
-                shp.Fill.ForeColor.RGB = 26 + 46 * 256 + 90 * 65536
-                shp.Line.Visible = False
-                tf = shp.TextFrame
-                tf.Characters().Text = "\u25b6 \u65e5\u6b21\u5165\u529b\u306b\u53cd\u6620"
-                tf.Characters().Font.Color = 16777215
-                tf.Characters().Font.Size = 10
-                tf.Characters().Font.Bold = True
-                tf.HorizontalAlignment = -4108
-                tf.VerticalAlignment = -4108
-                shp.OnAction = "SyncGanttToDaily"
-
-                wb.SaveAs(os.path.abspath(xlsm_path), FileFormat=52)
-                wb.Close(False)
-
-                os.remove(xlsx_path)
-                print(f"  {fname} → xlsm変換完了")
-
-            except Exception as e:
-                err_msg = str(e)
-                if "programmatic access" in err_msg.lower() or "信頼性" in err_msg:
-                    print("  VBA信頼設定が必要 → xlsxのまま")
-                    break
-                else:
-                    print(f"  {fname}: xlsm変換失敗 ({e})")
-
-    except Exception as e:
-        print(f"  Excel起動エラー: {e}")
-    finally:
-        if excel:
-            try:
-                excel.Quit()
-            except Exception:
-                pass
-            import time
-            time.sleep(1)
-        pythoncom.CoUninitialize()
-
-
 def main():
     parser = argparse.ArgumentParser(description="工事予定表 入力ファイル生成")
     parser.add_argument("--month", default=None,
@@ -468,22 +264,13 @@ def main():
     os.makedirs(config.DATA_DIR, exist_ok=True)
     print(f"=== 入力システム生成 ({year}年{month}月) ===\n")
 
-    xlsx_paths = []
     for person in persons:
-        path = create_input_file(
-            person, month_str,
-            projects=None if args.empty else None,  # サンプルは別途
-            daily_data=None,
-        )
-        xlsx_paths.append(path)
-
-    # VBA注入 → xlsm一括変換
-    print("\n--- VBAマクロ注入 ---")
-    convert_all_to_xlsm(xlsx_paths)
+        create_input_file(person, month_str)
 
     print(f"\n完了! {config.DATA_DIR}")
-    print(f"  ファイル名パターン: 入力_担当者名_{month_str}.xlsm")
+    print(f"  ファイル名パターン: 入力_担当者名_{month_str}.xlsx")
     print("  ※ 担当者名は自由に変更可能")
+    print("  ※ ガントチャートを記入→保存するだけで自動反映（VBA不要）")
 
 
 if __name__ == "__main__":
