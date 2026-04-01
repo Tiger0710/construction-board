@@ -51,17 +51,19 @@ def generate_html(data: dict, css: str) -> str:
     </div>
     <div class="header-right">
       <div id="clock" class="header-clock">00:00:00</div>
-      <div id="date" class="header-date"></div>
     </div>
   </header>
 
   <div class="board-table-header">
-    <div class="col col-time">時間</div>
-    <div class="col col-name">工事名</div>
-    <div class="col col-location">場所</div>
-    <div class="col col-status">ステータス</div>
-    <div class="col col-person">担当者</div>
-    <div class="col col-progress">進捗</div>
+    <div class="col col-client">客先</div>
+    <div class="col col-title">工事件名</div>
+    <div class="col col-our-person">現場</div>
+    <div class="col col-safety">安品</div>
+    <div class="col col-partner">協力会社</div>
+    <div class="col col-partner-person">担当</div>
+    <div class="col col-work">作業内容</div>
+    <div class="col col-time">昼/夜</div>
+    <div class="col col-priority">重点作業</div>
   </div>
 
   <div class="board-body" id="board-body"></div>
@@ -79,19 +81,21 @@ def generate_html(data: dict, css: str) -> str:
 
   <script>
     // ===== 埋め込みデータ =====
-    const BOARD_DATA = {data_json};
-    const ROWS_PER_PAGE = 8;
-    const PAGE_ROTATE_SEC = 15;
+    var BOARD_DATA = {data_json};
+    var MIN_ROW_HEIGHT = 72;
+    var PAGE_ROTATE_SEC = 15;
+    var GROUP_ROTATE_CYCLES = 1;
 
     // ===== グローバル変数 =====
-    let currentPage = 0;
-    let totalPages = 1;
-    let displayItems = [];
-    let pageRotateTimer = null;
-    let cycleComplete = false;     // 全ページ巡回完了フラグ
-    let lastTimeCheckMinute = -1;  // 前回の時刻チェック分
+    var ROWS_PER_PAGE = 10;
+    var currentPage = 0;
+    var totalPages = 1;
+    var dateGroups = [];
+    var currentGroupIdx = 0;
+    var groupCycleCount = 0;
+    var pageRotateTimer = null;
 
-    const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
+    var WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
     // ===== HTMLエスケープ =====
     function escapeHtml(str) {{
@@ -111,119 +115,107 @@ def generate_html(data: dict, css: str) -> str:
     // ===== 時計機能 =====
     function startClock() {{
       function update() {{
-        const now = new Date();
-        const hh = String(now.getHours()).padStart(2, "0");
-        const mm = String(now.getMinutes()).padStart(2, "0");
-        const ss = String(now.getSeconds()).padStart(2, "0");
+        var now = new Date();
+        var hh = String(now.getHours()).padStart(2, "0");
+        var mm = String(now.getMinutes()).padStart(2, "0");
+        var ss = String(now.getSeconds()).padStart(2, "0");
         document.getElementById("clock").textContent = hh + ":" + mm + ":" + ss;
-
-        const y = now.getFullYear();
-        const m = now.getMonth() + 1;
-        const d = now.getDate();
-        const w = WEEKDAYS[now.getDay()];
-        document.getElementById("date").textContent = y + "年" + m + "月" + d + "日(" + w + ")";
-
-        const todayEl = document.getElementById("header-today");
-        if (todayEl) {{
-          todayEl.textContent = m + "/" + d + " " + w + "曜日";
-        }}
       }}
       update();
       setInterval(update, 1000);
     }}
 
-    // ===== 「今日」フィルタリング =====
-    function filterToday(items, todayStr) {{
+    // ===== 日付フォーマット =====
+    function formatDateLabel(dateStr) {{
+      var parts = dateStr.split("-");
+      var d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      var m = d.getMonth() + 1;
+      var day = d.getDate();
+      var w = WEEKDAYS[d.getDay()];
+      return m + "/" + day + " " + w + "曜日";
+    }}
+
+    // ===== 今日+明日フィルタリング =====
+    function filterTodayTomorrow(items, todayStr, tomorrowStr) {{
       if (!items || items.length === 0) return [];
-      const todayItems = items.filter(function(item) {{ return item.date === todayStr; }});
-      if (todayItems.length > 0) return todayItems;
+      var filtered = items.filter(function(item) {{
+        return item.date === todayStr || item.date === tomorrowStr;
+      }});
+      if (filtered.length > 0) return filtered;
       return items;
     }}
 
-    // ===== 現在時刻に最も近い工事のページを探す =====
-    function findCurrentTimePage(items) {{
-      if (!items || items.length === 0) return 0;
-
-      const now = new Date();
-      const currentHH = String(now.getHours()).padStart(2, "0");
-      const currentMM = String(now.getMinutes()).padStart(2, "0");
-      const currentTime = currentHH + ":" + currentMM;
-
-      // 現在時刻の範囲内にある工事、または最も近い工事を探す
-      let bestIndex = 0;
-      let bestDistance = Infinity;
-
-      for (let i = 0; i < items.length; i++) {{
-        var item = items[i];
-        var startTime = item.start_time || "";
-        var endTime = item.end_time || "";
-
-        // start_time <= currentTime <= end_time なら完全一致
-        if (startTime && endTime && startTime <= currentTime && currentTime <= endTime) {{
-          bestIndex = i;
-          bestDistance = 0;
-          break;
-        }}
-
-        // start_time との距離を計算（分単位）
-        if (startTime) {{
-          var dist = timeDistanceMinutes(currentTime, startTime);
-          if (dist < bestDistance) {{
-            bestDistance = dist;
-            bestIndex = i;
-          }}
-        }}
+    // ===== 日付グループ構築 =====
+    function buildDateGroups(items, todayStr, tomorrowStr) {{
+      var todayItems = items.filter(function(item) {{ return item.date === todayStr; }});
+      var tomorrowItems = items.filter(function(item) {{ return item.date === tomorrowStr; }});
+      var otherItems = items.filter(function(item) {{
+        return item.date !== todayStr && item.date !== tomorrowStr;
+      }});
+      var groups = [];
+      if (todayItems.length > 0) {{
+        groups.push({{ date: todayStr, label: "本日", dateFormatted: formatDateLabel(todayStr), items: todayItems }});
       }}
-
-      // そのアイテムが含まれるページ番号を返す
-      return Math.floor(bestIndex / ROWS_PER_PAGE);
+      if (tomorrowItems.length > 0) {{
+        groups.push({{ date: tomorrowStr, label: "明日", dateFormatted: formatDateLabel(tomorrowStr), items: tomorrowItems }});
+      }}
+      if (otherItems.length > 0 && groups.length === 0) {{
+        var dates = [];
+        otherItems.forEach(function(i) {{ if (dates.indexOf(i.date) === -1) dates.push(i.date); }});
+        dates.sort();
+        dates.forEach(function(dt) {{
+          groups.push({{ date: dt, label: "", dateFormatted: formatDateLabel(dt), items: otherItems.filter(function(i) {{ return i.date === dt; }}) }});
+        }});
+      }}
+      return groups;
     }}
 
-    // ===== 時刻間の距離（分）を計算 =====
-    function timeDistanceMinutes(t1, t2) {{
-      // t1, t2 は "HH:MM" 形式
-      var parts1 = t1.split(":");
-      var parts2 = t2.split(":");
-      if (parts1.length < 2 || parts2.length < 2) return Infinity;
-      var m1 = parseInt(parts1[0], 10) * 60 + parseInt(parts1[1], 10);
-      var m2 = parseInt(parts2[0], 10) * 60 + parseInt(parts2[1], 10);
-      return Math.abs(m1 - m2);
+    // ===== 表示件数を画面サイズから自動計算 =====
+    function calcRowsPerPage() {{
+      var available = window.innerHeight - 88 - 62 - 40;
+      return Math.max(4, Math.floor(available / MIN_ROW_HEIGHT));
     }}
 
-    // ===== 行の高さ計算 =====
-    function calcRowHeight(rowCount) {{
-      if (rowCount === 0) return 64;
-      var available = window.innerHeight - 120 - 60 - 52;
-      return Math.floor(available / Math.max(rowCount, 1));
+    // ===== 夜間作業判定 =====
+    function isNightWork(workTime) {{
+      return workTime === "夜";
     }}
 
     // ===== 行レンダリング =====
-    function renderRow(item, index, rowHeight, changed, rowId) {{
+    function renderRow(item, index, rowHeight, rowId) {{
       var evenOdd = index % 2 === 0 ? "row-even" : "row-odd";
-      var flipClass = changed ? " flip-enter" : "";
-      var progressComplete = item.progress >= 100 ? " complete" : "";
-      var timeDisplay = item.end_time
-        ? escapeHtml(item.start_time) + ' <span class="time-dash">&#x2015;</span> ' + escapeHtml(item.end_time)
-        : escapeHtml(item.start_time);
+      var priorityClass = item.is_priority ? " row-priority" : "";
+      var nightClass = isNightWork(item.work_time) ? " row-night" : "";
+      var priorityBadge = item.is_priority
+        ? '<span class="priority-badge priority-yes">有</span>'
+        : '<span class="priority-badge priority-no">無</span>';
 
-      return '<div class="board-row ' + evenOdd + flipClass + '" data-id="' + escapeAttr(rowId) + '" style="height:' + rowHeight + 'px;">' +
-        '<div class="col col-time">' + timeDisplay + '</div>' +
-        '<div class="col col-name">' + escapeHtml(item.name) + '</div>' +
-        '<div class="col col-location">' + escapeHtml(item.location) + '</div>' +
-        '<div class="col col-status"><span class="status-badge status-' + item.status_code + '"><span class="status-dot"></span>' + escapeHtml(item.status) + '</span></div>' +
-        '<div class="col col-person">' + escapeHtml(item.person) + '</div>' +
-        '<div class="col col-progress">' +
-          '<div class="progress-wrapper"><div class="progress-bar"><div class="progress-fill" style="width:' + item.progress + '%"></div></div></div>' +
-          '<span class="progress-text' + progressComplete + '">' + item.progress + '%</span>' +
-        '</div>' +
+      return '<div class="board-row ' + evenOdd + priorityClass + nightClass + '" data-id="' + escapeAttr(rowId) + '" style="min-height:' + rowHeight + 'px;">' +
+        '<div class="col col-client">' + escapeHtml(item.client) + '</div>' +
+        '<div class="col col-title">' + escapeHtml(item.title) + '</div>' +
+        '<div class="col col-our-person">' + escapeHtml(item.our_person) + '</div>' +
+        '<div class="col col-safety">' + escapeHtml(item.safety_person) + '</div>' +
+        '<div class="col col-partner">' + escapeHtml(item.partner) + '</div>' +
+        '<div class="col col-partner-person">' + escapeHtml(item.partner_person) + '</div>' +
+        '<div class="col col-work">' + escapeHtml(item.work_content) + '</div>' +
+        '<div class="col col-time">' + escapeHtml(item.work_time) + '</div>' +
+        '<div class="col col-priority">' + priorityBadge + '</div>' +
       '</div>';
+    }}
+
+    // ===== ヘッダー日付表示更新 =====
+    function updateHeaderForGroup(group) {{
+      var todayEl = document.getElementById("header-today");
+      if (!todayEl) return;
+      var labelClass = group.label === "明日" ? "header-today-label label-tomorrow" : "header-today-label";
+      var label = group.label || "";
+      todayEl.innerHTML = '<span class="' + labelClass + '">' + escapeHtml(label) + '</span>' + escapeHtml(group.dateFormatted);
     }}
 
     // ===== ボード表示 =====
     function renderBoard(data) {{
       var body = document.getElementById("board-body");
 
-      // エラー表示
       if (data.error) {{
         body.innerHTML =
           '<div class="board-message">' +
@@ -231,146 +223,114 @@ def generate_html(data: dict, css: str) -> str:
             '<div class="board-message-error">' + escapeHtml(data.error) + '</div>' +
           '</div>';
         updateFooter(data, 0);
-        stopPageRotation();
+        stopAllTimers();
         return;
       }}
 
-      // 「今日」のフィルタリング
-      displayItems = filterToday(data.items, data.today);
+      var tomorrowStr = data.tomorrow || "";
+      var filtered = filterTodayTomorrow(data.items, data.today, tomorrowStr);
 
-      // 空の場合
-      if (displayItems.length === 0) {{
+      if (filtered.length === 0) {{
         body.innerHTML =
           '<div class="board-message">' +
             '<div class="board-message-icon">&#128736;</div>' +
             '<div class="board-message-text">本日の工事予定はありません</div>' +
           '</div>';
         updateFooter(data, 0);
-        stopPageRotation();
+        stopAllTimers();
         return;
       }}
 
-      // 時間順にソート（start_time昇順）
-      displayItems.sort(function(a, b) {{
-        var ta = a.start_time || "";
-        var tb = b.start_time || "";
-        if (ta < tb) return -1;
-        if (ta > tb) return 1;
-        return 0;
+      dateGroups = buildDateGroups(filtered, data.today, tomorrowStr);
+      dateGroups.forEach(function(g) {{
+        g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
       }});
 
-      // ページ計算
-      totalPages = Math.ceil(displayItems.length / ROWS_PER_PAGE);
-
-      // 初期ページを現在時刻ベースで決定
-      currentPage = findCurrentTimePage(displayItems);
+      if (currentGroupIdx >= dateGroups.length) currentGroupIdx = 0;
+      var group = dateGroups[currentGroupIdx];
+      totalPages = group.totalPages;
       if (currentPage >= totalPages) currentPage = 0;
 
-      // 現在ページを描画
-      renderCurrentPage();
+      renderCurrentGroupPage();
+      updateHeaderForGroup(group);
+      updateFooter(data, filtered.length);
 
-      // フッター更新
-      updateFooter(data, displayItems.length);
-
-      // ページローテーション開始
-      if (totalPages > 1) {{
+      stopAllTimers();
+      if (totalPages > 1 || dateGroups.length > 1) {{
         startPageRotation();
       }}
     }}
 
-    // ===== 現在ページの描画 =====
-    function renderCurrentPage() {{
-      if (displayItems.length === 0) return;
-
+    // ===== 現在グループ・ページ描画 =====
+    function renderCurrentGroupPage() {{
+      if (dateGroups.length === 0) return;
+      var group = dateGroups[currentGroupIdx];
       var body = document.getElementById("board-body");
       var start = currentPage * ROWS_PER_PAGE;
-      var pageItems = displayItems.slice(start, start + ROWS_PER_PAGE);
-      var rowHeight = calcRowHeight(pageItems.length);
+      var pageItems = group.items.slice(start, start + ROWS_PER_PAGE);
 
-      var rows = pageItems.map(function(item, idx) {{
-        var globalIdx = start + idx;
-        var rowId = item.name + "|" + item.date + "|" + item.start_time;
-        return renderRow(item, globalIdx, rowHeight, false, rowId);
+      var available = window.innerHeight - 88 - 62 - 40;
+      var rowHeight = pageItems.length > 0 ? Math.min(64, Math.floor(available / pageItems.length)) : 64;
+
+      var html = pageItems.map(function(item, idx) {{
+        var rowId = item.title + "|" + item.date + "|" + item.partner;
+        return renderRow(item, idx, rowHeight, rowId);
       }});
 
-      body.innerHTML = rows.join("");
-
-      // ページインジケーター更新
-      var indicator = document.getElementById("page-indicator");
-      if (totalPages > 1) {{
-        indicator.textContent = (currentPage + 1) + " / " + totalPages;
-      }} else {{
-        indicator.textContent = "";
-      }}
+      body.innerHTML = html.join("");
+      updatePageIndicator();
     }}
 
     // ===== ページローテーション =====
     function startPageRotation() {{
       if (pageRotateTimer) return;
-      cycleComplete = false;
-      var startPage = currentPage;  // 巡回開始ページを記憶
-
+      groupCycleCount = 0;
       pageRotateTimer = setInterval(function() {{
         var body = document.getElementById("board-body");
+        var group = dateGroups[currentGroupIdx];
         body.classList.add("fade-out");
         body.classList.remove("fade-in");
 
         setTimeout(function() {{
-          var nextPage = (currentPage + 1) % totalPages;
-
-          // 全ページ巡回完了チェック
-          // 巡回開始ページに戻ったら、現在時刻で再計算
-          if (nextPage === startPage) {{
-            currentPage = findCurrentTimePage(displayItems);
-            if (currentPage >= totalPages) currentPage = 0;
-            startPage = currentPage;  // 新しい起点を設定
+          var nextPage = currentPage + 1;
+          if (nextPage >= group.totalPages) {{
+            groupCycleCount++;
+            if (dateGroups.length > 1 && groupCycleCount >= GROUP_ROTATE_CYCLES) {{
+              groupCycleCount = 0;
+              currentGroupIdx = (currentGroupIdx + 1) % dateGroups.length;
+              currentPage = 0;
+              var newGroup = dateGroups[currentGroupIdx];
+              totalPages = newGroup.totalPages;
+              updateHeaderForGroup(newGroup);
+            }} else {{
+              currentPage = 0;
+            }}
           }} else {{
             currentPage = nextPage;
           }}
-
-          renderCurrentPage();
+          renderCurrentGroupPage();
           body.classList.remove("fade-out");
           body.classList.add("fade-in");
         }}, 300);
       }}, PAGE_ROTATE_SEC * 1000);
     }}
 
-    function stopPageRotation() {{
+    function stopAllTimers() {{
       if (pageRotateTimer) {{
         clearInterval(pageRotateTimer);
         pageRotateTimer = null;
       }}
     }}
 
-    // ===== 1分ごとの現在時刻再評価 =====
-    function startTimeCheck() {{
-      setInterval(function() {{
-        var now = new Date();
-        var currentMinute = now.getHours() * 60 + now.getMinutes();
-
-        if (currentMinute !== lastTimeCheckMinute) {{
-          lastTimeCheckMinute = currentMinute;
-          var bestPage = findCurrentTimePage(displayItems);
-          if (bestPage !== currentPage && displayItems.length > 0) {{
-            // 時間が進んだのでページジャンプ
-            stopPageRotation();
-            currentPage = bestPage;
-            if (currentPage >= totalPages) currentPage = 0;
-
-            var body = document.getElementById("board-body");
-            body.classList.add("fade-out");
-            body.classList.remove("fade-in");
-            setTimeout(function() {{
-              renderCurrentPage();
-              body.classList.remove("fade-out");
-              body.classList.add("fade-in");
-              if (totalPages > 1) {{
-                startPageRotation();
-              }}
-            }}, 300);
-          }}
-        }}
-      }}, 60000);
+    function updatePageIndicator() {{
+      var indicator = document.getElementById("page-indicator");
+      var group = dateGroups[currentGroupIdx];
+      if (!group) return;
+      if (group.totalPages > 1) {{
+        indicator.textContent = (currentPage + 1) + " / " + group.totalPages;
+      }} else {{
+        indicator.textContent = "";
+      }}
     }}
 
     // ===== フッター更新 =====
@@ -383,20 +343,53 @@ def generate_html(data: dict, css: str) -> str:
         document.getElementById("update-time").textContent = hh + ":" + mm + ":" + ss;
       }}
       document.getElementById("total-count").textContent = displayCount;
+      updatePageIndicator();
+    }}
 
-      var indicator = document.getElementById("page-indicator");
-      if (totalPages > 1) {{
-        indicator.textContent = (currentPage + 1) + " / " + totalPages;
+    // ===== フルスクリーン =====
+    function requestFullscreen() {{
+      var el = document.documentElement;
+      if (el.requestFullscreen) el.requestFullscreen();
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+      else if (el.msRequestFullscreen) el.msRequestFullscreen();
+    }}
+
+    function toggleFullscreen() {{
+      if (document.fullscreenElement || document.webkitFullscreenElement) {{
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
       }} else {{
-        indicator.textContent = "";
+        requestFullscreen();
+      }}
+    }}
+
+    // ===== リサイズ対応 =====
+    function onResize() {{
+      var newRows = calcRowsPerPage();
+      if (newRows !== ROWS_PER_PAGE) {{
+        ROWS_PER_PAGE = newRows;
+        stopAllTimers();
+        if (dateGroups.length > 0) {{
+          dateGroups.forEach(function(g) {{
+            g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
+          }});
+          var group = dateGroups[currentGroupIdx];
+          totalPages = group.totalPages;
+          if (currentPage >= totalPages) currentPage = 0;
+          renderCurrentGroupPage();
+          if (totalPages > 1 || dateGroups.length > 1) startPageRotation();
+        }}
       }}
     }}
 
     // ===== 初期化 =====
     function initBoard() {{
+      ROWS_PER_PAGE = calcRowsPerPage();
       startClock();
       renderBoard(BOARD_DATA);
-      startTimeCheck();
+      window.addEventListener("resize", onResize);
+      document.addEventListener("click", toggleFullscreen);
+      requestFullscreen();
     }}
 
     document.addEventListener("DOMContentLoaded", initBoard);

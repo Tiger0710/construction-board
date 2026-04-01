@@ -1,0 +1,37 @@
+name: Deploy Construction Board
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/入力_*"
+      - "*.py"
+      - "static/**"
+      - "templates/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install openpyxl
+
+      - name: Run pipeline (merge + generate HTML)
+        run: python ci_pipeline.py
+        env:
+          PYTHONUTF8: "1"
+
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir deploy --functions netlify/functions --site ${{ secrets.NETLIFY_SITE_ID }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

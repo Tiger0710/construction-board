@@ -1,4 +1,16 @@
 __pycache__/
 *.pyc
+
+# Generated output
 data/工事予定表.xlsx
+deploy/
+
+# Lock files
 ~$*.xlsx
+~$*.xlsm
+
+# Netlify local
+.netlify
+
+# Node
+node_modules/

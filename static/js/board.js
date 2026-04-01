@@ -3,13 +3,19 @@
    ============================================= */
 
 // ---------- グローバル変数 ----------
-let ROWS_PER_PAGE = 12;
+const MIN_ROW_HEIGHT = 72; // 1行の最低高さ(px)
+let ROWS_PER_PAGE = 10;
 let PAGE_ROTATE_SEC = 15;
-let currentPage = 0;
+let currentPage = 0; // 現在の日付グループ内ページ
 let totalPages = 1;
 let previousDataJSON = "";
 let previousItems = [];
 let pageRotateTimer = null;
+let dateGroups = []; // [{date, label, dateFormatted, items, pages}]
+let currentGroupIdx = 0;
+let groupRotateTimer = null;
+const GROUP_ROTATE_CYCLES = 1; // 各グループを何周するか
+let groupCycleCount = 0;
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -29,7 +35,8 @@ function startClock() {
     const m = now.getMonth() + 1;
     const d = now.getDate();
     const w = WEEKDAYS[now.getDay()];
-    document.getElementById("date").textContent = `${y}年${m}月${d}日(${w})`;
+    const dateEl = document.getElementById("date");
+    if (dateEl) dateEl.textContent = `${y}年${m}月${d}日(${w})`;
 
     // ヘッダー中央の TODAY 表示
     const todayEl = document.getElementById("header-today");
@@ -48,12 +55,13 @@ async function fetchConfig() {
     const res = await fetch("/api/config");
     if (res.ok) {
       const cfg = await res.json();
-      ROWS_PER_PAGE = cfg.rows_per_page || 12;
       PAGE_ROTATE_SEC = cfg.page_rotate_sec || 15;
     }
   } catch (e) {
     // デフォルト値のまま
   }
+  // 画面サイズから表示件数を自動計算
+  ROWS_PER_PAGE = calcRowsPerPage();
 }
 
 // ---------- データ取得・表示 ----------
@@ -71,6 +79,65 @@ async function fetchAndRender() {
   }
 }
 
+// ---------- 日付フォーマット ----------
+function formatDateLabel(dateStr) {
+  const parts = dateStr.split("-");
+  const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  const w = WEEKDAYS[d.getDay()];
+  return `${m}/${day} ${w}曜日`;
+}
+
+// ---------- 今日+明日フィルタリング ----------
+function filterTodayTomorrow(items, todayStr, tomorrowStr) {
+  if (!items || items.length === 0) return [];
+  const filtered = items.filter(function(item) {
+    return item.date === todayStr || item.date === tomorrowStr;
+  });
+  if (filtered.length > 0) return filtered;
+  return items;
+}
+
+// ---------- 日付グループ構築 ----------
+function buildDateGroups(items, todayStr, tomorrowStr) {
+  const todayItems = items.filter(function(item) { return item.date === todayStr; });
+  const tomorrowItems = items.filter(function(item) { return item.date === tomorrowStr; });
+  const otherItems = items.filter(function(item) {
+    return item.date !== todayStr && item.date !== tomorrowStr;
+  });
+
+  const groups = [];
+  if (todayItems.length > 0) {
+    groups.push({
+      date: todayStr,
+      label: "本日",
+      dateFormatted: formatDateLabel(todayStr),
+      items: todayItems,
+    });
+  }
+  if (tomorrowItems.length > 0) {
+    groups.push({
+      date: tomorrowStr,
+      label: "明日",
+      dateFormatted: formatDateLabel(tomorrowStr),
+      items: tomorrowItems,
+    });
+  }
+  if (otherItems.length > 0 && groups.length === 0) {
+    const dates = [...new Set(otherItems.map(function(i) { return i.date; }))].sort();
+    dates.forEach(function(d) {
+      groups.push({
+        date: d,
+        label: "",
+        dateFormatted: formatDateLabel(d),
+        items: otherItems.filter(function(i) { return i.date === d; }),
+      });
+    });
+  }
+  return groups;
+}
+
 function renderBoard(data) {
   const body = document.getElementById("board-body");
 
@@ -82,117 +149,139 @@ function renderBoard(data) {
         <div class="board-message-error">${escapeHtml(data.error)}</div>
       </div>`;
     updateFooter(data, 0);
-    stopPageRotation();
+    stopAllTimers();
     return;
   }
 
-  // 「今日」のフィルタリング
-  let displayItems = filterToday(data.items, data.today);
+  // 今日+明日のフィルタリング
+  const tomorrowStr = data.tomorrow || "";
+  const filtered = filterTodayTomorrow(data.items, data.today, tomorrowStr);
 
   // 空の場合
-  if (displayItems.length === 0) {
+  if (filtered.length === 0) {
     body.innerHTML = `
       <div class="board-message">
         <div class="board-message-icon">&#128736;</div>
         <div class="board-message-text">本日の工事予定はありません</div>
       </div>`;
     updateFooter(data, 0);
-    stopPageRotation();
+    stopAllTimers();
     return;
   }
 
-  // ページ計算
-  totalPages = Math.ceil(displayItems.length / ROWS_PER_PAGE);
-  if (currentPage >= totalPages) {
-    currentPage = 0;
-  }
-
-  // 現在ページのアイテムをスライス
-  const start = currentPage * ROWS_PER_PAGE;
-  const pageItems = displayItems.slice(start, start + ROWS_PER_PAGE);
-
   // 差分検出
-  const newDataJSON = JSON.stringify(displayItems);
+  const newDataJSON = JSON.stringify(filtered);
   const hasChanged = newDataJSON !== previousDataJSON;
+  previousDataJSON = newDataJSON;
+  previousItems = filtered;
 
-  // 行のHTML生成
-  const rowHeight = calcRowHeight(pageItems.length);
-  const rows = pageItems.map((item, idx) => {
-    const globalIdx = start + idx;
-    const rowId = item.name + "|" + item.date + "|" + item.start_time;
-    const prevItem = findPreviousItem(rowId);
-    const changed = hasChanged && (!prevItem || JSON.stringify(prevItem) !== JSON.stringify(item));
-    return renderRow(item, globalIdx, rowHeight, changed, rowId);
+  // 日付グループ構築
+  dateGroups = buildDateGroups(filtered, data.today, tomorrowStr);
+
+  // 各グループのページ数を計算
+  dateGroups.forEach(function(g) {
+    g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
   });
 
-  body.innerHTML = rows.join("");
+  // 初期表示
+  if (currentGroupIdx >= dateGroups.length) currentGroupIdx = 0;
+  const group = dateGroups[currentGroupIdx];
+  totalPages = group.totalPages;
+  if (currentPage >= totalPages) currentPage = 0;
+
+  renderCurrentGroupPage(hasChanged);
+  updateHeaderForGroup(group);
+  updateFooter(data, filtered.length);
+
+  // タイマー開始
+  stopAllTimers();
+  if (totalPages > 1 || dateGroups.length > 1) {
+    startPageRotation();
+  }
+}
+
+// ---------- ヘッダーの日付表示を現在グループに合わせる ----------
+function updateHeaderForGroup(group) {
+  const todayEl = document.getElementById("header-today");
+  if (!todayEl) return;
+  const labelClass = group.label === "明日" ? "header-today-label label-tomorrow" : "header-today-label";
+  const label = group.label || "";
+  todayEl.innerHTML = `<span class="${labelClass}">${escapeHtml(label)}</span>${escapeHtml(group.dateFormatted)}`;
+}
+
+// ---------- 現在グループ・現在ページの描画 ----------
+function renderCurrentGroupPage(hasChanged) {
+  if (dateGroups.length === 0) return;
+
+  const group = dateGroups[currentGroupIdx];
+  const body = document.getElementById("board-body");
+  const start = currentPage * ROWS_PER_PAGE;
+  const pageItems = group.items.slice(start, start + ROWS_PER_PAGE);
+
+  const available = window.innerHeight - 88 - 62 - 40;
+  const rowHeight = pageItems.length > 0 ? Math.min(64, Math.floor(available / pageItems.length)) : 64;
+
+  let rowIdx = 0;
+  const html = pageItems.map(function(item) {
+    const rowId = item.title + "|" + item.date + "|" + item.partner;
+    const prevItem = findPreviousItem(rowId);
+    const changed = hasChanged && (!prevItem || JSON.stringify(prevItem) !== JSON.stringify(item));
+    const result = renderRow(item, rowIdx, rowHeight, changed, rowId);
+    rowIdx++;
+    return result;
+  });
+
+  body.innerHTML = html.join("");
 
   // フリップアニメーション完了後にクラス除去
-  body.querySelectorAll(".flip-enter").forEach((el) => {
-    el.addEventListener("animationend", () => {
+  body.querySelectorAll(".flip-enter").forEach(function(el) {
+    el.addEventListener("animationend", function() {
       el.classList.remove("flip-enter");
     }, { once: true });
   });
 
-  // データ保持
-  previousDataJSON = newDataJSON;
-  previousItems = displayItems;
-
-  // フッター更新
-  updateFooter(data, displayItems.length);
-
-  // ページローテーション制御
-  if (totalPages > 1) {
-    startPageRotation();
-  } else {
-    stopPageRotation();
-  }
+  updatePageIndicator();
 }
 
-// ---------- 「今日」フィルタリング ----------
-function filterToday(items, todayStr) {
-  if (!items || items.length === 0) return [];
-  const todayItems = items.filter((item) => item.date === todayStr);
-  if (todayItems.length > 0) return todayItems;
-  return items;
+// ---------- 夜間作業判定 ----------
+function isNightWork(workTime) {
+  return workTime === "夜";
 }
 
 // ---------- 行レンダリング ----------
 function renderRow(item, index, rowHeight, changed, rowId) {
   const evenOdd = index % 2 === 0 ? "row-even" : "row-odd";
   const flipClass = changed ? " flip-enter" : "";
-  const progressComplete = item.progress >= 100 ? " complete" : "";
+  const priorityClass = item.is_priority ? " row-priority" : "";
+  const nightClass = isNightWork(item.work_time) ? " row-night" : "";
 
-  const timeDisplay = item.end_time
-    ? `${escapeHtml(item.start_time)} <span class="time-dash">―</span> ${escapeHtml(item.end_time)}`
-    : escapeHtml(item.start_time);
+  const priorityBadge = item.is_priority
+    ? `<span class="priority-badge priority-yes">有</span>`
+    : `<span class="priority-badge priority-no">無</span>`;
 
-  return `<div class="board-row ${evenOdd}${flipClass}" data-id="${escapeAttr(rowId)}" style="height:${rowHeight}px;">
-  <div class="col col-time">${timeDisplay}</div>
-  <div class="col col-name">${escapeHtml(item.name)}</div>
-  <div class="col col-location">${escapeHtml(item.location)}</div>
-  <div class="col col-status"><span class="status-badge status-${item.status_code}"><span class="status-dot"></span>${escapeHtml(item.status)}</span></div>
-  <div class="col col-person">${escapeHtml(item.person)}</div>
-  <div class="col col-progress">
-    <div class="progress-wrapper">
-      <div class="progress-bar"><div class="progress-fill" style="width:${item.progress}%"></div></div>
-    </div>
-    <span class="progress-text${progressComplete}">${item.progress}%</span>
-  </div>
+  return `<div class="board-row ${evenOdd}${flipClass}${priorityClass}${nightClass}" data-id="${escapeAttr(rowId)}" style="min-height:${rowHeight}px;">
+  <div class="col col-client">${escapeHtml(item.client)}</div>
+  <div class="col col-title">${escapeHtml(item.title)}</div>
+  <div class="col col-our-person">${escapeHtml(item.our_person)}</div>
+  <div class="col col-safety">${escapeHtml(item.safety_person)}</div>
+  <div class="col col-partner">${escapeHtml(item.partner)}</div>
+  <div class="col col-partner-person">${escapeHtml(item.partner_person)}</div>
+  <div class="col col-work">${escapeHtml(item.work_content)}</div>
+  <div class="col col-time">${escapeHtml(item.work_time)}</div>
+  <div class="col col-priority">${priorityBadge}</div>
 </div>`;
 }
 
-// ---------- 行の高さ計算 ----------
-function calcRowHeight(rowCount) {
-  if (rowCount === 0) return 64;
-  const available = window.innerHeight - 120 - 60 - 52; // header + table-header + footer
-  return Math.floor(available / Math.max(rowCount, 1));
+// ---------- 表示件数・行の高さを画面サイズから自動計算 ----------
+function calcRowsPerPage() {
+  const available = window.innerHeight - 88 - 62 - 40; // header + table-header + footer
+  return Math.max(4, Math.floor(available / MIN_ROW_HEIGHT));
 }
 
 // ---------- 前回データ検索 ----------
 function findPreviousItem(rowId) {
   for (const item of previousItems) {
-    const id = item.name + "|" + item.date + "|" + item.start_time;
+    const id = item.title + "|" + item.date + "|" + item.partner;
     if (id === rowId) return item;
   }
   return null;
@@ -201,12 +290,13 @@ function findPreviousItem(rowId) {
 // ---------- ページローテーション ----------
 function startPageRotation() {
   if (pageRotateTimer) return;
-  pageRotateTimer = setInterval(() => {
+  groupCycleCount = 0;
+  pageRotateTimer = setInterval(function() {
     rotatePage();
   }, PAGE_ROTATE_SEC * 1000);
 }
 
-function stopPageRotation() {
+function stopAllTimers() {
   if (pageRotateTimer) {
     clearInterval(pageRotateTimer);
     pageRotateTimer = null;
@@ -215,36 +305,44 @@ function stopPageRotation() {
 
 function rotatePage() {
   const body = document.getElementById("board-body");
+  const group = dateGroups[currentGroupIdx];
+
   body.classList.add("fade-out");
   body.classList.remove("fade-in");
 
-  setTimeout(() => {
-    currentPage = (currentPage + 1) % totalPages;
-    rerenderCurrentPage();
+  setTimeout(function() {
+    const nextPage = currentPage + 1;
+    if (nextPage >= group.totalPages) {
+      // このグループの最後のページ → 次のグループへ or 周回
+      groupCycleCount++;
+      if (dateGroups.length > 1 && groupCycleCount >= GROUP_ROTATE_CYCLES) {
+        // 次の日付グループへ切替
+        groupCycleCount = 0;
+        currentGroupIdx = (currentGroupIdx + 1) % dateGroups.length;
+        currentPage = 0;
+        const newGroup = dateGroups[currentGroupIdx];
+        totalPages = newGroup.totalPages;
+        updateHeaderForGroup(newGroup);
+      } else {
+        // 同じグループの先頭に戻る
+        currentPage = 0;
+      }
+    } else {
+      currentPage = nextPage;
+    }
+
+    renderCurrentGroupPage(false);
     body.classList.remove("fade-out");
     body.classList.add("fade-in");
   }, 300);
 }
 
-function rerenderCurrentPage() {
-  if (previousItems.length === 0) return;
-
-  const body = document.getElementById("board-body");
-  const start = currentPage * ROWS_PER_PAGE;
-  const pageItems = previousItems.slice(start, start + ROWS_PER_PAGE);
-  const rowHeight = calcRowHeight(pageItems.length);
-
-  const rows = pageItems.map((item, idx) => {
-    const globalIdx = start + idx;
-    const rowId = item.name + "|" + item.date + "|" + item.start_time;
-    return renderRow(item, globalIdx, rowHeight, false, rowId);
-  });
-
-  body.innerHTML = rows.join("");
-
+function updatePageIndicator() {
   const indicator = document.getElementById("page-indicator");
-  if (totalPages > 1) {
-    indicator.textContent = `${currentPage + 1} / ${totalPages}`;
+  const group = dateGroups[currentGroupIdx];
+  if (!group) return;
+  if (group.totalPages > 1) {
+    indicator.textContent = `${currentPage + 1} / ${group.totalPages}`;
   } else {
     indicator.textContent = "";
   }
@@ -296,12 +394,56 @@ function escapeAttr(str) {
   return escapeHtml(str);
 }
 
+// ---------- フルスクリーン ----------
+function requestFullscreen() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if (el.msRequestFullscreen) el.msRequestFullscreen();
+}
+
+function toggleFullscreen() {
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  } else {
+    requestFullscreen();
+  }
+}
+
+// ---------- リサイズ対応 ----------
+function onResize() {
+  const newRows = calcRowsPerPage();
+  if (newRows !== ROWS_PER_PAGE) {
+    ROWS_PER_PAGE = newRows;
+    stopAllTimers();
+    if (dateGroups.length > 0) {
+      dateGroups.forEach(function(g) {
+        g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
+      });
+      const group = dateGroups[currentGroupIdx];
+      totalPages = group.totalPages;
+      if (currentPage >= totalPages) currentPage = 0;
+      renderCurrentGroupPage(false);
+      if (totalPages > 1 || dateGroups.length > 1) startPageRotation();
+    }
+  }
+}
+
 // ---------- 初期化 ----------
 async function initBoard() {
   startClock();
   await fetchConfig();
   await fetchAndRender();
   setInterval(fetchAndRender, REFRESH_INTERVAL);
+
+  // リサイズ・全画面切替時に表示件数を再計算
+  window.addEventListener("resize", onResize);
+
+  // クリックで全画面トグル
+  document.addEventListener("click", toggleFullscreen);
+  // 初回は自動で全画面（ユーザー操作が必要なブラウザもある）
+  requestFullscreen();
 }
 
 document.addEventListener("DOMContentLoaded", initBoard);

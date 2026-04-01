@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工事予定表 - ファイルアップロード</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      min-height: 100vh; padding: 40px 20px;
+    }
+    .container { max-width: 560px; margin: 0 auto; }
+    .header {
+      text-align: center; margin-bottom: 32px;
+    }
+    .header h1 {
+      color: #1A2E5A; font-size: 24px; font-weight: 600;
+    }
+    .header p {
+      color: #666; margin-top: 8px; font-size: 14px;
+    }
+    .card {
+      background: white; border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(26,46,90,0.08);
+      padding: 32px; margin-bottom: 20px;
+    }
+    .drop-area {
+      border: 2px dashed #c0c8d8; border-radius: 12px;
+      padding: 48px 20px; text-align: center;
+      cursor: pointer; transition: all 0.2s;
+      background: #fafbfc;
+    }
+    .drop-area:hover, .drop-area.dragover {
+      background: #f0f3fa; border-color: #1A2E5A;
+    }
+    .drop-area .icon { font-size: 48px; margin-bottom: 12px; }
+    .drop-area .label { color: #666; font-size: 15px; line-height: 1.6; }
+    .drop-area input { display: none; }
+    .file-info {
+      margin-top: 20px; padding: 14px 16px;
+      background: #f0f3fa; border-radius: 8px;
+      display: none; align-items: center; gap: 12px;
+    }
+    .file-info.visible { display: flex; }
+    .file-info .name { flex: 1; font-size: 14px; color: #333; word-break: break-all; }
+    .file-info .size { color: #888; font-size: 13px; white-space: nowrap; }
+    .file-info .remove {
+      background: none; border: none; color: #999;
+      cursor: pointer; font-size: 18px; padding: 0 4px;
+    }
+    .file-info .remove:hover { color: #c00; }
+    .btn {
+      display: block; width: 100%; margin-top: 24px;
+      background: #1A2E5A; color: white; border: none;
+      padding: 14px; border-radius: 8px; font-size: 16px;
+      font-weight: 500; cursor: pointer; transition: background 0.2s;
+    }
+    .btn:hover { background: #2a4070; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .status {
+      margin-top: 16px; padding: 14px 16px; border-radius: 8px;
+      font-size: 14px; display: none;
+    }
+    .status.success { display: block; background: #d4edda; color: #155724; }
+    .status.error { display: block; background: #f8d7da; color: #721c24; }
+    .status.uploading { display: block; background: #cce5ff; color: #004085; }
+    .note {
+      color: #888; font-size: 13px; line-height: 1.8;
+      padding: 0 4px;
+    }
+    .note li { margin-bottom: 4px; }
+    .back-link {
+      display: block; text-align: center; margin-top: 24px;
+      color: #1A2E5A; text-decoration: none; font-size: 14px;
+    }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>工事予定表 ファイルアップロード</h1>
+      <p>入力ファイルをアップロードすると工事予定表が自動更新されます</p>
+    </div>
+
+    <div class="card">
+      <div class="drop-area" id="drop-area">
+        <div class="icon">&#128203;</div>
+        <div class="label">
+          ここにファイルをドラッグ＆ドロップ<br>
+          または <strong>クリックして選択</strong>
+        </div>
+        <input type="file" id="file-input" accept=".xlsm,.xlsx">
+      </div>
+
+      <div class="file-info" id="file-info">
+        <span class="name" id="file-name"></span>
+        <span class="size" id="file-size"></span>
+        <button class="remove" id="file-remove" title="取り消し">&times;</button>
+      </div>
+
+      <button class="btn" id="upload-btn" disabled>アップロード</button>
+
+      <div class="status" id="status"></div>
+    </div>
+
+    <ul class="note">
+      <li>ファイル名は「入力_担当者名.xlsm」の形式にしてください</li>
+      <li>アップロード後、約2分で工事予定表に反映されます</li>
+      <li>対応形式: .xlsm / .xlsx</li>
+    </ul>
+
+    <a href="/" class="back-link">工事予定表を見る</a>
+  </div>
+
+  <script>
+    var dropArea = document.getElementById("drop-area");
+    var fileInput = document.getElementById("file-input");
+    var fileInfo = document.getElementById("file-info");
+    var fileName = document.getElementById("file-name");
+    var fileSize = document.getElementById("file-size");
+    var fileRemove = document.getElementById("file-remove");
+    var uploadBtn = document.getElementById("upload-btn");
+    var statusEl = document.getElementById("status");
+    var selectedFile = null;
+
+    // Click to select
+    dropArea.addEventListener("click", function() { fileInput.click(); });
+
+    // Drag & Drop
+    ["dragenter", "dragover"].forEach(function(evt) {
+      dropArea.addEventListener(evt, function(e) {
+        e.preventDefault(); e.stopPropagation();
+        dropArea.classList.add("dragover");
+      });
+    });
+    ["dragleave", "drop"].forEach(function(evt) {
+      dropArea.addEventListener(evt, function(e) {
+        e.preventDefault(); e.stopPropagation();
+        dropArea.classList.remove("dragover");
+      });
+    });
+    dropArea.addEventListener("drop", function(e) {
+      var files = e.dataTransfer.files;
+      if (files.length > 0) handleFile(files[0]);
+    });
+
+    fileInput.addEventListener("change", function() {
+      if (fileInput.files.length > 0) handleFile(fileInput.files[0]);
+    });
+
+    fileRemove.addEventListener("click", function(e) {
+      e.stopPropagation();
+      clearFile();
+    });
+
+    function handleFile(file) {
+      // Validate
+      var ext = file.name.split(".").pop().toLowerCase();
+      if (ext !== "xlsm" && ext !== "xlsx") {
+        showStatus("error", ".xlsm または .xlsx ファイルを選択してください");
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        showStatus("error", "ファイルサイズが大きすぎます（上限: 10MB）");
+        return;
+      }
+
+      selectedFile = file;
+      fileName.textContent = file.name;
+      fileSize.textContent = formatSize(file.size);
+      fileInfo.classList.add("visible");
+      uploadBtn.disabled = false;
+      statusEl.className = "status";
+      statusEl.style.display = "none";
+    }
+
+    function clearFile() {
+      selectedFile = null;
+      fileInput.value = "";
+      fileInfo.classList.remove("visible");
+      uploadBtn.disabled = true;
+    }
+
+    function formatSize(bytes) {
+      if (bytes < 1024) return bytes + " B";
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+      return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
+    function showStatus(type, msg) {
+      statusEl.className = "status " + type;
+      statusEl.textContent = msg;
+    }
+
+    uploadBtn.addEventListener("click", function() {
+      if (!selectedFile) return;
+      uploadBtn.disabled = true;
+      showStatus("uploading", "アップロード中...");
+
+      var reader = new FileReader();
+      reader.onload = function() {
+        var base64 = reader.result.split(",")[1];
+        fetch("/.netlify/functions/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: selectedFile.name,
+            content: base64,
+          }),
+        })
+        .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+        .then(function(result) {
+          if (result.ok && result.data.success) {
+            showStatus("success", "アップロード完了! 約2分後に工事予定表に反映されます。");
+            clearFile();
+          } else {
+            showStatus("error", "エラー: " + (result.data.error || "不明なエラー"));
+            uploadBtn.disabled = false;
+          }
+        })
+        .catch(function(err) {
+          showStatus("error", "通信エラー: " + err.message);
+          uploadBtn.disabled = false;
+        });
+      };
+      reader.readAsDataURL(selectedFile);
+    });
+  </script>
+</body>
+</html>
