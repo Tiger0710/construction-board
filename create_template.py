@@ -1,208 +1,211 @@
-"""工事予定表Excelテンプレート生成スクリプト"""
+"""VBA付きテンプレート生成 (初回のみ実行)
+
+template/gantt_template.xlsm を生成する。
+create_input_system.py が openpyxl + keep_vba=True で再利用。
+
+必要条件:
+  - Windows + Excel
+  - Excelオプション → トラストセンター → 「VBAプロジェクトオブジェクトモデルへのアクセスを信頼する」有効
+"""
 import os
-import datetime
+import sys
+import time
 
-from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
-from openpyxl.worksheet.datavalidation import DataValidation
-from openpyxl.formatting.rule import CellIsRule
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE_DIR, "template")
+TEMPLATE_PATH = os.path.join(TEMPLATE_DIR, "gantt_template.xlsm")
 
-import config
+# === VBA: ThisWorkbook ===
+VBA_THISWORKBOOK = """
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+    SyncGanttToDaily
+End Sub
+"""
+
+# === VBA: SyncModule ===
+VBA_MODULE = """
+Public Sub SyncGanttToDaily()
+    Dim wsG As Worksheet, wsD As Worksheet
+    On Error Resume Next
+    Set wsG = ThisWorkbook.Worksheets("ガントチャート")
+    Set wsD = ThisWorkbook.Worksheets("日次入力")
+    On Error GoTo 0
+    If wsG Is Nothing Or wsD Is Nothing Then Exit Sub
+
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+    On Error GoTo CleanUp
+
+    ' === 1. Read existing daily data ===
+    Dim existing As Object
+    Set existing = CreateObject("Scripting.Dictionary")
+    Dim lastRowD As Long
+    lastRowD = wsD.Cells(wsD.Rows.Count, 1).End(xlUp).Row
+
+    Dim r As Long
+    For r = 2 To lastRowD
+        If Not IsEmpty(wsD.Cells(r, 1).Value) Then
+            Dim cv As String, tv As String
+            cv = Trim(wsD.Cells(r, 2).Value & "")
+            tv = Trim(wsD.Cells(r, 3).Value & "")
+            If cv <> "" And tv <> "" Then
+                Dim ek As String
+                ek = Format(wsD.Cells(r, 1).Value, "yyyy-mm-dd") & "|" & cv & "|" & tv
+                existing(ek) = Trim(wsD.Cells(r, 4).Value & "") & Chr(0) & _
+                               Trim(wsD.Cells(r, 5).Value & "") & Chr(0) & _
+                               Trim(wsD.Cells(r, 6).Value & "")
+            End If
+        End If
+    Next r
+
+    ' === 2. Generate entries from Gantt ===
+    Dim entries As New Collection
+    Dim lastRowG As Long
+    lastRowG = wsG.Cells(wsG.Rows.Count, 1).End(xlUp).Row
+
+    For r = 3 To lastRowG
+        Dim gc As String, gt As String
+        gc = Trim(wsG.Cells(r, 1).Value & "")
+        gt = Trim(wsG.Cells(r, 2).Value & "")
+        If gc = "" Or gt = "" Then GoTo NextRow
+
+        Dim sd As Variant, ed As Variant
+        sd = wsG.Cells(r, 7).Value
+        ed = wsG.Cells(r, 8).Value
+        If Not IsDate(sd) Or Not IsDate(ed) Then GoTo NextRow
+        If CDate(ed) < CDate(sd) Then GoTo NextRow
+
+        Dim d As Date
+        For d = CDate(sd) To CDate(ed)
+            Dim lk As String
+            lk = Format(d, "yyyy-mm-dd") & "|" & gc & "|" & gt
+            Dim dn As String, wc As String, pr As String
+            dn = "": wc = "": pr = ""
+            If existing.Exists(lk) Then
+                Dim parts() As String
+                parts = Split(existing(lk), Chr(0))
+                If UBound(parts) >= 0 Then dn = parts(0)
+                If UBound(parts) >= 1 Then wc = parts(1)
+                If UBound(parts) >= 2 Then pr = parts(2)
+            End If
+            entries.Add Array(d, gc, gt, dn, wc, pr)
+        Next d
+NextRow:
+    Next r
+
+    ' === 3. Clear and batch write ===
+    If lastRowD >= 2 Then wsD.Range("A2:F" & lastRowD).ClearContents
+
+    Dim cnt As Long
+    cnt = entries.Count
+    If cnt > 0 Then
+        Dim arr() As Variant
+        ReDim arr(1 To cnt, 1 To 6)
+        Dim i As Long
+        For i = 1 To cnt
+            Dim e As Variant
+            e = entries(i)
+            arr(i, 1) = e(0)
+            arr(i, 2) = e(1)
+            arr(i, 3) = e(2)
+            arr(i, 4) = e(3)
+            arr(i, 5) = e(4)
+            arr(i, 6) = e(5)
+        Next i
+        wsD.Range("A2:F" & (cnt + 1)).Value = arr
+        wsD.Range("A2:A" & (cnt + 1)).NumberFormat = "M/D"
+    End If
+
+CleanUp:
+    Application.ScreenUpdating = True
+    Application.EnableEvents = True
+End Sub
+"""
 
 
-def create_template():
-    """工事予定表テンプレートExcelを生成する"""
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "工事予定"
+def main():
+    try:
+        import win32com.client as win32
+    except ImportError:
+        print("ERROR: pywin32 が必要: pip install pywin32")
+        sys.exit(1)
 
-    # ── ヘッダー ──
-    headers = [
-        "日付", "客先", "工事件名", "弊社担当者", "安全品質管理部担当者",
-        "協力会社名", "協力会社担当者", "当日の作業内容",
-        "作業時間", "重点作業有無",
-    ]
-    header_fill = PatternFill(start_color="1A2E5A", end_color="1A2E5A", fill_type="solid")
-    header_font = Font(color="FFFFFF", bold=True, size=11)
-    header_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    thin_border = Border(
-        left=Side(style="thin"),
-        right=Side(style="thin"),
-        top=Side(style="thin"),
-        bottom=Side(style="thin"),
-    )
+    os.makedirs(TEMPLATE_DIR, exist_ok=True)
 
-    for col_idx, header in enumerate(headers, 1):
-        cell = ws.cell(row=1, column=col_idx, value=header)
-        cell.fill = header_fill
-        cell.font = header_font
-        cell.alignment = header_alignment
-        cell.border = thin_border
+    if os.path.exists(TEMPLATE_PATH):
+        os.remove(TEMPLATE_PATH)
 
-    # ── 列幅 ──
-    col_widths = {
-        "A": 12,  # 日付
-        "B": 12,  # 客先
-        "C": 28,  # 工事件名
-        "D": 14,  # 弊社担当者
-        "E": 18,  # 安全品質管理部担当者
-        "F": 20,  # 協力会社名
-        "G": 14,  # 協力会社担当者
-        "H": 35,  # 当日の作業内容
-        "I": 16,  # 作業時間
-        "J": 14,  # 重点作業有無
-    }
-    for col_letter, width in col_widths.items():
-        ws.column_dimensions[col_letter].width = width
+    print("Excel起動...")
+    excel = win32.DispatchEx("Excel.Application")
+    excel.Visible = False
+    excel.DisplayAlerts = False
 
-    # ── DataValidation: 重点作業有無(J列) ──
-    priority_dv = DataValidation(
-        type="list",
-        formula1='"有,無"',
-        allow_blank=True,
-    )
-    priority_dv.error = "有 または 無 から選択してください"
-    priority_dv.errorTitle = "無効な値"
-    priority_dv.prompt = "重点作業の有無を選択"
-    priority_dv.promptTitle = "重点作業"
-    ws.add_data_validation(priority_dv)
-    priority_dv.add("J2:J1048576")
+    try:
+        wb = excel.Workbooks.Add()
 
-    # ── サンプルデータ (今日60件+明日20件) ──
-    D = datetime.date(2026, 4, 1)
-    D2 = D + datetime.timedelta(days=1)
-    # 客先: NESIC, 京王, 小田急, きんでん
-    sample_data = [
-        # ===== 今日 1-10 =====
-        (D, "NESIC", "受水槽清掃工事", "田中", "佐藤", "ABC設備(株)", "山田", "受水槽内部高圧洗浄・消毒・水質検査（残留塩素・大腸菌・一般細菌）・槽内壁面点検・防錆処理", "06:00〜08:00", "有"),
-        (D, "京王", "駐車場ライン引き直し", "高橋", "渡辺", "道路工業(株)", "中村", "白線・車止め塗装補修", "06:30〜08:00", "無"),
-        (D, "小田急", "高圧受電設備年次点検", "鈴木", "佐藤", "(株)電気保安協会", "木村", "高圧受変電設備の年次精密点検（絶縁抵抗測定・接地抵抗測定・保護継電器試験・変圧器油中ガス分析）", "06:00〜09:00", "無"),
-        (D, "きんでん", "非常階段手摺り塗装", "伊藤", "渡辺", "塗装工業(株)", "斎藤", "東棟非常階段手摺り錆止め・上塗り", "07:00〜09:00", "有"),
-        (D, "NESIC", "自動ドア定期点検", "中村", "佐藤", "(株)ドアテック", "森", "本館1Fエントランス自動ドア点検", "07:30〜09:00", "無"),
-        (D, "京王", "給排水管洗浄", "山本", "渡辺", "ABC設備(株)", "山田", "本館B1配管室高圧洗浄", "07:00〜10:00", "無"),
-        (D, "小田急", "照明LED化工事", "加藤", "佐藤", "(株)ライトワークス", "藤田", "本館2F廊下蛍光灯40本交換", "08:00〜10:00", "有"),
-        (D, "きんでん", "消防設備点検", "田中", "渡辺", "(株)消防設備", "井上", "本館1F消火器・感知器確認", "08:00〜09:30", "無"),
-        (D, "NESIC", "外壁タイル補修", "鈴木", "佐藤", "タイル工業(株)", "岡田", "東棟外壁浮きタイル張替え", "08:00〜12:00", "有"),
-        (D, "京王", "館内放送設備点検", "高橋", "渡辺", "(株)音響システム", "坂本", "本館1F管理室放送設備動作確認", "08:30〜10:00", "無"),
-        # ===== 今日 11-20 =====
-        (D, "小田急", "1Fエントランス改修", "伊藤", "佐藤", "(株)内装工房", "小林", "床タイル張替え・壁面塗装", "09:00〜17:00", "有"),
-        (D, "きんでん", "電気設備定期点検", "中村", "渡辺", "(株)電気保安協会", "木村", "分電盤・幹線の絶縁抵抗測定", "09:00〜11:30", "無"),
-        (D, "NESIC", "空調配管交換工事", "山本", "佐藤", "空調サービス(株)", "加藤", "3F機械室冷媒配管の交換作業", "09:00〜16:00", "無"),
-        (D, "京王", "トイレ改修工事", "加藤", "渡辺", "(株)水回りサービス", "吉田", "3F男女トイレ便器交換・配管更新", "09:30〜17:00", "有"),
-        (D, "小田急", "窓ガラスフィルム貼付", "田中", "佐藤", "(株)フィルムプロ", "三浦", "本館5F遮熱フィルム施工", "09:30〜12:00", "無"),
-        (D, "きんでん", "屋上防水シート補修", "鈴木", "渡辺", "防水工業(株)", "松本", "シート破損箇所のパッチ補修", "10:00〜15:00", "有"),
-        (D, "NESIC", "火災報知器交換", "高橋", "佐藤", "(株)消防設備", "井上", "別館1F感知器3台交換", "10:00〜12:00", "無"),
-        (D, "京王", "ガス配管漏れ修繕", "伊藤", "渡辺", "(株)ガステック", "原田", "本館B1ボイラー室配管溶接補修", "10:00〜13:00", "無"),
-        (D, "小田急", "排煙設備点検", "中村", "佐藤", "(株)消防設備", "井上", "東棟3F排煙窓開閉・ダンパー確認", "10:30〜12:00", "有"),
-        (D, "きんでん", "エレベーター定期点検A", "山本", "渡辺", "(株)エレベーターメンテ", "林", "A号機法定定期検査", "11:00〜14:00", "無"),
-        # ===== 今日 21-30 =====
-        (D, "NESIC", "OAフロア配線整理", "加藤", "佐藤", "(株)オフィスネット", "野村", "本館4Fフリーアクセス内LAN整理", "11:00〜13:00", "無"),
-        (D, "京王", "スプリンクラー点検", "田中", "渡辺", "(株)消防設備", "井上", "本館全フロア放水テスト", "11:00〜14:00", "有"),
-        (D, "小田急", "カーペット張替え", "鈴木", "佐藤", "(株)内装工房", "小林", "3F会議室カーペット全面張替え", "12:30〜16:00", "無"),
-        (D, "きんでん", "外壁塗装工事", "高橋", "渡辺", "塗装工業(株)", "斎藤", "西棟外壁下地処理・中塗り", "13:00〜17:00", "有"),
-        (D, "NESIC", "空調設備定期点検", "伊藤", "佐藤", "空調サービス(株)", "加藤", "別館3Fパッケージエアコン整備", "13:00〜15:00", "無"),
-        (D, "京王", "分電盤交換工事", "中村", "渡辺", "(株)電気保安協会", "木村", "別館B1分電盤2面更新", "13:00〜16:00", "無"),
-        (D, "小田急", "防犯カメラ増設", "山本", "佐藤", "セキュリティ(株)", "清水", "駐車場A出入口にカメラ2台新設", "13:30〜15:30", "有"),
-        (D, "きんでん", "避難誘導灯交換", "加藤", "渡辺", "(株)ライトワークス", "藤田", "本館全階段LED誘導灯交換", "14:00〜16:00", "無"),
-        (D, "NESIC", "駐車場アスファルト補修", "田中", "佐藤", "道路工業(株)", "中村", "駐車場B舗装ひび割れ補修", "14:00〜17:00", "有"),
-        (D, "京王", "防水工事(屋上)", "鈴木", "渡辺", "防水工業(株)", "松本", "本館屋上ウレタン防水塗膜補修", "14:00〜17:00", "無"),
-        # ===== 今日 31-40 =====
-        (D, "小田急", "貯水槽水質検査", "高橋", "佐藤", "ABC設備(株)", "山田", "本館屋上貯水槽法定水質検査", "14:30〜16:00", "無"),
-        (D, "きんでん", "内装クロス張替え", "伊藤", "渡辺", "(株)内装工房", "小林", "別館2F応接室壁紙全面張替え", "15:00〜18:00", "有"),
-        (D, "NESIC", "ボイラー点検", "中村", "佐藤", "(株)ガステック", "原田", "B1ボイラー室定期整備・水処理確認", "15:00〜17:00", "無"),
-        (D, "京王", "共用部照明交換", "山本", "渡辺", "(株)ライトワークス", "藤田", "本館1F〜5F廊下ダウンライト交換", "15:30〜18:00", "無"),
-        (D, "小田急", "段差解消スロープ設置", "加藤", "佐藤", "(株)バリアフリー工房", "竹内", "本館1F裏口バリアフリー化", "15:30〜17:30", "有"),
-        (D, "きんでん", "防犯カメラ配線工事", "田中", "渡辺", "セキュリティ(株)", "清水", "別館1F〜3Fカメラ配線敷設", "16:00〜18:00", "無"),
-        (D, "NESIC", "自家発電設備点検", "鈴木", "佐藤", "(株)電気保安協会", "木村", "屋上発電機室年次負荷試験", "16:00〜18:00", "有"),
-        (D, "京王", "エレベーター定期点検B", "高橋", "渡辺", "(株)エレベーターメンテ", "林", "B号機法定定期検査", "16:30〜19:00", "無"),
-        (D, "小田急", "排水ポンプ交換", "伊藤", "佐藤", "ABC設備(株)", "山田", "B1排水ピットポンプ1台交換", "17:00〜19:00", "無"),
-        (D, "きんでん", "屋上フェンス取替", "中村", "渡辺", "(株)メタルワークス", "石川", "別館屋上フェンス腐食部分取替", "17:00〜19:00", "有"),
-        # ===== 今日 41-50 =====
-        (D, "NESIC", "漏水調査", "山本", "佐藤", "(株)水回りサービス", "吉田", "本館3F天井裏赤外線カメラ調査", "17:00〜19:00", "無"),
-        (D, "京王", "機械式駐車場点検", "加藤", "渡辺", "(株)パーキングシステム", "大野", "駐車場C地下機械装置定期整備", "18:00〜20:00", "有"),
-        (D, "小田急", "グリストラップ清掃", "田中", "佐藤", "ビルクリーン(株)", "高田", "本館B1厨房下グリストラップ汚泥除去", "18:00〜20:00", "無"),
-        (D, "きんでん", "床ワックス塗布", "鈴木", "渡辺", "ビルクリーン(株)", "高田", "本館1Fロビー・廊下ワックス塗布", "18:30〜21:00", "無"),
-        (D, "NESIC", "非常用照明バッテリー交換", "高橋", "佐藤", "(株)ライトワークス", "藤田", "別館全フロア非常灯バッテリー交換", "19:00〜21:00", "有"),
-        (D, "京王", "空調ダクト清掃", "伊藤", "渡辺", "空調サービス(株)", "加藤", "本館2F〜4F空調ダクト内部洗浄", "19:00〜22:00", "無"),
-        (D, "小田急", "配管保温材巻き直し", "中村", "佐藤", "ABC設備(株)", "山田", "東棟B1配管室保温材更新", "19:00〜21:00", "有"),
-        (D, "きんでん", "セキュリティゲート調整", "山本", "渡辺", "セキュリティ(株)", "清水", "本館1Fカード認証ゲート設定変更", "20:00〜21:00", "無"),
-        (D, "NESIC", "汚水管高圧洗浄", "加藤", "佐藤", "(株)水回りサービス", "吉田", "別館B1汚水管高圧ジェット洗浄", "20:00〜22:00", "無"),
-        (D, "京王", "蓄電池設備点検", "田中", "渡辺", "(株)電気保安協会", "木村", "屋上蓄電池室BCP関連設備点検", "20:00〜21:30", "有"),
-        # ===== 今日 51-60 =====
-        (D, "小田急", "守衛室モニター交換", "鈴木", "佐藤", "セキュリティ(株)", "清水", "本館1F守衛室4Kモニター2台設置", "20:30〜22:00", "無"),
-        (D, "きんでん", "消火栓ポンプ試運転", "高橋", "渡辺", "(株)消防設備", "井上", "本館B1消火栓ポンプ性能試験", "20:30〜22:00", "有"),
-        (D, "NESIC", "トイレ排水管更新", "伊藤", "佐藤", "(株)水回りサービス", "吉田", "別館4Fトイレ排水竪管ライニング", "21:00〜23:00", "無"),
-        (D, "京王", "電気錠システム更新", "中村", "渡辺", "セキュリティ(株)", "清水", "本館2F〜5F事務室電気錠交換", "21:00〜23:00", "無"),
-        (D, "小田急", "冷却塔整備", "山本", "佐藤", "空調サービス(株)", "加藤", "屋上冷却塔ファンベルト・充填材交換", "21:00〜23:00", "有"),
-        (D, "きんでん", "屋内消火栓ホース交換", "加藤", "渡辺", "(株)消防設備", "井上", "本館全階消火栓ホース10本更新", "21:30〜23:00", "無"),
-        (D, "NESIC", "受変電設備清掃", "田中", "佐藤", "(株)電気保安協会", "木村", "屋上キュービクル内部清掃・増締め", "22:00〜24:00", "有"),
-        (D, "京王", "エスカレーター整備", "鈴木", "渡辺", "(株)エレベーターメンテ", "林", "本館1Fエスカレーター駆動部整備", "22:00〜24:00", "無"),
-        (D, "小田急", "給水ポンプ交換", "高橋", "佐藤", "ABC設備(株)", "山田", "本館B1加圧給水ポンプユニット更新", "22:00〜翌02:00", "無"),
-        (D, "きんでん", "中央監視盤ソフト更新", "伊藤", "渡辺", "(株)ビルオートメーション", "西田", "中央監視システムソフトウェア更新", "23:00〜翌03:00", "有"),
-        # ===== 明日 1-20 =====
-        (D2, "NESIC", "屋上防水改修工事", "田中", "佐藤", "防水工業(株)", "松本", "本館屋上ウレタン防水トップコート塗布", "06:00〜10:00", "有"),
-        (D2, "京王", "外壁洗浄", "高橋", "渡辺", "ビルクリーン(株)", "高田", "東棟外壁高圧洗浄（ゴンドラ作業）", "07:00〜12:00", "無"),
-        (D2, "小田急", "受水槽点検", "鈴木", "佐藤", "ABC設備(株)", "山田", "別館地下受水槽内部点検・清掃", "06:00〜08:00", "有"),
-        (D2, "きんでん", "照明制御盤更新", "伊藤", "渡辺", "(株)ライトワークス", "藤田", "本館1F照明制御盤プログラム更新", "08:00〜11:00", "無"),
-        (D2, "NESIC", "空調フィルター交換", "中村", "佐藤", "空調サービス(株)", "加藤", "本館全フロアAHUフィルター交換", "08:00〜12:00", "無"),
-        (D2, "京王", "防火扉点検", "山本", "渡辺", "(株)消防設備", "井上", "本館・別館全防火扉開閉試験", "09:00〜12:00", "有"),
-        (D2, "小田急", "給湯器交換", "加藤", "佐藤", "(株)ガステック", "原田", "別館3F給湯室ガス給湯器更新", "09:00〜11:00", "無"),
-        (D2, "きんでん", "非常放送設備点検", "田中", "渡辺", "(株)音響システム", "坂本", "全館非常放送設備総合試験", "10:00〜14:00", "有"),
-        (D2, "NESIC", "タイルカーペット張替え", "鈴木", "佐藤", "(株)内装工房", "小林", "本館5F事務室タイルカーペット更新", "10:00〜16:00", "無"),
-        (D2, "京王", "排水管カメラ調査", "高橋", "渡辺", "(株)水回りサービス", "吉田", "本館B1〜RF排水竪管内部カメラ調査", "11:00〜15:00", "無"),
-        (D2, "小田急", "消防用ポンプ点検", "伊藤", "佐藤", "(株)消防設備", "井上", "別館B1スプリンクラーポンプ性能試験", "13:00〜15:00", "有"),
-        (D2, "きんでん", "自動火災報知設備更新", "中村", "渡辺", "(株)消防設備", "井上", "東棟2F感知器回線増設工事", "13:00〜16:00", "無"),
-        (D2, "NESIC", "電気室清掃", "山本", "佐藤", "(株)電気保安協会", "木村", "本館B1電気室内清掃・絶縁点検", "14:00〜16:00", "有"),
-        (D2, "京王", "植栽剪定", "加藤", "渡辺", "(株)グリーンサービス", "上田", "本館エントランス周辺植栽剪定・除草", "14:00〜17:00", "無"),
-        (D2, "小田急", "避雷設備点検", "田中", "佐藤", "(株)電気保安協会", "木村", "屋上避雷針接地抵抗測定", "15:00〜16:30", "無"),
-        (D2, "きんでん", "空調室外機基礎補修", "鈴木", "渡辺", "空調サービス(株)", "加藤", "屋上室外機コンクリート基礎クラック補修", "15:00〜17:00", "有"),
-        (D2, "NESIC", "駐輪場整備", "高橋", "佐藤", "(株)メタルワークス", "石川", "駐輪場ラック増設・舗装補修", "16:00〜18:00", "無"),
-        (D2, "京王", "窓サッシコーキング", "伊藤", "渡辺", "(株)シール工業", "渡部", "本館3F〜5F窓サッシシーリング打替え", "16:00〜19:00", "無"),
-        (D2, "小田急", "中央監視設備点検", "中村", "佐藤", "(株)ビルオートメーション", "西田", "中央監視室端末・通信回線点検", "17:00〜19:00", "有"),
-        (D2, "きんでん", "エレベーター部品交換", "山本", "渡辺", "(株)エレベーターメンテ", "林", "A号機ドアモーター・エンコーダ交換", "18:00〜21:00", "無"),
-    ]
+        # --- ガントチャート sheet ---
+        ws = wb.Worksheets(1)
+        ws.Name = "ガントチャート"
 
-    data_font = Font(size=11)
-    date_alignment = Alignment(horizontal="center", vertical="center")
-    center_alignment = Alignment(horizontal="center", vertical="center")
+        labels = ["客先", "工事件名", "現場担当者", "安品担当者",
+                  "協力会社名", "協力会社担当者", "開始", "終了"]
+        widths = [12, 38, 10, 10, 16, 10, 10, 10]
+        for i, (label, w) in enumerate(zip(labels, widths), 1):
+            ws.Cells(2, i).Value = label
+            ws.Columns(i).ColumnWidth = w
 
-    for row_idx, row_data in enumerate(sample_data, 2):
-        for col_idx, value in enumerate(row_data, 1):
-            cell = ws.cell(row=row_idx, column=col_idx, value=value)
-            cell.font = data_font
-            cell.border = thin_border
+        ws.Rows(1).RowHeight = 28
 
-            if col_idx == 1:  # 日付
-                cell.alignment = date_alignment
-                cell.number_format = "YYYY/MM/DD"
-            elif col_idx == 10:  # 重点作業有無
-                cell.alignment = center_alignment
-            else:
-                cell.alignment = Alignment(vertical="center")
+        # --- 日次入力 sheet ---
+        ws_d = wb.Worksheets.Add(After=wb.Worksheets(wb.Worksheets.Count))
+        ws_d.Name = "日次入力"
 
-    # ── 条件付き書式: 重点作業有(J列) ──
-    navy_fill = PatternFill(start_color="D6DFEF", end_color="D6DFEF", fill_type="solid")
-    ws.conditional_formatting.add(
-        "J2:J1048576",
-        CellIsRule(operator="equal", formula=['"有"'], fill=navy_fill),
-    )
+        d_headers = ["日付", "客先", "工事件名", "昼/夜", "工事内容", "重点工事"]
+        d_widths = [12, 12, 28, 8, 40, 10]
+        for i, (h, w) in enumerate(zip(d_headers, d_widths), 1):
+            ws_d.Cells(1, i).Value = h
+            ws_d.Columns(i).ColumnWidth = w
 
-    # ── オートフィルター ──
-    last_col = get_column_letter(len(headers))
-    ws.auto_filter.ref = f"A1:{last_col}1"
+        # Delete extra sheets
+        while wb.Worksheets.Count > 2:
+            for i in range(wb.Worksheets.Count, 0, -1):
+                name = wb.Worksheets(i).Name
+                if name not in ("ガントチャート", "日次入力"):
+                    wb.Worksheets(i).Delete()
+                    break
 
-    # ── 行の高さ ──
-    ws.row_dimensions[1].height = 30
-    for r in range(2, len(sample_data) + 2):
-        ws.row_dimensions[r].height = 24
+        # --- VBA injection ---
+        print("VBAコード挿入...")
+        vb_project = wb.VBProject
 
-    # ── 保存 ──
-    os.makedirs(config.DATA_DIR, exist_ok=True)
-    wb.save(config.EXCEL_PATH)
-    print(f"テンプレート作成完了: {config.EXCEL_PATH}")
-    print(f"  今日({D}): 60件, 明日({D2}): 20件")
+        # ThisWorkbook
+        tb = vb_project.VBComponents("ThisWorkbook")
+        tb.CodeModule.AddFromString(VBA_THISWORKBOOK.strip())
+
+        # Standard module
+        mod = vb_project.VBComponents.Add(1)  # vbext_ct_StdModule
+        mod.Name = "SyncModule"
+        mod.CodeModule.AddFromString(VBA_MODULE.strip())
+
+        # Activate ガントチャート
+        wb.Worksheets("ガントチャート").Activate()
+
+        # Save as xlsm (FileFormat=52)
+        abs_path = os.path.abspath(TEMPLATE_PATH)
+        print(f"保存: {abs_path}")
+        wb.SaveAs(abs_path, FileFormat=52)
+        wb.Close(False)
+
+        print("テンプレート作成完了!")
+
+    except Exception as e:
+        print(f"ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+    finally:
+        excel.Quit()
+        time.sleep(1)
 
 
 if __name__ == "__main__":
-    create_template()
+    main()

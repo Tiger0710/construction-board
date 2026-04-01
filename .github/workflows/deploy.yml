@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "data/入力_*"
+      - "data/**/入力_*"
       - "*.py"
       - "static/**"
       - "templates/**"

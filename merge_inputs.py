@@ -1,12 +1,11 @@
 """入力ファイル統合: ガントチャートから自動生成 + 日次入力オーバーレイ → 工事予定表.xlsx
 
-ファイル名パターン:
-  入力_{担当者名}_{YYMM}.xlsm  → 月別ファイル (2604 = 2026年4月)
-  入力_{担当者名}.xlsm          → 月指定なし (常に読み込み)
+フォルダ構成:
+  {INPUT_DIR}/{YYMM}/入力_{担当者名}.xlsm  → 月サブフォルダ
+  {INPUT_DIR}/入力_{担当者名}_{YYMM}.xlsx   → 旧形式 (後方互換)
 
 ガントチャートの開始〜終了日から自動で日次エントリーを生成。
 日次入力シートに手入力データがあればそちらを優先。
-→ VBAマクロ不要。ガントチャートを埋めるだけで動く。
 """
 import os
 import re
@@ -21,9 +20,8 @@ from openpyxl.utils import get_column_letter
 
 import config
 
-# ファイル名から月(YYMM)を抽出するパターン
+# 旧ファイル名パターン (後方互換)
 MONTH_RE = re.compile(r"^入力_.+_(\d{4})\.(xlsx|xlsm)$")
-
 
 # ---------- スタイル ----------
 NAVY = "1A2E5A"
@@ -58,16 +56,10 @@ def _to_date(val):
 
 
 def load_input_file(fpath):
-    """1ファイルからガントチャート + 日次入力を読み込み、エントリーを自動生成
-
-    ガントチャートの開始〜終了日から全日分のエントリーを生成し、
-    日次入力シートの手入力データがあればオーバーレイする。
-    """
+    """1ファイルからガントチャート + 日次入力を読み込み、エントリーを自動生成"""
     fname = os.path.basename(fpath)
     wb = load_workbook(fpath, read_only=True, data_only=True)
 
-    # ガントチャート: 案件情報 + 日付範囲
-    # A=客先, B=工事件名, C=現場担当者, D=安品担当者, E=協力会社名, F=協力会社担当者, G=開始, H=終了
     project_info = {}
     gantt_ranges = []
 
@@ -89,8 +81,6 @@ def load_input_file(fpath):
             if start and end and end >= start:
                 gantt_ranges.append((client, title, start, end))
 
-    # 日次入力: 手入力データ (lookup用)
-    # A=日付, B=客先, C=工事件名, D=昼/夜, E=工事内容, F=重点工事
     daily_dict = {}
     if "日次入力" in wb.sheetnames:
         for row in wb["日次入力"].iter_rows(min_row=2, values_only=True):
@@ -112,7 +102,6 @@ def load_input_file(fpath):
 
     wb.close()
 
-    # ガントの日付範囲からエントリー自動生成 + 日次入力オーバーレイ
     entries = []
     for client, title, start, end in gantt_ranges:
         d = start
@@ -136,7 +125,6 @@ def load_input_file(fpath):
                 })
             d += datetime.timedelta(days=1)
 
-    # ガントに紐付かない日次入力（残り）も拾う
     for (d, client, title), user in daily_dict.items():
         entries.append({
             "date": d, "client": client, "title": title,
@@ -158,40 +146,48 @@ def get_target_months():
     return [current, next_m]
 
 
-def filter_by_month(files):
-    """月別ファイルを当月+翌月でフィルタ。月指定なしファイルは常に含む"""
+def scan_input_files():
+    """入力ファイルをスキャン (サブフォルダ + 旧フラット構成)"""
     target_months = get_target_months()
-    result = []
-    for f in files:
-        fname = os.path.basename(f)
-        m = MONTH_RE.match(fname)
-        if m:
-            if m.group(1) in target_months:
-                result.append(f)
-        else:
-            result.append(f)
-    return result
-
-
-def merge_all():
-    """全ファイル読み込み → ガントチャートJOIN → 統合リスト"""
     files = []
-    for d in (config.INPUT_DIR, config.DATA_DIR):
-        if not os.path.isdir(d):
+
+    for base_dir in (config.INPUT_DIR, config.DATA_DIR):
+        if not os.path.isdir(base_dir):
             continue
+
+        # 新形式: {base}/{YYMM}/入力_*.xlsm
+        for yymm in target_months:
+            month_dir = os.path.join(base_dir, yymm)
+            if os.path.isdir(month_dir):
+                for ext in ("xlsm", "xlsx"):
+                    files.extend(glob.glob(os.path.join(month_dir, f"入力_*.{ext}")))
+
+        # 旧形式: {base}/入力_*_{YYMM}.xlsx (後方互換)
         for ext in ("xlsx", "xlsm"):
-            files.extend(glob.glob(os.path.join(d, f"入力_*.{ext}")))
+            for f in glob.glob(os.path.join(base_dir, f"入力_*.{ext}")):
+                fname = os.path.basename(f)
+                m = MONTH_RE.match(fname)
+                if m:
+                    if m.group(1) in target_months:
+                        files.append(f)
+                else:
+                    files.append(f)
+
+    # ロックファイル除外
     files = [f for f in files if not os.path.basename(f).startswith("~$")]
 
-    files = filter_by_month(files)
-
-    # 重複除去 (同名ファイルはINPUT_DIR優先)
+    # 重複除去 (INPUT_DIR優先)
     seen = {}
     for f in files:
         name = os.path.basename(f)
         if name not in seen or f.startswith(config.INPUT_DIR):
             seen[name] = f
-    files = list(seen.values())
+    return list(seen.values())
+
+
+def merge_all():
+    """全ファイル読み込み → ガントチャートJOIN → 統合リスト"""
+    files = scan_input_files()
 
     if not files:
         print("警告: 入力ファイルが見つかりません")
@@ -201,7 +197,9 @@ def merge_all():
 
     for fpath in sorted(files):
         fname = os.path.basename(fpath)
-        print(f"  読み込み: {fname}")
+        parent = os.path.basename(os.path.dirname(fpath))
+        display = f"{parent}/{fname}" if parent.isdigit() else fname
+        print(f"  読み込み: {display}")
         try:
             project_info, entries = load_input_file(fpath)
             gantt_count = len(project_info)

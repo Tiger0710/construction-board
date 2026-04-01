@@ -45,12 +45,16 @@ logger.addHandler(ch)
 
 
 def get_input_files():
-    """入力ファイル一覧 (DirectCloud + ローカル、ロックファイル除外)"""
+    """入力ファイル一覧 (サブフォルダ + 旧フラット、ロックファイル除外)"""
     files = []
     for d in (config.INPUT_DIR, config.DATA_DIR):
         if not os.path.isdir(d):
             continue
-        for ext in ("xlsx", "xlsm"):
+        # 新形式: {base}/{YYMM}/入力_*.xlsm
+        for ext in ("xlsm", "xlsx"):
+            files.extend(glob.glob(os.path.join(d, "*", f"入力_*.{ext}")))
+        # 旧形式: {base}/入力_*.xlsx
+        for ext in ("xlsm", "xlsx"):
             files.extend(glob.glob(os.path.join(d, f"入力_*.{ext}")))
     return [f for f in files if not os.path.basename(f).startswith("~$")]
 
@@ -108,8 +112,7 @@ def deploy_to_netlify(html_path):
 
 def run_pipeline():
     """merge → HTML生成 → Netlifyデプロイ"""
-    now = datetime.datetime.now().strftime("%H:%M:%S")
-    logger.info(f"変更検出 → パイプライン実行")
+    logger.info("変更検出 → パイプライン実行")
 
     # 1. merge
     logger.info("統合開始...")

@@ -9,6 +9,9 @@ deploy/
 ~$*.xlsx
 ~$*.xlsm
 
+# Logs
+logs/
+
 # Netlify local
 .netlify
 

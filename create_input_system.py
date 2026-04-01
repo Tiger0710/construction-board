@@ -1,23 +1,30 @@
 """入力システム生成: ガントチャート + 日次入力 + VBA自動同期
 
+VBA付きテンプレート(template/gantt_template.xlsm)をベースに、
+月別のガントチャート入力ファイルを生成する。
+
 使い方:
-  python create_input_system.py                       # 当月、サンプルデータ付き
-  python create_input_system.py --month 2604 --empty  # 4月分、空データ
-  python create_input_system.py --persons 田中,山本,鈴木 --month 2604 --empty
+  python create_input_system.py                       # 当月、空データ
+  python create_input_system.py --month 2604          # 4月分
+  python create_input_system.py --persons 田中,山本,鈴木 --month 2604
 """
 import os
 import sys
 import argparse
 import calendar
 import datetime
+import shutil
 
-from openpyxl import Workbook
+from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.formatting.rule import FormulaRule
 from openpyxl.utils import get_column_letter
 
 import config
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_PATH = os.path.join(BASE_DIR, "template", "gantt_template.xlsm")
 
 WEEKDAYS_JP = ["月", "火", "水", "木", "金", "土", "日"]
 
@@ -41,14 +48,14 @@ SAT_FILL = PatternFill(start_color="E0E7FF", end_color="E0E7FF", fill_type="soli
 SUN_FILL = PatternFill(start_color="FEE2E2", end_color="FEE2E2", fill_type="solid")
 BAR_FILL = PatternFill(start_color="93C5FD", end_color="93C5FD", fill_type="solid")
 
-# ガントチャート列定義: (列名, 幅)
+# ガントチャート列定義
 GANTT_COLS = [
     ("客先", 12), ("工事件名", 38), ("現場担当者", 10), ("安品担当者", 10),
     ("協力会社名", 16), ("協力会社担当者", 10), ("開始", 10), ("終了", 10),
 ]
 GANTT_LEFT_COLS = len(GANTT_COLS)  # 8列 (A-H)
 DATE_START_COL = GANTT_LEFT_COLS + 1  # I列から日付
-GANTT_EMPTY_ROWS = 30  # 空ファイルの入力可能行数
+GANTT_EMPTY_ROWS = 30
 
 
 def parse_month(month_str):
@@ -74,30 +81,28 @@ def apply_header(ws, row, col_start, col_end, fill=None):
         cell.border = THIN_BORDER
 
 
-def create_input_file(person_name, month_str, projects=None, daily_data=None):
-    """入力ファイル生成
-
-    Args:
-        person_name: 担当者名
-        month_str: 'YYMM' (例: '2604')
-        projects: 案件リスト。Noneで空ファイル
-        daily_data: 日次入力サンプル。Noneで空
-    """
+def create_input_file(person_name, month_str):
+    """VBA付き入力ファイル生成 (テンプレートベース)"""
     year, month = parse_month(month_str)
     dates = get_month_dates(year, month)
     gantt_days = len(dates)
 
-    wb = Workbook()
+    # テンプレート読み込み (VBA保持)
+    if not os.path.exists(TEMPLATE_PATH):
+        print(f"  ERROR: テンプレートなし: {TEMPLATE_PATH}")
+        print("  → python create_template.py を実行してください")
+        return None
+
+    wb = load_workbook(TEMPLATE_PATH, keep_vba=True)
 
     # ==================== ガントチャート ====================
-    ws = wb.active
-    ws.title = "ガントチャート"
+    ws = wb["ガントチャート"]
 
     # 列幅
     for i, (_, width) in enumerate(GANTT_COLS):
         ws.column_dimensions[get_column_letter(i + 1)].width = width
 
-    # Row 1: ボタン配置エリア + 日付
+    # Row 1: 日付
     ws.row_dimensions[1].height = 28
     for c in range(1, GANTT_LEFT_COLS + 1):
         ws.cell(row=1, column=c).border = THIN_BORDER
@@ -134,39 +139,12 @@ def create_input_file(person_name, month_str, projects=None, daily_data=None):
         elif d.weekday() == 6:
             c2.fill = SUN_FILL
 
-    # データ行
+    # 空行（入力エリア）
     GANTT_NO_WRAP = Alignment(vertical="center", wrap_text=False)
     GANTT_ROW_HEIGHT = 22
+    max_data_row = GANTT_EMPTY_ROWS + 2
 
-    data_rows = len(projects) if projects else 0
-    max_data_row = max(data_rows, GANTT_EMPTY_ROWS) + 2
-
-    if projects:
-        first_date = dates[0]
-        for idx, proj in enumerate(projects):
-            row = idx + 3
-            client, title, our, safety, partner, pp, s_off, e_off = proj
-            start_d = first_date + datetime.timedelta(days=s_off)
-            end_d = first_date + datetime.timedelta(days=e_off)
-            vals = [client, title, our, safety, partner, pp, start_d, end_d]
-            for c, v in enumerate(vals, 1):
-                cell = ws.cell(row=row, column=c, value=v)
-                cell.font = CELL_FONT
-                cell.border = THIN_BORDER
-                if c in (3, 4, 6):
-                    cell.alignment = CENTER_ALIGN
-                elif c in (7, 8):
-                    cell.number_format = "M/D"
-                    cell.alignment = CENTER_ALIGN
-                else:
-                    cell.alignment = GANTT_NO_WRAP
-            for col in range(DATE_START_COL, DATE_START_COL + gantt_days):
-                ws.cell(row=row, column=col).border = THIN_BORDER
-            ws.row_dimensions[row].height = GANTT_ROW_HEIGHT
-
-    # 空行（入力エリア）
-    empty_start = (data_rows + 3) if projects else 3
-    for r in range(empty_start, max_data_row + 1):
+    for r in range(3, max_data_row + 1):
         for c in range(1, GANTT_LEFT_COLS + 1):
             cell = ws.cell(row=r, column=c)
             cell.border = THIN_BORDER
@@ -188,38 +166,16 @@ def create_input_file(person_name, month_str, projects=None, daily_data=None):
     ws.freeze_panes = "I3"
 
     # ==================== 日次入力 ====================
-    ws_d = wb.create_sheet("日次入力")
+    ws_d = wb["日次入力"]
     d_headers = ["日付", "客先", "工事件名", "昼/夜", "工事内容", "重点工事"]
     d_widths = [12, 12, 28, 8, 40, 10]
     for c, (h, w) in enumerate(zip(d_headers, d_widths), 1):
-        ws_d.cell(row=1, column=c, value=h)
+        cell = ws_d.cell(row=1, column=c, value=h)
+        cell.font = HEADER_FONT
+        cell.fill = HEADER_FILL
+        cell.alignment = HEADER_ALIGN
+        cell.border = THIN_BORDER
         ws_d.column_dimensions[get_column_letter(c)].width = w
-    apply_header(ws_d, 1, 1, len(d_headers))
-
-    # サンプルデータ展開
-    if projects and daily_data:
-        first_date = dates[0]
-        entries = []
-        for idx, proj in enumerate(projects):
-            client, title, _, _, _, _, s_off, e_off = proj
-            for day in range(s_off, e_off + 1):
-                d = first_date + datetime.timedelta(days=day)
-                dn, work, pri = daily_data.get((day, idx), ("", "", ""))
-                entries.append((d, client, title, dn, work, pri))
-        entries.sort(key=lambda x: (x[0], x[1], x[2]))
-
-        for i, (d, client, title, dn, work, pri) in enumerate(entries, 2):
-            ws_d.cell(row=i, column=1, value=d).number_format = "M/D"
-            ws_d.cell(row=i, column=2, value=client)
-            ws_d.cell(row=i, column=3, value=title)
-            ws_d.cell(row=i, column=4, value=dn)
-            ws_d.cell(row=i, column=5, value=work)
-            ws_d.cell(row=i, column=6, value=pri)
-            for c in range(1, 7):
-                cell = ws_d.cell(row=i, column=c)
-                cell.font = CELL_FONT
-                cell.border = THIN_BORDER
-                cell.alignment = CENTER_ALIGN if c in (1, 4, 6) else CELL_ALIGN
 
     # プルダウン
     dv_dn = DataValidation(type="list", formula1='"昼,夜,なし"', allow_blank=True, showDropDown=False)
@@ -235,10 +191,13 @@ def create_input_file(person_name, month_str, projects=None, daily_data=None):
     # ガントチャートをアクティブに
     wb.active = 0
 
-    xlsx_path = os.path.join(config.DATA_DIR, f"入力_{person_name}_{month_str}.xlsx")
-    wb.save(xlsx_path)
-    print(f"  作成: {os.path.basename(xlsx_path)} (ガント: {gantt_days}日間)")
-    return xlsx_path
+    # 月サブフォルダに保存
+    out_dir = os.path.join(config.DATA_DIR, month_str)
+    os.makedirs(out_dir, exist_ok=True)
+    xlsm_path = os.path.join(out_dir, f"入力_{person_name}.xlsm")
+    wb.save(xlsm_path)
+    print(f"  作成: {month_str}/入力_{person_name}.xlsm (ガント: {gantt_days}日間)")
+    return xlsm_path
 
 
 def main():
@@ -251,7 +210,6 @@ def main():
                         help="空ファイル生成 (サンプルデータなし)")
     args = parser.parse_args()
 
-    # 月の決定
     if args.month:
         month_str = args.month
     else:
@@ -267,10 +225,8 @@ def main():
     for person in persons:
         create_input_file(person, month_str)
 
-    print(f"\n完了! {config.DATA_DIR}")
-    print(f"  ファイル名パターン: 入力_担当者名_{month_str}.xlsx")
-    print("  ※ 担当者名は自由に変更可能")
-    print("  ※ ガントチャートを記入→保存するだけで自動反映（VBA不要）")
+    print(f"\n完了! {config.DATA_DIR}/{month_str}/")
+    print(f"  VBA自動同期: ガントチャート保存時に日次入力シートが自動更新")
 
 
 if __name__ == "__main__":
