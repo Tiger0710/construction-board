@@ -172,7 +172,7 @@ body {
 
 /* ---------- Column Widths ---------- */
 .col-client         { width: 7%;  padding: 0 8px;  }
-.col-title          { width: 19%; padding: 0 10px; }
+.col-title          { flex: 1;    padding: 0 10px; }
 .col-our-person     { width: 5%;  padding: 0 8px;  }
 .col-safety         { width: 5%;  padding: 0 8px;  }
 .col-partner        { width: 10%; padding: 0 8px;  }
