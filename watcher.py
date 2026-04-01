@@ -23,7 +23,7 @@ POLL_INTERVAL = 15   # 秒ごとにチェック
 DEBOUNCE_SEC = 5     # 変更検出後、追加変更を待つ秒数
 MAX_ERRORS = 5       # 連続エラー上限 (超えたら長めにwait)
 ERROR_COOLDOWN = 120  # エラー連続時のクールダウン(秒)
-GIT_SYNC_INTERVAL = 8  # N回ポーリングごとにgit pull (8 * 15秒 = 2分)
+GIT_SYNC_INTERVAL = 2  # N回ポーリングごとにgit pull (2 * 15秒 = 30秒)
 
 # ログ設定
 LOG_DIR = os.path.join(config.BASE_DIR, "logs")
