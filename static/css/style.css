@@ -172,14 +172,14 @@ body {
 
 /* ---------- Column Widths ---------- */
 .col-client         { width: 7%;  padding: 0 8px;  }
-.col-title          { width: 14%; padding: 0 10px; }
+.col-title          { width: 19%; padding: 0 10px; }
 .col-our-person     { width: 5%;  padding: 0 8px;  }
 .col-safety         { width: 5%;  padding: 0 8px;  }
-.col-partner        { width: 11%; padding: 0 8px;  }
+.col-partner        { width: 10%; padding: 0 8px;  }
 .col-partner-person { width: 5%;  padding: 0 8px;  }
 .col-work           { flex: 1;    padding: 0 10px; }
 .col-time           { width: 5%;  padding: 0 8px;  text-align: center; }
-.col-priority       { width: 8%;  padding: 0 8px;  text-align: center; }
+.col-priority       { width: 7%;  padding: 0 8px;  text-align: center; }
 
 /* ---------- Board Body ---------- */
 .board-body {

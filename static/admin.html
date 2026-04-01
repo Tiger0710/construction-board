@@ -171,12 +171,12 @@
       .then(function(res) { return res.json().then(function(d) { return { ok: res.ok, data: d }; }); })
       .then(function(result) {
         if (result.ok && result.data.success) {
-          var files = persons.map(function(p) { return "入力_" + p + "_" + month + ".xlsx"; });
+          var files = persons.map(function(p) { return month + "/入力_" + p + ".xlsm"; });
           var fileList = files.map(function(f) { return "・" + f; }).join("<br>");
           showStatus("success",
             "生成リクエスト完了!<br><br>" +
             "以下のファイルが約2分後にDirectCloudに配置されます:<br>" + fileList + "<br><br>" +
-            "※ GitHub Actionsで生成→自動配置"
+            "※ GitHub Actions → git pull → DirectCloud自動配置"
           );
         } else {
           showStatus("error", result.data.error || "不明なエラー");
