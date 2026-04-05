@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>工事予定表 - ファイルアップロード</title>
+  <title>工事予定表 - ファイル管理</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -13,7 +13,7 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
       min-height: 100vh; padding: 40px 20px;
     }
-    .container { max-width: 560px; margin: 0 auto; }
+    .container { max-width: 600px; margin: 0 auto; }
     .header {
       text-align: center; margin-bottom: 32px;
     }
@@ -28,6 +28,55 @@
       box-shadow: 0 2px 12px rgba(26,46,90,0.08);
       padding: 32px; margin-bottom: 20px;
     }
+    .card h2 {
+      color: #1A2E5A; font-size: 16px; font-weight: 600;
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 2px solid #e8ecf1;
+    }
+
+    /* Month selector */
+    .month-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .month-row label {
+      font-size: 14px; color: #333; font-weight: 500; white-space: nowrap;
+    }
+    .month-select {
+      flex: 1; padding: 10px 12px; border: 1px solid #c0c8d8;
+      border-radius: 8px; font-size: 14px; font-family: inherit;
+      background: white; color: #333;
+    }
+    .month-select:focus { outline: none; border-color: #1A2E5A; }
+
+    /* File list */
+    .file-list { list-style: none; }
+    .file-list li {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .file-list li:last-child { border-bottom: none; }
+    .file-list .fl-name {
+      flex: 1; font-size: 14px; color: #333; word-break: break-all;
+    }
+    .file-list .fl-size {
+      color: #888; font-size: 13px; white-space: nowrap;
+    }
+    .dl-btn {
+      background: #1A2E5A; color: white; border: none;
+      padding: 6px 14px; border-radius: 6px; font-size: 13px;
+      font-family: inherit; cursor: pointer; transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .dl-btn:hover { background: #2a4070; }
+    .dl-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .file-list-empty {
+      color: #999; font-size: 14px; text-align: center; padding: 20px 0;
+    }
+    .file-list-loading {
+      color: #666; font-size: 14px; text-align: center; padding: 20px 0;
+    }
+
+    /* Upload area */
     .drop-area {
       border: 2px dashed #c0c8d8; border-radius: 12px;
       padding: 48px 20px; text-align: center;
@@ -83,11 +132,33 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>工事予定表 ファイルアップロード</h1>
-      <p>入力ファイルをアップロードすると工事予定表が自動更新されます</p>
+      <h1>工事予定表 ファイル管理</h1>
+      <p>入力ファイルのダウンロード・アップロードで工事予定表を更新</p>
     </div>
 
+    <!-- Month selector -->
     <div class="card">
+      <div class="month-row">
+        <label for="month-select">対象月:</label>
+        <select class="month-select" id="month-select"></select>
+      </div>
+    </div>
+
+    <!-- Download section -->
+    <div class="card">
+      <h2>ファイル一覧</h2>
+      <div id="file-list-area">
+        <div class="file-list-loading" id="file-list-loading">読み込み中...</div>
+        <ul class="file-list" id="file-list"></ul>
+        <div class="file-list-empty" id="file-list-empty" style="display:none;">
+          この月のファイルはまだありません
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload section -->
+    <div class="card">
+      <h2>アップロード</h2>
       <div class="drop-area" id="drop-area">
         <div class="icon">&#128203;</div>
         <div class="label">
@@ -118,6 +189,11 @@
   </div>
 
   <script>
+    // --- Elements ---
+    var monthSelect = document.getElementById("month-select");
+    var fileListEl = document.getElementById("file-list");
+    var fileListLoading = document.getElementById("file-list-loading");
+    var fileListEmpty = document.getElementById("file-list-empty");
     var dropArea = document.getElementById("drop-area");
     var fileInput = document.getElementById("file-input");
     var fileInfo = document.getElementById("file-info");
@@ -128,10 +204,141 @@
     var statusEl = document.getElementById("status");
     var selectedFile = null;
 
-    // Click to select
+    // --- Month selector ---
+    function getCurrentMonth() {
+      var d = new Date();
+      var yy = String(d.getFullYear()).slice(2);
+      var mm = String(d.getMonth() + 1).padStart(2, "0");
+      return yy + mm;
+    }
+
+    function formatMonthLabel(yymm) {
+      var yy = yymm.slice(0, 2);
+      var mm = yymm.slice(2, 4);
+      return "20" + yy + "年" + parseInt(mm) + "月";
+    }
+
+    function initMonthSelector(serverMonths) {
+      var current = getCurrentMonth();
+      // Build list: current month + months from server (deduplicated, sorted desc)
+      var allMonths = [current];
+      if (serverMonths) {
+        serverMonths.forEach(function(m) {
+          if (allMonths.indexOf(m) === -1) allMonths.push(m);
+        });
+      }
+      // Also add next month and previous month for convenience
+      var d = new Date();
+      d.setMonth(d.getMonth() + 1);
+      var next = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, "0");
+      d.setMonth(d.getMonth() - 2);
+      var prev = String(d.getFullYear()).slice(2) + String(d.getMonth() + 1).padStart(2, "0");
+      if (allMonths.indexOf(next) === -1) allMonths.push(next);
+      if (allMonths.indexOf(prev) === -1) allMonths.push(prev);
+
+      allMonths.sort().reverse();
+
+      monthSelect.innerHTML = "";
+      allMonths.forEach(function(m) {
+        var opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = formatMonthLabel(m);
+        if (m === current) opt.selected = true;
+        monthSelect.appendChild(opt);
+      });
+    }
+
+    monthSelect.addEventListener("change", function() {
+      loadFileList(monthSelect.value);
+    });
+
+    // --- File list (download) ---
+    function loadFileList(month) {
+      fileListLoading.style.display = "block";
+      fileListEl.innerHTML = "";
+      fileListEmpty.style.display = "none";
+
+      var url = "/.netlify/functions/files";
+      if (month) url += "?month=" + encodeURIComponent(month);
+
+      fetch(url)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          fileListLoading.style.display = "none";
+
+          // Initialize month selector with server-known months (only on first load)
+          if (!monthSelect.options.length || (data.months && data.months.length)) {
+            initMonthSelector(data.months || []);
+          }
+
+          if (!data.files || data.files.length === 0) {
+            fileListEmpty.style.display = "block";
+            return;
+          }
+
+          data.files.forEach(function(f) {
+            var li = document.createElement("li");
+            var nameSpan = document.createElement("span");
+            nameSpan.className = "fl-name";
+            nameSpan.textContent = f.name;
+            var sizeSpan = document.createElement("span");
+            sizeSpan.className = "fl-size";
+            sizeSpan.textContent = formatSize(f.size);
+            var btn = document.createElement("button");
+            btn.className = "dl-btn";
+            btn.textContent = "ダウンロード";
+            btn.addEventListener("click", function() {
+              downloadFile(f.name, month, btn);
+            });
+            li.appendChild(nameSpan);
+            li.appendChild(sizeSpan);
+            li.appendChild(btn);
+            fileListEl.appendChild(li);
+          });
+        })
+        .catch(function(err) {
+          fileListLoading.style.display = "none";
+          fileListEmpty.style.display = "block";
+          fileListEmpty.textContent = "読み込みエラー: " + err.message;
+        });
+    }
+
+    function downloadFile(name, month, btn) {
+      btn.disabled = true;
+      btn.textContent = "取得中...";
+
+      var url = "/.netlify/functions/files?download=" + encodeURIComponent(name);
+      if (month) url += "&month=" + encodeURIComponent(month);
+
+      fetch(url)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (!data.content) throw new Error("ファイルデータなし");
+          // base64 → Blob → download
+          var raw = atob(data.content.replace(/\n/g, ""));
+          var arr = new Uint8Array(raw.length);
+          for (var i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+          var blob = new Blob([arr], { type: "application/octet-stream" });
+          var a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = data.filename || name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(a.href);
+        })
+        .catch(function(err) {
+          alert("ダウンロードエラー: " + err.message);
+        })
+        .finally(function() {
+          btn.disabled = false;
+          btn.textContent = "ダウンロード";
+        });
+    }
+
+    // --- Upload ---
     dropArea.addEventListener("click", function() { fileInput.click(); });
 
-    // Drag & Drop
     ["dragenter", "dragover"].forEach(function(evt) {
       dropArea.addEventListener(evt, function(e) {
         e.preventDefault(); e.stopPropagation();
@@ -159,7 +366,6 @@
     });
 
     function handleFile(file) {
-      // Validate
       var ext = file.name.split(".").pop().toLowerCase();
       if (ext !== "xlsm" && ext !== "xlsx") {
         showStatus("error", ".xlsm または .xlsx ファイルを選択してください");
@@ -199,6 +405,7 @@
 
     uploadBtn.addEventListener("click", function() {
       if (!selectedFile) return;
+      var month = monthSelect.value;
       uploadBtn.disabled = true;
       showStatus("uploading", "アップロード中...");
 
@@ -211,6 +418,7 @@
           body: JSON.stringify({
             filename: selectedFile.name,
             content: base64,
+            month: month,
           }),
         })
         .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
@@ -218,6 +426,8 @@
           if (result.ok && result.data.success) {
             showStatus("success", "アップロード完了! 約2分後に工事予定表に反映されます。");
             clearFile();
+            // Refresh file list
+            setTimeout(function() { loadFileList(month); }, 1500);
           } else {
             showStatus("error", "エラー: " + (result.data.error || "不明なエラー"));
             uploadBtn.disabled = false;
@@ -230,6 +440,19 @@
       };
       reader.readAsDataURL(selectedFile);
     });
+
+    // --- Init ---
+    // First: fetch top-level to discover month folders, then load current month
+    fetch("/.netlify/functions/files")
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        initMonthSelector(data.months || []);
+        loadFileList(monthSelect.value);
+      })
+      .catch(function() {
+        initMonthSelector([]);
+        loadFileList(monthSelect.value);
+      });
   </script>
 </body>
 </html>

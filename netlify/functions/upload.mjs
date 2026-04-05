@@ -29,13 +29,19 @@ export async function handler(event) {
     return { statusCode: 500, headers, body: JSON.stringify({ error: "サーバー設定エラー (GITHUB_TOKEN)" }) };
   }
 
-  let filename, content;
+  let filename, content, month;
   try {
     const body = JSON.parse(event.body);
     filename = body.filename;
     content = body.content; // base64
+    month = body.month;     // YYMM (optional)
   } catch {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "リクエスト形式が不正です" }) };
+  }
+
+  // Validate month if provided
+  if (month && !month.match(/^\d{4}$/)) {
+    return { statusCode: 400, headers, body: JSON.stringify({ error: "月はYYMM形式で指定してください" }) };
   }
 
   // Validate filename
@@ -52,8 +58,9 @@ export async function handler(event) {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "ファイルサイズが大きすぎます" }) };
   }
 
-  const path = `data/${filename}`;
-  const apiBase = `https://api.github.com/repos/${REPO}/contents/${encodeURIComponent(path)}`;
+  const path = month ? `data/${month}/${filename}` : `data/${filename}`;
+  const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+  const apiBase = `https://api.github.com/repos/${REPO}/contents/${encodedPath}`;
   const authHeaders = {
     Authorization: `Bearer ${GITHUB_TOKEN}`,
     Accept: "application/vnd.github.v3+json",
