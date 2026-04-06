@@ -35,3 +35,15 @@ jobs:
         run: npx netlify-cli deploy --prod --dir deploy --functions netlify/functions --site ${{ secrets.NETLIFY_SITE_ID }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+
+      - name: Sync to DirectCloud
+        if: env.DIRECTCLOUD_NODE != ''
+        run: python sync_directcloud.py
+        env:
+          PYTHONUTF8: "1"
+          DIRECTCLOUD_SERVICE: ${{ secrets.DIRECTCLOUD_SERVICE }}
+          DIRECTCLOUD_SERVICE_KEY: ${{ secrets.DIRECTCLOUD_SERVICE_KEY }}
+          DIRECTCLOUD_CODE: ${{ secrets.DIRECTCLOUD_CODE }}
+          DIRECTCLOUD_ID: ${{ secrets.DIRECTCLOUD_ID }}
+          DIRECTCLOUD_PASSWORD: ${{ secrets.DIRECTCLOUD_PASSWORD }}
+          DIRECTCLOUD_NODE: ${{ secrets.DIRECTCLOUD_NODE }}
