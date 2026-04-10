@@ -3,6 +3,12 @@
 GitHub Actions から呼び出し、data/{YYMM}/入力_*.xlsm を
 DirectCloud の工事予定表フォルダにアップロードする。
 
+API構成:
+  - 認証:       POST /openapi/jauth/token (v1/v2共通)
+  - フォルダ一覧: GET  /openapi/v2/folders/lists?node=XXX (v2)
+  - フォルダ作成: POST /openapp/v1/folders/create/{node}  (v1, URL encode必須)
+  - アップロード: POST /openapp/v1/files/upload/{node}     (v1, URL encode必須)
+
 必要な環境変数:
   DIRECTCLOUD_SERVICE      - API Service
   DIRECTCLOUD_SERVICE_KEY  - API Service Key
@@ -45,23 +51,29 @@ def get_token():
     return result["access_token"]
 
 
+def _encode_node(node):
+    """nodeをURLパス用にエンコード（{} 等の特殊文字対応）"""
+    return urllib.parse.quote(node, safe="")
+
+
 def list_folders(token, parent_node):
-    """フォルダ一覧を取得"""
-    url = f"{API_BASE}/openapp/v1/folders/index/{parent_node}?lang=jpn"
+    """v2 APIでフォルダ一覧を取得"""
+    encoded = _encode_node(parent_node)
+    url = f"{API_BASE}/openapi/v2/folders/lists?node={encoded}&limit=100"
     req = urllib.request.Request(url)
     req.add_header("access_token", token)
     with urllib.request.urlopen(req) as resp:
         result = json.loads(resp.read())
 
-    if not result.get("success"):
+    if result.get("result") != "success":
         return []
-    return result.get("list", [])
+    return result.get("data", {}).get("folders", [])
 
 
 def create_folder(token, parent_node, name):
-    """サブフォルダを作成"""
-    url = f"{API_BASE}/openapp/v1/folders/create/{parent_node}"
-    # form-data で送信
+    """v1 APIでサブフォルダを作成"""
+    encoded = _encode_node(parent_node)
+    url = f"{API_BASE}/openapp/v1/folders/create/{encoded}"
     boundary = "----FormBoundary7MA4YWxkTrZu0gW"
     body = (
         f"--{boundary}\r\n"
@@ -95,8 +107,9 @@ def find_or_create_folder(token, parent_node, name):
 
 
 def upload_file(token, node, filepath):
-    """ファイルをアップロード"""
-    url = f"{API_BASE}/openapp/v1/files/upload/{node}"
+    """v1 APIでファイルをアップロード"""
+    encoded = _encode_node(node)
+    url = f"{API_BASE}/openapp/v1/files/upload/{encoded}"
     filename = os.path.basename(filepath)
 
     boundary = "----FormBoundary7MA4YWxkTrZu0gW"

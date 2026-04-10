@@ -37,7 +37,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
       - name: Sync to DirectCloud
-        if: env.DIRECTCLOUD_NODE != ''
+        if: ${{ secrets.DIRECTCLOUD_NODE != '' }}
         run: python sync_directcloud.py
         env:
           PYTHONUTF8: "1"
