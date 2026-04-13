@@ -40,6 +40,17 @@
       font-family: inherit; transition: background 0.2s;
     }
     .add-proj-btn:hover { background: rgba(255,255,255,0.35); }
+    .person-filter {
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; padding: 6px 10px; border-radius: 6px;
+      font-size: 14px; font-family: inherit; cursor: pointer;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='white'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+      padding-right: 26px;
+    }
+    .person-filter:focus { outline: none; border-color: rgba(255,255,255,0.6); }
+    .person-filter option { color: #333; background: #fff; }
     .header-links { margin-top: 8px; display: flex; gap: 16px; }
     .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
     .header-links a:hover { color: #fff; }
@@ -316,6 +327,9 @@
         <span class="month-label" id="month-label"></span>
         <button onclick="changeMonth(1)">&#9654;</button>
       </div>
+      <select id="person-filter" class="person-filter" onchange="onFilterPerson(this.value)">
+        <option value="">全員</option>
+      </select>
       <div class="legend">
         <span class="legend-item"><span class="lsw l-day"></span>昼</span>
         <span class="legend-item"><span class="lsw l-night"></span>夜</span>
@@ -460,6 +474,7 @@
       data: { projects: [], daily: {} },
       sha: null,
       editingId: null,
+      filterPerson: "",
       dirty: false,
       loading: false
     };
@@ -601,8 +616,17 @@
       var main = document.getElementById("main");
       document.getElementById("loading").style.display = "none";
 
-      if (state.data.projects.length === 0) {
-        main.innerHTML = '<div class="empty-state">案件がありません。<br>「+ 案件追加」ボタンから追加してください。</div>';
+      buildPersonFilter();
+
+      var projects = state.data.projects;
+      if (state.filterPerson) {
+        projects = projects.filter(function(p) { return p.our_person === state.filterPerson; });
+      }
+
+      if (projects.length === 0) {
+        main.innerHTML = '<div class="empty-state">' +
+          (state.filterPerson ? esc(state.filterPerson) + ' の案件はありません。' : '案件がありません。<br>「+ 案件追加」ボタンから追加してください。') +
+          '</div>';
         return;
       }
 
@@ -630,8 +654,8 @@
       html += '</tr></thead><tbody>';
 
       // --- Rows ---
-      for (var i = 0; i < state.data.projects.length; i++) {
-        var proj = state.data.projects[i];
+      for (var i = 0; i < projects.length; i++) {
+        var proj = projects[i];
         html += '<tr>';
         html += '<td class="s0 sc"><button class="ebtn" onclick="openModal(\'' + proj.id + '\')" title="編集">&#9998;</button></td>';
         html += '<td class="s1 sc" title="' + esc(proj.client) + ' / ' + esc(proj.title) + '">'
@@ -692,6 +716,27 @@
         var offset = th.offsetLeft - 300;
         wrapper.scrollLeft = Math.max(0, offset);
       }
+    }
+
+    // ===== 担当者フィルター =====
+    function buildPersonFilter() {
+      var persons = {};
+      state.data.projects.forEach(function(p) {
+        if (p.our_person) persons[p.our_person] = true;
+      });
+      var sel = document.getElementById("person-filter");
+      var current = state.filterPerson;
+      var html = '<option value="">全員</option>';
+      Object.keys(persons).sort().forEach(function(name) {
+        html += '<option value="' + esc(name) + '"' + (name === current ? ' selected' : '') + '>' + esc(name) + '</option>';
+      });
+      sel.innerHTML = html;
+      if (current && !persons[current]) { state.filterPerson = ""; sel.value = ""; }
+    }
+
+    function onFilterPerson(val) {
+      state.filterPerson = val;
+      render();
     }
 
     // ===== 日次エディタ =====
