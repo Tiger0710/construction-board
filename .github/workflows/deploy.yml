@@ -4,17 +4,16 @@ on:
   push:
     branches: [main]
     paths:
-      - "data/**/入力_*"
-      - "*.py"
       - "static/**"
-      - "templates/**"
+      - "netlify/**"
+      - "ci_pipeline.py"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
       - uses: actions/checkout@v4
@@ -23,27 +22,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
-        run: pip install openpyxl
-
-      - name: Run pipeline (merge + generate HTML)
+      - name: Build (static → deploy)
         run: python ci_pipeline.py
-        env:
-          PYTHONUTF8: "1"
 
       - name: Deploy to Netlify
         run: npx netlify-cli deploy --prod --dir deploy --functions netlify/functions --site ${{ secrets.NETLIFY_SITE_ID }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-
-      - name: Sync to DirectCloud
-        if: ${{ secrets.DIRECTCLOUD_NODE != '' }}
-        run: python sync_directcloud.py
-        env:
-          PYTHONUTF8: "1"
-          DIRECTCLOUD_SERVICE: ${{ secrets.DIRECTCLOUD_SERVICE }}
-          DIRECTCLOUD_SERVICE_KEY: ${{ secrets.DIRECTCLOUD_SERVICE_KEY }}
-          DIRECTCLOUD_CODE: ${{ secrets.DIRECTCLOUD_CODE }}
-          DIRECTCLOUD_ID: ${{ secrets.DIRECTCLOUD_ID }}
-          DIRECTCLOUD_PASSWORD: ${{ secrets.DIRECTCLOUD_PASSWORD }}
-          DIRECTCLOUD_NODE: ${{ secrets.DIRECTCLOUD_NODE }}
