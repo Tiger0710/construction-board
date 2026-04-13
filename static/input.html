@@ -18,12 +18,36 @@
     /* === Header === */
     .app-header {
       background: linear-gradient(135deg, #1A2E5A 0%, #2c4a8a 100%);
-      color: #fff; padding: 14px 20px 12px; flex-shrink: 0;
+      color: #fff; padding: 14px 20px 8px; flex-shrink: 0;
+    }
+    .header-top {
+      display: flex; justify-content: space-between; align-items: center;
     }
     .app-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 2px; }
+    .header-links { display: flex; gap: 16px; }
+    .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
+    .header-links a:hover { color: #fff; }
+
+    /* === User Tabs === */
+    .user-tabs {
+      display: flex; gap: 0; margin-top: 12px; border-bottom: 2px solid rgba(255,255,255,0.15);
+    }
+    .user-tab {
+      background: transparent; border: none; color: rgba(255,255,255,0.6);
+      padding: 10px 24px; font-size: 15px; font-weight: 600;
+      cursor: pointer; font-family: inherit; border-bottom: 3px solid transparent;
+      transition: all 0.2s; position: relative; top: 2px;
+    }
+    .user-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); }
+    .user-tab.active {
+      color: #fff; border-bottom-color: #fff;
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* === Toolbar === */
     .toolbar {
       display: flex; align-items: center; justify-content: space-between;
-      margin-top: 10px; gap: 12px; flex-wrap: wrap;
+      margin-top: 10px; gap: 12px; flex-wrap: wrap; padding-bottom: 10px;
     }
     .month-nav { display: flex; align-items: center; gap: 12px; }
     .month-nav button {
@@ -33,13 +57,6 @@
     }
     .month-nav button:hover { background: rgba(255,255,255,0.3); }
     .month-label { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
-    .user-badge {
-      background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
-      color: #fff; padding: 5px 14px; border-radius: 20px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
-      text-decoration: none; transition: background 0.2s;
-    }
-    .user-badge:hover { background: rgba(255,255,255,0.35); }
     .add-proj-btn {
       background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
       color: #fff; padding: 7px 16px; border-radius: 6px;
@@ -47,9 +64,6 @@
       font-family: inherit; transition: background 0.2s;
     }
     .add-proj-btn:hover { background: rgba(255,255,255,0.35); }
-    .header-links { margin-top: 8px; display: flex; gap: 16px; }
-    .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
-    .header-links a:hover { color: #fff; }
 
     /* === Legend === */
     .legend {
@@ -58,11 +72,11 @@
     }
     .legend-item { display: flex; align-items: center; gap: 4px; }
     .lsw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.3); }
-    .lsw.l-day { background: #93c5fd; }
-    .lsw.l-night { background: #fde68a; }
-    .lsw.l-both { background: linear-gradient(to bottom, #93c5fd 55%, #fde68a 55%); }
+    .lsw.l-day { background: #60a5fa; }
+    .lsw.l-night { background: #fbbf24; }
+    .lsw.l-both { background: linear-gradient(to bottom, #60a5fa 50%, #fbbf24 50%); }
     .lsw.l-off { background: #d1d5db; }
-    .lsw.l-pri { background: #93c5fd; position: relative; }
+    .lsw.l-pri { background: #60a5fa; position: relative; }
     .lsw.l-pri::after {
       content: ''; position: absolute; top: 1px; right: 1px;
       width: 5px; height: 5px; background: #ef4444; border-radius: 50%;
@@ -131,6 +145,7 @@
     .dh.sat { color: #2563eb; }
     .dh.sat .dow { color: #2563eb; }
     .dh.today-col { background: #dbeafe; }
+    .dh.week-border { border-right: 2px solid #9ca3af; }
 
     /* Body: sticky info cells */
     .sc { text-align: left; padding: 4px 6px; font-size: 12px; line-height: 1.4; }
@@ -150,7 +165,7 @@
     }
     .ebtn:hover { background: #e0e7f5; }
 
-    /* Gantt cells */
+    /* Gantt cells - continuous bar */
     .gc {
       width: 36px; min-width: 36px; max-width: 36px; height: 42px;
       position: relative; transition: filter 0.1s;
@@ -158,16 +173,41 @@
     .gc.sun-bg { background: #fef2f2; }
     .gc.sat-bg { background: #eff6ff; }
     .gc.today-bg { background: #dbeafe; }
-    .gc.ir { cursor: pointer; }
-    .gc.ir:hover { filter: brightness(0.92); }
-    .gc.ir.day { background: #93c5fd; }
-    .gc.ir.ngt { background: #fde68a; }
-    .gc.ir.dn { background: linear-gradient(to bottom, #93c5fd 55%, #fde68a 55%); }
-    .gc.ir.off { background: #d1d5db; }
+    .gc.week-border { border-right: 2px solid #e5e7eb; }
+
+    /* Bar container - spans entire project period */
+    .bar-row { position: relative; height: 42px; }
+    .proj-bar {
+      position: absolute; top: 6px; height: 30px;
+      border-radius: 6px; display: flex; align-items: center;
+      font-size: 10px; color: #1e293b; font-weight: 600;
+      overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1;
+    }
+    .proj-bar.day-bar { background: linear-gradient(to bottom, #60a5fa 0%, #3b82f6 100%); }
+    .proj-bar.night-bar { background: linear-gradient(to bottom, #fbbf24 0%, #f59e0b 100%); }
+    .proj-bar.both-bar { background: linear-gradient(to bottom, #60a5fa 0%, #60a5fa 50%, #fbbf24 50%, #fbbf24 100%); }
+
+    /* Month overflow arrows */
+    .bar-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.9);
+    }
+    .bar-arrow.left { left: 4px; }
+    .bar-arrow.right { right: 4px; }
+
+    /* Day cells for clickable interaction */
+    .day-cell {
+      position: absolute; top: 0; bottom: 0; cursor: pointer;
+      transition: background 0.1s; z-index: 2;
+    }
+    .day-cell:hover { background: rgba(0,0,0,0.08); }
+    .day-cell.off { background: rgba(209,213,219,0.5); }
     .pri-dot {
       position: absolute; top: 3px; right: 3px;
       width: 7px; height: 7px; background: #ef4444;
       border-radius: 50%; border: 1px solid #fff;
+      z-index: 3;
     }
 
     /* === Save Footer === */
@@ -315,19 +355,33 @@
       .legend { display: none; }
       .s1 { width: 140px; min-width: 140px; max-width: 140px; }
       .s2 { left: 170px; }
+      .user-tab { padding: 8px 16px; font-size: 13px; }
     }
   </style>
 </head>
 <body>
   <header class="app-header">
-    <h1>工事予定表 入力</h1>
+    <div class="header-top">
+      <h1>工事予定表 入力</h1>
+      <div class="header-links">
+        <a href="/">サイネージ表示</a>
+        <a href="/admin.html">管理</a>
+        <a href="/manual.html">マニュアル</a>
+      </div>
+    </div>
+
+    <div class="user-tabs" id="user-tabs" style="display:none">
+      <button class="user-tab" data-user="手島" onclick="switchUser('手島')">手島</button>
+      <button class="user-tab" data-user="森_吉村" onclick="switchUser('森_吉村')">森_吉村</button>
+      <button class="user-tab" data-user="谷口" onclick="switchUser('谷口')">谷口</button>
+    </div>
+
     <div class="toolbar" id="toolbar" style="display:none">
       <div class="month-nav">
         <button onclick="changeMonth(-1)">&#9664;</button>
         <span class="month-label" id="month-label"></span>
         <button onclick="changeMonth(1)">&#9654;</button>
       </div>
-      <a class="user-badge" id="user-badge" onclick="goPersonSelect()" title="担当者切り替え"></a>
       <div class="legend">
         <span class="legend-item"><span class="lsw l-day"></span>昼</span>
         <span class="legend-item"><span class="lsw l-night"></span>夜</span>
@@ -336,11 +390,6 @@
         <span class="legend-item"><span class="lsw l-pri"></span>重点</span>
       </div>
       <button class="add-proj-btn" onclick="openModal()">+ 案件追加</button>
-    </div>
-    <div class="header-links">
-      <a href="/">サイネージ表示</a>
-      <a href="/admin.html">管理</a>
-      <a href="/manual.html">マニュアル</a>
     </div>
   </header>
 
@@ -627,15 +676,35 @@
       el.className = "save-status" + (type ? " " + type : "");
     }
 
+    // ===== User Tabs =====
+    function updateUserTabs() {
+      var tabs = document.querySelectorAll(".user-tab");
+      tabs.forEach(function(tab) {
+        tab.classList.toggle("active", tab.dataset.user === state.user);
+      });
+    }
+
+    function switchUser(user) {
+      if (state.user === user) return;
+      if (state.dirty && !confirm("未保存の変更があります。破棄しますか？")) return;
+      state.user = user;
+      state.dirty = false;
+      setHash(user, state.month);
+      updateUserTabs();
+      loadData(state.month);
+    }
+
     // ===== 画面切り替え =====
     function showGanttMode() {
+      document.getElementById("user-tabs").style.display = "";
       document.getElementById("toolbar").style.display = "";
       document.getElementById("save-footer").style.display = "";
-      document.getElementById("user-badge").textContent = state.user;
       document.getElementById("month-label").textContent = formatMonth(state.month);
+      updateUserTabs();
     }
 
     function showPersonSelectMode() {
+      document.getElementById("user-tabs").style.display = "none";
       document.getElementById("toolbar").style.display = "none";
       document.getElementById("save-footer").style.display = "none";
     }
@@ -714,10 +783,15 @@
       var dim = new Date(year, mm, 0).getDate();
       var today = todayStr();
 
+      var monthStart = dateStr(year, mm, 1);
+      var monthEnd = dateStr(year, mm, dim);
+
       var html = '<div class="gantt-wrapper" id="gantt-wrapper"><table class="gantt"><thead><tr>';
       html += '<th class="s0 gh"></th>';
       html += '<th class="s1 gh">工事件名</th>';
       html += '<th class="s2 gh">担当</th>';
+
+      // Day header
       for (var d = 1; d <= dim; d++) {
         var ds = dateStr(year, mm, d);
         var dObj = new Date(year, mm-1, d);
@@ -726,10 +800,12 @@
         if (dow === 0) cls += ' sun';
         if (dow === 6) cls += ' sat';
         if (ds === today) cls += ' today-col';
+        if (dow === 0 && d < dim) cls += ' week-border'; // 日曜日の右側に太線
         html += '<th class="' + cls + '">' + d + '<br><span class="dow">' + WEEKDAYS[dow] + '</span></th>';
       }
       html += '</tr></thead><tbody>';
 
+      // Projects
       for (var i = 0; i < projects.length; i++) {
         var proj = projects[i];
         html += '<tr>';
@@ -738,50 +814,96 @@
               + '<span class="pclient">' + esc(proj.client) + '</span><br>' + esc(proj.title) + '</td>';
         html += '<td class="s2 sc">' + esc(proj.our_person || '') + '</td>';
 
+        // Background cells
         for (var d = 1; d <= dim; d++) {
           var ds = dateStr(year, mm, d);
           var dObj = new Date(year, mm-1, d);
           var dow = dObj.getDay();
-          var inRange = ds >= proj.start_date && ds <= proj.end_date;
-
-          if (!inRange) {
-            var ecls = 'gc';
-            if (dow === 0) ecls += ' sun-bg';
-            else if (dow === 6) ecls += ' sat-bg';
-            if (ds === today) ecls += ' today-bg';
-            html += '<td class="' + ecls + '"></td>';
-            continue;
-          }
-
-          var dd = getDayData(proj.id, ds);
-          var dayOn = dd ? dd.day !== false : true;
-          var nightOn = dd ? dd.night === true : false;
-          var hasPri = (dd && dd.day_priority === "有") || (dd && dd.night_priority === "有");
-
-          var cls = 'gc ir';
-          if (dayOn && nightOn) cls += ' dn';
-          else if (dayOn) cls += ' day';
-          else if (nightOn) cls += ' ngt';
-          else cls += ' off';
+          var cls = 'gc';
+          if (dow === 0) cls += ' sun-bg';
+          else if (dow === 6) cls += ' sat-bg';
           if (ds === today) cls += ' today-bg';
-
-          var tip = fmtDateShort(ds);
-          if (dayOn) tip += ' 昼';
-          if (nightOn) tip += ' 夜';
-          if (hasPri) tip += ' [重点]';
-          if (dd && dd.day_work) tip += '\n' + dd.day_work;
-          if (dd && dd.night_work) tip += '\n(夜)' + dd.night_work;
-
-          html += '<td class="' + cls + '" title="' + esc(tip) + '" onclick="openDayEditor(\'' + proj.id + '\',\'' + ds + '\')">';
-          if (hasPri) html += '<span class="pri-dot"></span>';
-          html += '</td>';
+          if (dow === 0 && d < dim) cls += ' week-border';
+          html += '<td class="' + cls + '"></td>';
         }
         html += '</tr>';
+
+        // Bar row
+        html += '<tr style="height:0"><td colspan="3"></td>';
+        html += '<td colspan="' + dim + '" style="padding:0;position:relative">';
+        html += renderProjectBar(proj, year, mm, dim, monthStart, monthEnd);
+        html += '</td></tr>';
       }
 
       html += '</tbody></table></div>';
       main.innerHTML = html;
       scrollToToday();
+    }
+
+    function renderProjectBar(proj, year, mm, dim, monthStart, monthEnd) {
+      var projStart = proj.start_date;
+      var projEnd = proj.end_date;
+
+      // 月内の有効範囲
+      var visibleStart = projStart > monthStart ? projStart : monthStart;
+      var visibleEnd = projEnd < monthEnd ? projEnd : monthEnd;
+
+      if (visibleStart > monthEnd || visibleEnd < monthStart) return ''; // 月外
+
+      var startDate = new Date(year, mm-1, 1);
+      var visStartDate = new Date(visibleStart);
+      var visEndDate = new Date(visibleEnd);
+
+      var startDay = Math.floor((visStartDate - startDate) / 86400000) + 1;
+      var endDay = Math.floor((visEndDate - startDate) / 86400000) + 1;
+
+      // 昼/夜の状態を判定（全期間をチェック）
+      var hasDayWork = false, hasNightWork = false;
+      for (var d = startDay; d <= endDay; d++) {
+        var ds = dateStr(year, mm, d);
+        var dd = getDayData(proj.id, ds);
+        if (!dd || dd.day !== false) hasDayWork = true;
+        if (dd && dd.night === true) hasNightWork = true;
+      }
+
+      var barType = hasDayWork && hasNightWork ? 'both-bar' : hasDayWork ? 'day-bar' : 'night-bar';
+      var leftPos = (startDay - 1) * 36;
+      var width = (endDay - startDay + 1) * 36;
+
+      var html = '<div class="bar-row">';
+      html += '<div class="proj-bar ' + barType + '" style="left:' + leftPos + 'px;width:' + width + 'px">';
+
+      // 月跨ぎ矢印
+      if (projStart < monthStart) html += '<span class="bar-arrow left">◀</span>';
+      if (projEnd > monthEnd) html += '<span class="bar-arrow right">▶</span>';
+
+      html += '</div>';
+
+      // 日ごとのクリック可能セル
+      for (var d = startDay; d <= endDay; d++) {
+        var ds = dateStr(year, mm, d);
+        var dd = getDayData(proj.id, ds);
+        var dayOn = !dd || dd.day !== false;
+        var nightOn = dd && dd.night === true;
+        var isOff = !dayOn && !nightOn;
+        var hasPri = (dd && dd.day_priority === "有") || (dd && dd.night_priority === "有");
+
+        var cellLeft = (d - 1) * 36;
+        var tip = fmtDateShort(ds);
+        if (dayOn) tip += ' 昼';
+        if (nightOn) tip += ' 夜';
+        if (hasPri) tip += ' [重点]';
+        if (dd && dd.day_work) tip += '\\n' + dd.day_work;
+        if (dd && dd.night_work) tip += '\\n(夜)' + dd.night_work;
+
+        html += '<div class="day-cell' + (isOff ? ' off' : '') + '" style="left:' + cellLeft + 'px;width:36px" ';
+        html += 'onclick="openDayEditor(\'' + proj.id + '\',\'' + ds + '\')" title="' + esc(tip) + '">';
+        if (hasPri) html += '<span class="pri-dot"></span>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+      return html;
     }
 
     function scrollToToday() {
