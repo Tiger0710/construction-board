@@ -1,9 +1,10 @@
 /**
- * 工事予定表 データ API
+ * 工事予定表 データ API (担当者別)
  *
- * GET  ?month=2604         → _2604.json を返却
- * GET  ?signage=true       → 前月+当月+翌月を統合し items[] 形式で返却
- * PUT  { month, data, sha } → _{month}.json を GitHub に保存
+ * GET  ?month=2604              → 担当者一覧 { members: [...] }
+ * GET  ?month=2604&user=手島    → 担当者データ { projects, daily, _sha }
+ * GET  ?signage=true            → 全担当者統合 items[] (前月+当月+翌月)
+ * PUT  { month, user, data, sha } → 担当者データ保存
  */
 
 const REPO = "Tiger0710/construction-board";
@@ -45,9 +46,17 @@ function ghHeaders(token) {
   };
 }
 
-async function fetchMonthData(token, month) {
-  const path = `_${month}.json`;
-  const url = `https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`;
+/** リポジトリルートのファイル一覧を取得 */
+async function listRepoFiles(token) {
+  const url = `https://api.github.com/repos/${REPO}/contents/?ref=${BRANCH}`;
+  const res = await fetch(url, { headers: ghHeaders(token) });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+/** JSON ファイルを取得してパース */
+async function fetchFileData(token, filePath) {
+  const url = `https://api.github.com/repos/${REPO}/contents/${encodeURIComponent(filePath)}?ref=${BRANCH}`;
   const res = await fetch(url, { headers: ghHeaders(token) });
   if (!res.ok) return null;
   const file = await res.json();
@@ -56,6 +65,17 @@ async function fetchMonthData(token, month) {
   );
   content._sha = file.sha;
   return content;
+}
+
+/** 月のデータファイル一覧から担当者を抽出 */
+function findMemberFiles(allFiles, month) {
+  const prefix = `_${month}_`;
+  return allFiles
+    .filter((f) => f.name.startsWith(prefix) && f.name.endsWith(".json"))
+    .map((f) => ({
+      name: f.name.slice(prefix.length, -5),
+      path: f.name,
+    }));
 }
 
 function expandToItems(data) {
@@ -147,14 +167,28 @@ export async function handler(event) {
     // ===== GET ?signage=true =====
     if (event.httpMethod === "GET" && params.signage) {
       const months = getTargetMonths();
-      let allItems = [];
+      const allFiles = await listRepoFiles(GITHUB_TOKEN);
 
+      const fetchPromises = [];
       for (const m of months) {
-        const d = await fetchMonthData(GITHUB_TOKEN, m);
-        if (d) allItems.push(...expandToItems(d));
+        const memberFiles = findMemberFiles(allFiles, m);
+        if (memberFiles.length > 0) {
+          for (const mf of memberFiles) {
+            fetchPromises.push(fetchFileData(GITHUB_TOKEN, mf.path));
+          }
+        } else {
+          // 後方互換: 旧形式 _YYMM.json
+          fetchPromises.push(fetchFileData(GITHUB_TOKEN, `_${m}.json`));
+        }
       }
 
-      // 月またぎプロジェクトの重複排除
+      const results = await Promise.all(fetchPromises);
+      let allItems = [];
+      for (const data of results) {
+        if (data) allItems.push(...expandToItems(data));
+      }
+
+      // 重複排除
       const seen = new Set();
       allItems = allItems.filter((item) => {
         const key = `${item.date}|${item.client}|${item.title}|${item.work_time}`;
@@ -190,11 +224,27 @@ export async function handler(event) {
           body: JSON.stringify({ error: "月はYYMM形式で指定してください" }),
         };
       }
-      const d = await fetchMonthData(GITHUB_TOKEN, params.month);
+
+      // user指定あり → 担当者データ返却
+      if (params.user) {
+        const path = `_${params.month}_${params.user}.json`;
+        const d = await fetchFileData(GITHUB_TOKEN, path);
+        return {
+          statusCode: 200,
+          headers: CORS_HEADERS,
+          body: JSON.stringify(d || { projects: [], daily: {} }),
+        };
+      }
+
+      // user指定なし → 担当者一覧
+      const allFiles = await listRepoFiles(GITHUB_TOKEN);
+      const memberFiles = findMemberFiles(allFiles, params.month);
+      const members = memberFiles.map((mf) => mf.name);
+
       return {
         statusCode: 200,
         headers: CORS_HEADERS,
-        body: JSON.stringify(d || { projects: [], daily: {} }),
+        body: JSON.stringify({ members }),
       };
     }
 
@@ -211,13 +261,20 @@ export async function handler(event) {
         };
       }
 
-      const { month, data, sha } = body;
+      const { month, user, data, sha } = body;
 
       if (!month || !/^\d{4}$/.test(month)) {
         return {
           statusCode: 400,
           headers: CORS_HEADERS,
           body: JSON.stringify({ error: "月はYYMM形式で指定してください" }),
+        };
+      }
+      if (!user) {
+        return {
+          statusCode: 400,
+          headers: CORS_HEADERS,
+          body: JSON.stringify({ error: "担当者名が必要です" }),
         };
       }
       if (!data) {
@@ -231,7 +288,7 @@ export async function handler(event) {
       const saveData = { ...data };
       delete saveData._sha;
 
-      const path = `_${month}.json`;
+      const path = `_${month}_${user}.json`;
       const content = Buffer.from(
         JSON.stringify(saveData, null, 2),
         "utf-8"
@@ -245,7 +302,7 @@ export async function handler(event) {
       // SHA取得（楽観的ロック）
       let currentSha = sha;
       if (!currentSha) {
-        const url = `https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`;
+        const url = `https://api.github.com/repos/${REPO}/contents/${encodeURIComponent(path)}?ref=${BRANCH}`;
         const getRes = await fetch(url, { headers });
         if (getRes.ok) {
           currentSha = (await getRes.json()).sha;
@@ -253,13 +310,13 @@ export async function handler(event) {
       }
 
       const commitBody = {
-        message: `Update ${month}.json`,
+        message: `Update ${month} ${user}`,
         content,
         branch: BRANCH,
       };
       if (currentSha) commitBody.sha = currentSha;
 
-      const apiUrl = `https://api.github.com/repos/${REPO}/contents/${path}`;
+      const apiUrl = `https://api.github.com/repos/${REPO}/contents/${encodeURIComponent(path)}`;
       const putRes = await fetch(apiUrl, {
         method: "PUT",
         headers,
@@ -274,7 +331,7 @@ export async function handler(event) {
           body: JSON.stringify({
             success: true,
             sha: result.content.sha,
-            message: `${month}.json を保存しました`,
+            message: `${user} の ${month} データを保存しました`,
           }),
         };
       }

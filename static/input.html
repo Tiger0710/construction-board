@@ -33,6 +33,13 @@
     }
     .month-nav button:hover { background: rgba(255,255,255,0.3); }
     .month-label { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
+    .user-badge {
+      background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; padding: 5px 14px; border-radius: 20px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .user-badge:hover { background: rgba(255,255,255,0.35); }
     .add-proj-btn {
       background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
       color: #fff; padding: 7px 16px; border-radius: 6px;
@@ -40,17 +47,6 @@
       font-family: inherit; transition: background 0.2s;
     }
     .add-proj-btn:hover { background: rgba(255,255,255,0.35); }
-    .person-filter {
-      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
-      color: #fff; padding: 6px 10px; border-radius: 6px;
-      font-size: 14px; font-family: inherit; cursor: pointer;
-      appearance: none; -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='white'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 8px center;
-      padding-right: 26px;
-    }
-    .person-filter:focus { outline: none; border-color: rgba(255,255,255,0.6); }
-    .person-filter option { color: #333; background: #fff; }
     .header-links { margin-top: 8px; display: flex; gap: 16px; }
     .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
     .header-links a:hover { color: #fff; }
@@ -70,6 +66,30 @@
     .lsw.l-pri::after {
       content: ''; position: absolute; top: 1px; right: 1px;
       width: 5px; height: 5px; background: #ef4444; border-radius: 50%;
+    }
+
+    /* === Person Selection === */
+    .person-select {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; flex: 1; gap: 24px; padding: 40px 20px;
+    }
+    .person-select h2 { font-size: 20px; color: #1A2E5A; font-weight: 700; }
+    .person-grid {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    }
+    .person-btn {
+      background: #fff; border: 2px solid #d0d5dd; border-radius: 14px;
+      padding: 28px 40px; font-size: 20px; font-weight: 700; color: #1A2E5A;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+      min-width: 160px; text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .person-btn:hover { border-color: #1A2E5A; background: #f0f3fa; box-shadow: 0 4px 16px rgba(26,46,90,0.12); }
+    .person-btn .person-count { font-size: 12px; font-weight: 400; color: #888; margin-top: 6px; }
+    .person-btn .excel-tag {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      background: #dcfce7; color: #166534; padding: 2px 8px;
+      border-radius: 4px; margin-top: 6px;
     }
 
     /* === Gantt Area === */
@@ -138,19 +158,12 @@
     .gc.sun-bg { background: #fef2f2; }
     .gc.sat-bg { background: #eff6ff; }
     .gc.today-bg { background: #dbeafe; }
-
-    /* In-range cells */
     .gc.ir { cursor: pointer; }
     .gc.ir:hover { filter: brightness(0.92); }
     .gc.ir.day { background: #93c5fd; }
     .gc.ir.ngt { background: #fde68a; }
     .gc.ir.dn { background: linear-gradient(to bottom, #93c5fd 55%, #fde68a 55%); }
     .gc.ir.off { background: #d1d5db; }
-
-    /* Range start/end rounding - use inner pseudo-element */
-    .gc.ir.rs::before, .gc.ir.re::before { display: none; }
-
-    /* Priority dot */
     .pri-dot {
       position: absolute; top: 3px; right: 3px;
       width: 7px; height: 7px; background: #ef4444;
@@ -249,12 +262,8 @@
       display: flex; align-items: flex-start; justify-content: space-between;
       padding: 18px 20px 12px; border-bottom: 1px solid #eee;
     }
-    .dm-header-info h3 {
-      font-size: 14px; font-weight: 700; color: #1A2E5A; margin-bottom: 2px;
-    }
-    .dm-header-info .dm-proj-name {
-      font-size: 12px; color: #888; margin-bottom: 4px;
-    }
+    .dm-header-info h3 { font-size: 14px; font-weight: 700; color: #1A2E5A; margin-bottom: 2px; }
+    .dm-header-info .dm-proj-name { font-size: 12px; color: #888; margin-bottom: 4px; }
     .dm-date-nav { display: flex; align-items: center; gap: 8px; }
     .dm-date-nav button {
       background: #f0f3fa; border: none; width: 28px; height: 28px;
@@ -271,10 +280,7 @@
     }
     .dm-close:hover { color: #333; }
     .dm-body { padding: 16px 20px; }
-    .dm-section {
-      margin-bottom: 14px; padding: 12px;
-      background: #f8f9fb; border-radius: 8px;
-    }
+    .dm-section { margin-bottom: 14px; padding: 12px; background: #f8f9fb; border-radius: 8px; }
     .dm-section.night-section { background: #fffbeb; }
     .dm-section .check-label {
       font-size: 14px; font-weight: 600; color: #333;
@@ -292,14 +298,8 @@
     .dm-fields .dm-row { display: flex; gap: 8px; }
     .dm-fields .dm-row > * { flex: 1; }
     .dm-fields .dm-label { font-size: 11px; color: #888; margin-bottom: 2px; }
-    .dm-persons {
-      margin-top: 10px; padding: 10px 12px;
-      background: #f8f9fb; border-radius: 8px;
-    }
-    .dm-persons summary {
-      font-size: 13px; color: #1A2E5A; cursor: pointer;
-      font-weight: 500; user-select: none;
-    }
+    .dm-persons { margin-top: 10px; padding: 10px 12px; background: #f8f9fb; border-radius: 8px; }
+    .dm-persons summary { font-size: 13px; color: #1A2E5A; cursor: pointer; font-weight: 500; }
     .dm-persons .dm-pgrid {
       display: grid; grid-template-columns: auto 1fr; gap: 6px 8px;
       margin-top: 10px; align-items: center;
@@ -321,15 +321,13 @@
 <body>
   <header class="app-header">
     <h1>工事予定表 入力</h1>
-    <div class="toolbar">
+    <div class="toolbar" id="toolbar" style="display:none">
       <div class="month-nav">
         <button onclick="changeMonth(-1)">&#9664;</button>
         <span class="month-label" id="month-label"></span>
         <button onclick="changeMonth(1)">&#9654;</button>
       </div>
-      <select id="person-filter" class="person-filter" onchange="onFilterPerson(this.value)">
-        <option value="">全員</option>
-      </select>
+      <a class="user-badge" id="user-badge" onclick="goPersonSelect()" title="担当者切り替え"></a>
       <div class="legend">
         <span class="legend-item"><span class="lsw l-day"></span>昼</span>
         <span class="legend-item"><span class="lsw l-night"></span>夜</span>
@@ -346,11 +344,9 @@
     </div>
   </header>
 
-  <main class="main" id="main">
-    <div class="loading" id="loading">読み込み中...</div>
-  </main>
+  <main class="main" id="main"></main>
 
-  <div class="save-footer" id="save-footer">
+  <div class="save-footer" id="save-footer" style="display:none">
     <button class="save-btn" id="save-btn" disabled onclick="saveData()">保存</button>
     <span class="save-status" id="save-status"></span>
   </div>
@@ -467,18 +463,18 @@
     // ===== 定数 =====
     var API = "/.netlify/functions/data";
     var WEEKDAYS = ["日","月","火","水","木","金","土"];
+    var KNOWN_MEMBERS = ["手島", "森_吉村", "谷口"];
 
     // ===== 状態 =====
     var state = {
+      user: null,     // 選択中の担当者 (nullなら選択画面)
       month: "",
       data: { projects: [], daily: {} },
       sha: null,
       editingId: null,
-      filterPerson: "",
       dirty: false,
       loading: false
     };
-    // Day editor state
     var dmState = { projId: null, dateStr: null };
 
     // ===== ユーティリティ =====
@@ -537,13 +533,35 @@
       return state.data.daily[key];
     }
 
+    // ===== ハッシュ管理 =====
+    // 形式: #USER/YYMM (例: #手島/2604)
+    function parseHash() {
+      var h = decodeURIComponent(window.location.hash.replace("#",""));
+      var parts = h.split("/");
+      if (parts.length === 2 && /^\d{4}$/.test(parts[1])) {
+        return { user: parts[0], month: parts[1] };
+      }
+      if (parts.length === 1 && parts[0]) {
+        return { user: parts[0], month: getCurrentMonth() };
+      }
+      return { user: null, month: getCurrentMonth() };
+    }
+
+    function setHash(user, month) {
+      if (user) {
+        window.location.hash = encodeURIComponent(user) + "/" + month;
+      } else {
+        window.location.hash = "";
+      }
+    }
+
     // ===== API =====
     async function loadData(month) {
       state.loading = true;
-      var el = document.getElementById("loading");
-      el.style.display = ""; el.textContent = "読み込み中...";
+      document.getElementById("main").innerHTML = '<div class="loading">読み込み中...</div>';
       try {
-        var res = await fetch(API + "?month=" + month);
+        var url = API + "?month=" + month + "&user=" + encodeURIComponent(state.user);
+        var res = await fetch(url);
         if (!res.ok) throw new Error("HTTP " + res.status);
         var d = await res.json();
         state.data = { projects: d.projects || [], daily: d.daily || {} };
@@ -556,7 +574,18 @@
         showStatus("読み込み失敗: " + e.message, "error");
       }
       state.loading = false;
-      render();
+      renderGantt();
+    }
+
+    async function loadMembers() {
+      try {
+        var res = await fetch(API + "?month=" + state.month);
+        if (!res.ok) return [];
+        var d = await res.json();
+        return d.members || [];
+      } catch (e) {
+        return [];
+      }
     }
 
     async function saveData() {
@@ -567,7 +596,7 @@
         var res = await fetch(API, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ month: state.month, data: state.data, sha: state.sha })
+          body: JSON.stringify({ month: state.month, user: state.user, data: state.data, sha: state.sha })
         });
         var result = await res.json();
         if (res.status === 409) { showStatus(result.error, "error"); btn.disabled = false; return; }
@@ -598,35 +627,84 @@
       el.className = "save-status" + (type ? " " + type : "");
     }
 
+    // ===== 画面切り替え =====
+    function showGanttMode() {
+      document.getElementById("toolbar").style.display = "";
+      document.getElementById("save-footer").style.display = "";
+      document.getElementById("user-badge").textContent = state.user;
+      document.getElementById("month-label").textContent = formatMonth(state.month);
+    }
+
+    function showPersonSelectMode() {
+      document.getElementById("toolbar").style.display = "none";
+      document.getElementById("save-footer").style.display = "none";
+    }
+
+    function selectUser(user) {
+      if (state.dirty && !confirm("未保存の変更があります。破棄しますか？")) return;
+      state.user = user;
+      state.dirty = false;
+      setHash(user, state.month);
+      showGanttMode();
+      loadData(state.month);
+    }
+
+    function goPersonSelect() {
+      if (state.dirty && !confirm("未保存の変更があります。破棄しますか？")) return;
+      state.user = null;
+      state.dirty = false;
+      setHash(null, state.month);
+      showPersonSelectMode();
+      renderPersonSelect();
+    }
+
     // ===== 月ナビ =====
     function changeMonth(delta) {
       if (state.dirty && !confirm("未保存の変更があります。破棄しますか？")) return;
-      setMonth(addMonths(state.month, delta));
+      var newMonth = addMonths(state.month, delta);
+      state.month = newMonth;
+      state.dirty = false;
+      setHash(state.user, newMonth);
+      document.getElementById("month-label").textContent = formatMonth(newMonth);
+      loadData(newMonth);
     }
 
-    function setMonth(yymm) {
-      state.month = yymm;
-      window.location.hash = yymm;
-      document.getElementById("month-label").textContent = formatMonth(yymm);
-      loadData(yymm);
+    // ===== 担当者選択画面 =====
+    async function renderPersonSelect() {
+      var main = document.getElementById("main");
+      main.innerHTML = '<div class="loading">担当者情報を取得中...</div>';
+
+      var apiMembers = await loadMembers();
+      // KNOWN_MEMBERS + APIから取得した担当者をマージ（重複排除）
+      var allMembers = KNOWN_MEMBERS.slice();
+      apiMembers.forEach(function(m) {
+        if (allMembers.indexOf(m) === -1) allMembers.push(m);
+      });
+
+      var html = '<div class="person-select">';
+      html += '<h2>入力担当者を選んでください</h2>';
+      html += '<div class="person-grid">';
+      for (var i = 0; i < allMembers.length; i++) {
+        var name = allMembers[i];
+        var hasData = apiMembers.indexOf(name) >= 0;
+        html += '<button class="person-btn" onclick="selectUser(\'' + esc(name) + '\')">';
+        html += esc(name);
+        if (name === "手島") html += '<div class="excel-tag">Excel同期</div>';
+        if (hasData) html += '<div class="person-count">データあり</div>';
+        else html += '<div class="person-count">新規</div>';
+        html += '</button>';
+      }
+      html += '</div></div>';
+      main.innerHTML = html;
     }
 
     // ===== ガントチャート描画 =====
-    function render() {
+    function renderGantt() {
       var main = document.getElementById("main");
-      document.getElementById("loading").style.display = "none";
-
-      buildPersonFilter();
-
       var projects = state.data.projects;
-      if (state.filterPerson) {
-        projects = projects.filter(function(p) { return p.our_person === state.filterPerson; });
-      }
 
       if (projects.length === 0) {
-        main.innerHTML = '<div class="empty-state">' +
-          (state.filterPerson ? esc(state.filterPerson) + ' の案件はありません。' : '案件がありません。<br>「+ 案件追加」ボタンから追加してください。') +
-          '</div>';
+        main.innerHTML = '<div class="empty-state">案件がありません。<br>「+ 案件追加」ボタンから追加してください。</div>';
         return;
       }
 
@@ -636,7 +714,6 @@
       var dim = new Date(year, mm, 0).getDate();
       var today = todayStr();
 
-      // --- Header ---
       var html = '<div class="gantt-wrapper" id="gantt-wrapper"><table class="gantt"><thead><tr>';
       html += '<th class="s0 gh"></th>';
       html += '<th class="s1 gh">工事件名</th>';
@@ -653,7 +730,6 @@
       }
       html += '</tr></thead><tbody>';
 
-      // --- Rows ---
       for (var i = 0; i < projects.length; i++) {
         var proj = projects[i];
         html += '<tr>';
@@ -689,7 +765,6 @@
           else cls += ' off';
           if (ds === today) cls += ' today-bg';
 
-          // Tooltip
           var tip = fmtDateShort(ds);
           if (dayOn) tip += ' 昼';
           if (nightOn) tip += ' 夜';
@@ -713,30 +788,8 @@
       var wrapper = document.getElementById("gantt-wrapper");
       var th = document.querySelector(".today-col");
       if (wrapper && th) {
-        var offset = th.offsetLeft - 300;
-        wrapper.scrollLeft = Math.max(0, offset);
+        wrapper.scrollLeft = Math.max(0, th.offsetLeft - 300);
       }
-    }
-
-    // ===== 担当者フィルター =====
-    function buildPersonFilter() {
-      var persons = {};
-      state.data.projects.forEach(function(p) {
-        if (p.our_person) persons[p.our_person] = true;
-      });
-      var sel = document.getElementById("person-filter");
-      var current = state.filterPerson;
-      var html = '<option value="">全員</option>';
-      Object.keys(persons).sort().forEach(function(name) {
-        html += '<option value="' + esc(name) + '"' + (name === current ? ' selected' : '') + '>' + esc(name) + '</option>';
-      });
-      sel.innerHTML = html;
-      if (current && !persons[current]) { state.filterPerson = ""; sel.value = ""; }
-    }
-
-    function onFilterPerson(val) {
-      state.filterPerson = val;
-      render();
     }
 
     // ===== 日次エディタ =====
@@ -750,7 +803,7 @@
     function closeDayEditor() {
       document.getElementById("dm-overlay").classList.add("hidden");
       dmState.projId = null; dmState.dateStr = null;
-      render(); // refresh cells
+      renderGantt();
     }
 
     function populateDayEditor() {
@@ -761,7 +814,6 @@
       var dayOn = dd ? dd.day !== false : true;
       var nightOn = dd ? dd.night === true : false;
 
-      // Header
       document.getElementById("dm-proj-name").textContent = proj.client + " / " + proj.title;
       var p = ds.split("-");
       var dObj = new Date(+p[0], +p[1]-1, +p[2]);
@@ -770,27 +822,21 @@
       lbl.textContent = (+p[1]) + "月" + (+p[2]) + "日 (" + WEEKDAYS[dow] + ")";
       lbl.className = "dm-date-label" + (dow===0?" sun":"") + (dow===6?" sat":"");
 
-      // Nav buttons
-      var prevDs = getPrevDate(proj, ds);
-      var nextDs = getNextDate(proj, ds);
-      document.getElementById("dm-prev").disabled = !prevDs;
-      document.getElementById("dm-next").disabled = !nextDs;
+      document.getElementById("dm-prev").disabled = !getPrevDate(proj, ds);
+      document.getElementById("dm-next").disabled = !getNextDate(proj, ds);
 
-      // Day fields
       document.getElementById("dm-day-on").checked = dayOn;
       document.getElementById("dm-day-fields").style.display = dayOn ? "" : "none";
       document.getElementById("dm-day-work").value = dd ? dd.day_work || "" : "";
       document.getElementById("dm-day-pri").value = dd ? dd.day_priority || "" : "";
       document.getElementById("dm-day-detail").value = dd ? dd.day_priority_detail || "" : "";
 
-      // Night fields
       document.getElementById("dm-night-on").checked = nightOn;
       document.getElementById("dm-night-fields").style.display = nightOn ? "" : "none";
       document.getElementById("dm-night-work").value = dd ? dd.night_work || "" : "";
       document.getElementById("dm-night-pri").value = dd ? dd.night_priority || "" : "";
       document.getElementById("dm-night-detail").value = dd ? dd.night_priority_detail || "" : "";
 
-      // Person overrides
       document.getElementById("dm-day-our").value = dd ? dd.day_our_person || "" : "";
       document.getElementById("dm-day-our").placeholder = proj.our_person || "";
       document.getElementById("dm-day-safety").value = dd ? dd.day_safety_person || "" : "";
@@ -802,16 +848,14 @@
     }
 
     function getPrevDate(proj, ds) {
-      var p = ds.split("-");
-      var d = new Date(+p[0], +p[1]-1, +p[2]);
+      var p = ds.split("-"); var d = new Date(+p[0], +p[1]-1, +p[2]);
       d.setDate(d.getDate() - 1);
       var s = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
       return s >= proj.start_date ? s : null;
     }
 
     function getNextDate(proj, ds) {
-      var p = ds.split("-");
-      var d = new Date(+p[0], +p[1]-1, +p[2]);
+      var p = ds.split("-"); var d = new Date(+p[0], +p[1]-1, +p[2]);
       d.setDate(d.getDate() + 1);
       var s = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
       return s <= proj.end_date ? s : null;
@@ -820,28 +864,19 @@
     function dmNav(delta) {
       var proj = state.data.projects.find(function(p) { return p.id === dmState.projId; });
       if (!proj) return;
-      var fn = delta < 0 ? getPrevDate : getNextDate;
-      var next = fn(proj, dmState.dateStr);
-      if (next) {
-        dmState.dateStr = next;
-        populateDayEditor();
-      }
+      var next = (delta < 0 ? getPrevDate : getNextDate)(proj, dmState.dateStr);
+      if (next) { dmState.dateStr = next; populateDayEditor(); }
     }
 
     function onDmToggle(field, checked) {
       var dd = ensureDaily(dmState.projId, dmState.dateStr);
-      dd[field] = checked;
-      markDirty();
-      if (field === "day") {
-        document.getElementById("dm-day-fields").style.display = checked ? "" : "none";
-      } else {
-        document.getElementById("dm-night-fields").style.display = checked ? "" : "none";
-      }
+      dd[field] = checked; markDirty();
+      if (field === "day") document.getElementById("dm-day-fields").style.display = checked ? "" : "none";
+      else document.getElementById("dm-night-fields").style.display = checked ? "" : "none";
     }
 
     function onDmField(field, value) {
-      var dd = ensureDaily(dmState.projId, dmState.dateStr);
-      dd[field] = value;
+      ensureDaily(dmState.projId, dmState.dateStr)[field] = value;
       markDirty();
     }
 
@@ -871,16 +906,14 @@
         var yy = parseInt(state.month.slice(0,2));
         var mm = parseInt(state.month.slice(2,4));
         var y = 2000 + yy;
-        var first = y + "-" + String(mm).padStart(2,"0") + "-01";
-        var last = y + "-" + String(mm).padStart(2,"0") + "-" + String(new Date(y,mm,0).getDate()).padStart(2,"0");
         document.getElementById("m-client").value = "";
         document.getElementById("m-title").value = "";
         document.getElementById("m-our").value = "";
         document.getElementById("m-safety").value = "";
         document.getElementById("m-partner").value = "";
         document.getElementById("m-partner-person").value = "";
-        document.getElementById("m-start").value = first;
-        document.getElementById("m-end").value = last;
+        document.getElementById("m-start").value = y + "-" + String(mm).padStart(2,"0") + "-01";
+        document.getElementById("m-end").value = y + "-" + String(mm).padStart(2,"0") + "-" + String(new Date(y,mm,0).getDate()).padStart(2,"0");
       }
       modal.classList.remove("hidden");
     }
@@ -915,7 +948,7 @@
         projData.id = genId();
         state.data.projects.push(projData);
       }
-      markDirty(); closeModal(); render();
+      markDirty(); closeModal(); renderGantt();
     }
 
     function deleteProject() {
@@ -927,30 +960,45 @@
       Object.keys(state.data.daily).forEach(function(k) {
         if (k.indexOf(prefix) === 0) delete state.data.daily[k];
       });
-      markDirty(); closeModal(); render();
+      markDirty(); closeModal(); renderGantt();
     }
 
     // ===== 初期化 =====
     function init() {
-      var hash = window.location.hash.replace("#","");
-      var month = /^\d{4}$/.test(hash) ? hash : getCurrentMonth();
-      state.month = month;
-      document.getElementById("month-label").textContent = formatMonth(month);
-      window.location.hash = month;
-      loadData(month);
+      var parsed = parseHash();
+      state.month = parsed.month;
+
+      if (parsed.user) {
+        state.user = parsed.user;
+        showGanttMode();
+        loadData(state.month);
+      } else {
+        showPersonSelectMode();
+        renderPersonSelect();
+      }
 
       window.addEventListener("beforeunload", function(e) {
         if (state.dirty) { e.preventDefault(); e.returnValue = ""; }
       });
+
       window.addEventListener("hashchange", function() {
-        var h = window.location.hash.replace("#","");
-        if (/^\d{4}$/.test(h) && h !== state.month) {
+        var p = parseHash();
+        if (!p.user) {
           if (state.dirty && !confirm("未保存の変更があります。破棄しますか？")) {
-            window.location.hash = state.month; return;
+            setHash(state.user, state.month); return;
           }
-          state.month = h;
-          document.getElementById("month-label").textContent = formatMonth(h);
-          loadData(h);
+          state.user = null; state.dirty = false;
+          showPersonSelectMode(); renderPersonSelect();
+          return;
+        }
+        if (p.user !== state.user || p.month !== state.month) {
+          if (state.dirty && !confirm("未保存の変更があります。破棄しますか？")) {
+            setHash(state.user, state.month); return;
+          }
+          state.user = p.user;
+          state.month = p.month;
+          state.dirty = false;
+          showGanttMode(); loadData(state.month);
         }
       });
     }
