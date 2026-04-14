@@ -165,7 +165,7 @@
     }
     .ebtn:hover { background: #e0e7f5; }
 
-    /* Gantt cells - continuous bar */
+    /* Gantt cells */
     .gc {
       width: 36px; min-width: 36px; max-width: 36px; height: 42px;
       position: relative; transition: filter 0.1s;
@@ -173,41 +173,34 @@
     .gc.sun-bg { background: #fef2f2; }
     .gc.sat-bg { background: #eff6ff; }
     .gc.today-bg { background: #dbeafe; }
-    .gc.week-border { border-right: 2px solid #e5e7eb; }
+    .gc.week-border { border-right: 2px solid #9ca3af; }
 
-    /* Bar container - spans entire project period */
-    .bar-row { position: relative; height: 42px; }
-    .proj-bar {
-      position: absolute; top: 6px; height: 30px;
-      border-radius: 6px; display: flex; align-items: center;
-      font-size: 10px; color: #1e293b; font-weight: 600;
-      overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 1;
-    }
-    .proj-bar.day-bar { background: linear-gradient(to bottom, #60a5fa 0%, #3b82f6 100%); }
-    .proj-bar.night-bar { background: linear-gradient(to bottom, #fbbf24 0%, #f59e0b 100%); }
-    .proj-bar.both-bar { background: linear-gradient(to bottom, #60a5fa 0%, #60a5fa 50%, #fbbf24 50%, #fbbf24 100%); }
-
+    /* In-range cells: continuous bar look */
+    .gc.ir { cursor: pointer; }
+    .gc.ir:hover { filter: brightness(0.92); }
+    .gc.ir.day { background: #60a5fa; }
+    .gc.ir.ngt { background: #fbbf24; }
+    .gc.ir.dn { background: linear-gradient(to bottom, #60a5fa 50%, #fbbf24 50%); }
+    .gc.ir.off { background: #d1d5db; }
+    /* Remove internal borders for continuous bar */
+    .gc.ir.bar-mid { border-right-color: transparent; }
+    .gc.ir.bar-mid.week-border { border-right: 2px solid rgba(156,163,175,0.4); }
+    /* Rounded corners on first/last cells */
+    .gc.ir.bar-start { border-radius: 6px 0 0 6px; }
+    .gc.ir.bar-end { border-radius: 0 6px 6px 0; border-right-color: #d1d5db; }
+    .gc.ir.bar-start.bar-end { border-radius: 6px; }
     /* Month overflow arrows */
     .bar-arrow {
       position: absolute; top: 50%; transform: translateY(-50%);
-      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.9);
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.9);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3); z-index: 1;
     }
-    .bar-arrow.left { left: 4px; }
-    .bar-arrow.right { right: 4px; }
-
-    /* Day cells for clickable interaction */
-    .day-cell {
-      position: absolute; top: 0; bottom: 0; cursor: pointer;
-      transition: background 0.1s; z-index: 2;
-    }
-    .day-cell:hover { background: rgba(0,0,0,0.08); }
-    .day-cell.off { background: rgba(209,213,219,0.5); }
+    .bar-arrow.left { left: 2px; }
+    .bar-arrow.right { right: 2px; }
     .pri-dot {
       position: absolute; top: 3px; right: 3px;
       width: 7px; height: 7px; background: #ef4444;
       border-radius: 50%; border: 1px solid #fff;
-      z-index: 3;
     }
 
     /* === Save Footer === */
@@ -800,7 +793,7 @@
         if (dow === 0) cls += ' sun';
         if (dow === 6) cls += ' sat';
         if (ds === today) cls += ' today-col';
-        if (dow === 0 && d < dim) cls += ' week-border'; // 日曜日の右側に太線
+        if (dow === 0 && d < dim) cls += ' week-border';
         html += '<th class="' + cls + '">' + d + '<br><span class="dow">' + WEEKDAYS[dow] + '</span></th>';
       }
       html += '</tr></thead><tbody>';
@@ -808,102 +801,74 @@
       // Projects
       for (var i = 0; i < projects.length; i++) {
         var proj = projects[i];
+        var overflowLeft = proj.start_date < monthStart;
+        var overflowRight = proj.end_date > monthEnd;
+
         html += '<tr>';
         html += '<td class="s0 sc"><button class="ebtn" onclick="openModal(\'' + proj.id + '\')" title="編集">&#9998;</button></td>';
         html += '<td class="s1 sc" title="' + esc(proj.client) + ' / ' + esc(proj.title) + '">'
               + '<span class="pclient">' + esc(proj.client) + '</span><br>' + esc(proj.title) + '</td>';
         html += '<td class="s2 sc">' + esc(proj.our_person || '') + '</td>';
 
-        // Background cells
         for (var d = 1; d <= dim; d++) {
           var ds = dateStr(year, mm, d);
           var dObj = new Date(year, mm-1, d);
           var dow = dObj.getDay();
-          var cls = 'gc';
-          if (dow === 0) cls += ' sun-bg';
-          else if (dow === 6) cls += ' sat-bg';
-          if (ds === today) cls += ' today-bg';
-          if (dow === 0 && d < dim) cls += ' week-border';
-          html += '<td class="' + cls + '"></td>';
+          var inRange = ds >= proj.start_date && ds <= proj.end_date;
+          var isWeekBorder = dow === 0 && d < dim;
+
+          if (!inRange) {
+            var ecls = 'gc';
+            if (dow === 0) ecls += ' sun-bg';
+            else if (dow === 6) ecls += ' sat-bg';
+            if (ds === today) ecls += ' today-bg';
+            if (isWeekBorder) ecls += ' week-border';
+            html += '<td class="' + ecls + '"></td>';
+            continue;
+          }
+
+          var dd = getDayData(proj.id, ds);
+          var dayOn = dd ? dd.day !== false : true;
+          var nightOn = dd ? dd.night === true : false;
+          var hasPri = (dd && dd.day_priority === "有") || (dd && dd.night_priority === "有");
+
+          // Determine cell color class
+          var cls = 'gc ir';
+          if (dayOn && nightOn) cls += ' dn';
+          else if (dayOn) cls += ' day';
+          else if (nightOn) cls += ' ngt';
+          else cls += ' off';
+
+          // Continuous bar: first/mid/last
+          var visStart = proj.start_date < monthStart ? monthStart : proj.start_date;
+          var visEnd = proj.end_date > monthEnd ? monthEnd : proj.end_date;
+          var isFirst = ds === visStart;
+          var isLast = ds === visEnd;
+          if (isFirst && isLast) cls += ' bar-start bar-end';
+          else if (isFirst) cls += ' bar-start bar-mid';
+          else if (isLast) cls += ' bar-end';
+          else cls += ' bar-mid';
+          if (isWeekBorder) cls += ' week-border';
+
+          var tip = fmtDateShort(ds);
+          if (dayOn) tip += ' 昼';
+          if (nightOn) tip += ' 夜';
+          if (hasPri) tip += ' [重点]';
+          if (dd && dd.day_work) tip += '\n' + dd.day_work;
+          if (dd && dd.night_work) tip += '\n(夜)' + dd.night_work;
+
+          html += '<td class="' + cls + '" title="' + esc(tip) + '" onclick="openDayEditor(\'' + proj.id + '\',\'' + ds + '\')">';
+          if (hasPri) html += '<span class="pri-dot"></span>';
+          if (isFirst && overflowLeft) html += '<span class="bar-arrow left">◀</span>';
+          if (isLast && overflowRight) html += '<span class="bar-arrow right">▶</span>';
+          html += '</td>';
         }
         html += '</tr>';
-
-        // Bar row
-        html += '<tr style="height:0"><td colspan="3"></td>';
-        html += '<td colspan="' + dim + '" style="padding:0;position:relative">';
-        html += renderProjectBar(proj, year, mm, dim, monthStart, monthEnd);
-        html += '</td></tr>';
       }
 
       html += '</tbody></table></div>';
       main.innerHTML = html;
       scrollToToday();
-    }
-
-    function renderProjectBar(proj, year, mm, dim, monthStart, monthEnd) {
-      var projStart = proj.start_date;
-      var projEnd = proj.end_date;
-
-      // 月内の有効範囲
-      var visibleStart = projStart > monthStart ? projStart : monthStart;
-      var visibleEnd = projEnd < monthEnd ? projEnd : monthEnd;
-
-      if (visibleStart > monthEnd || visibleEnd < monthStart) return ''; // 月外
-
-      var startDate = new Date(year, mm-1, 1);
-      var visStartDate = new Date(visibleStart);
-      var visEndDate = new Date(visibleEnd);
-
-      var startDay = Math.floor((visStartDate - startDate) / 86400000) + 1;
-      var endDay = Math.floor((visEndDate - startDate) / 86400000) + 1;
-
-      // 昼/夜の状態を判定（全期間をチェック）
-      var hasDayWork = false, hasNightWork = false;
-      for (var d = startDay; d <= endDay; d++) {
-        var ds = dateStr(year, mm, d);
-        var dd = getDayData(proj.id, ds);
-        if (!dd || dd.day !== false) hasDayWork = true;
-        if (dd && dd.night === true) hasNightWork = true;
-      }
-
-      var barType = hasDayWork && hasNightWork ? 'both-bar' : hasDayWork ? 'day-bar' : 'night-bar';
-      var leftPos = (startDay - 1) * 36;
-      var width = (endDay - startDay + 1) * 36;
-
-      var html = '<div class="bar-row">';
-      html += '<div class="proj-bar ' + barType + '" style="left:' + leftPos + 'px;width:' + width + 'px">';
-
-      // 月跨ぎ矢印
-      if (projStart < monthStart) html += '<span class="bar-arrow left">◀</span>';
-      if (projEnd > monthEnd) html += '<span class="bar-arrow right">▶</span>';
-
-      html += '</div>';
-
-      // 日ごとのクリック可能セル
-      for (var d = startDay; d <= endDay; d++) {
-        var ds = dateStr(year, mm, d);
-        var dd = getDayData(proj.id, ds);
-        var dayOn = !dd || dd.day !== false;
-        var nightOn = dd && dd.night === true;
-        var isOff = !dayOn && !nightOn;
-        var hasPri = (dd && dd.day_priority === "有") || (dd && dd.night_priority === "有");
-
-        var cellLeft = (d - 1) * 36;
-        var tip = fmtDateShort(ds);
-        if (dayOn) tip += ' 昼';
-        if (nightOn) tip += ' 夜';
-        if (hasPri) tip += ' [重点]';
-        if (dd && dd.day_work) tip += '\\n' + dd.day_work;
-        if (dd && dd.night_work) tip += '\\n(夜)' + dd.night_work;
-
-        html += '<div class="day-cell' + (isOff ? ' off' : '') + '" style="left:' + cellLeft + 'px;width:36px" ';
-        html += 'onclick="openDayEditor(\'' + proj.id + '\',\'' + ds + '\')" title="' + esc(tip) + '">';
-        if (hasPri) html += '<span class="pri-dot"></span>';
-        html += '</div>';
-      }
-
-      html += '</div>';
-      return html;
     }
 
     function scrollToToday() {
