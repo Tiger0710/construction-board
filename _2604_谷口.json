@@ -1,4 +1,16 @@
 {
-  "projects": [],
+  "projects": [
+    {
+      "client": "test",
+      "title": "test",
+      "our_person": "",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-04-30",
+      "end_date": "2026-05-01",
+      "id": "m3ixn0m8"
+    }
+  ],
   "daily": {}
 }
