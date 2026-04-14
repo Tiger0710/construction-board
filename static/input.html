@@ -202,17 +202,12 @@
       width: 7px; height: 7px; background: #ef4444;
       border-radius: 50%; border: 1px solid #fff;
     }
-    /* Adjacent month projects (ghost) */
-    tr.adj-row td.s0, tr.adj-row td.s1, tr.adj-row td.s2 { background: #f8f8f8 !important; }
-    tr.adj-row td.s1.sc { color: #999; }
-    tr.adj-row .pclient { color: #bbb; }
+    /* Adjacent month projects (from today/tomorrow month) */
     tr.adj-row .adj-badge {
       display: inline-block; font-size: 9px; font-weight: 600;
-      background: #e5e7eb; color: #888; padding: 1px 5px;
+      background: #1A2E5A; color: #fff; padding: 1px 6px;
       border-radius: 3px; margin-left: 4px;
     }
-    tr.adj-row .gc.ir { opacity: 0.45; cursor: pointer; }
-    tr.adj-row .gc.ir:hover { filter: brightness(0.88); }
 
     /* === Save Footer === */
     .save-footer {
@@ -616,15 +611,25 @@
       document.getElementById("main").innerHTML = '<div class="loading">読み込み中...</div>';
       try {
         var userEnc = encodeURIComponent(state.user);
-        var prevMonth = addMonths(month, -1);
-        var nextMonth = addMonths(month, 1);
 
-        // 当月 + 前後の月を並列取得
-        var results = await Promise.all([
-          fetch(API + "?month=" + month + "&user=" + userEnc).then(function(r) { return r.ok ? r.json() : null; }),
-          fetch(API + "?month=" + prevMonth + "&user=" + userEnc).then(function(r) { return r.ok ? r.json() : null; }).catch(function() { return null; }),
-          fetch(API + "?month=" + nextMonth + "&user=" + userEnc).then(function(r) { return r.ok ? r.json() : null; }).catch(function() { return null; })
-        ]);
+        // today/tomorrowの月を追加取得（表示月と重複しないもの）
+        var todayMonth = getCurrentMonth();
+        var tmr = new Date(); tmr.setDate(tmr.getDate() + 1);
+        var tomorrowMonth = String(tmr.getFullYear() % 100).padStart(2, "0") + String(tmr.getMonth() + 1).padStart(2, "0");
+        var extraMonths = [];
+        if (todayMonth !== month) extraMonths.push(todayMonth);
+        if (tomorrowMonth !== month && tomorrowMonth !== todayMonth) extraMonths.push(tomorrowMonth);
+
+        // 当月 + today/tomorrowの月を並列取得
+        var fetchPromises = [
+          fetch(API + "?month=" + month + "&user=" + userEnc).then(function(r) { return r.ok ? r.json() : null; })
+        ];
+        extraMonths.forEach(function(em) {
+          fetchPromises.push(
+            fetch(API + "?month=" + em + "&user=" + userEnc).then(function(r) { return r.ok ? r.json() : null; }).catch(function() { return null; })
+          );
+        });
+        var results = await Promise.all(fetchPromises);
 
         var cur = results[0];
         if (!cur) throw new Error("データ取得失敗");
@@ -641,23 +646,18 @@
         var curIds = {};
         state.data.projects.forEach(function(p) { curIds[p.id] = true; });
 
-        // 前月: end_date が当月に入る案件
-        if (results[1] && results[1].projects) {
-          results[1].projects.forEach(function(p) {
-            if (p.end_date >= monthStart && !curIds[p.id]) {
-              state.adjProjects.push({ proj: p, daily: results[1].daily || {}, fromMonth: prevMonth });
-              curIds[p.id] = true;
-            }
-          });
-        }
-        // 翌月: start_date が当月に入る案件
-        if (results[2] && results[2].projects) {
-          results[2].projects.forEach(function(p) {
-            if (p.start_date <= monthEnd && !curIds[p.id]) {
-              state.adjProjects.push({ proj: p, daily: results[2].daily || {}, fromMonth: nextMonth });
-              curIds[p.id] = true;
-            }
-          });
+        // 追加月の案件: 表示月の日付範囲にオーバーラップするもの
+        for (var ei = 0; ei < extraMonths.length; ei++) {
+          var extraData = results[1 + ei];
+          var extraMonth = extraMonths[ei];
+          if (extraData && extraData.projects) {
+            extraData.projects.forEach(function(p) {
+              if (p.start_date <= monthEnd && p.end_date >= monthStart && !curIds[p.id]) {
+                state.adjProjects.push({ proj: p, daily: extraData.daily || {}, fromMonth: extraMonth });
+                curIds[p.id] = true;
+              }
+            });
+          }
         }
       } catch (e) {
         state.data = { projects: [], daily: {} };
