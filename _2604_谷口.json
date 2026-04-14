@@ -1,31 +1,4 @@
 {
-  "projects": [
-    {
-      "client": "test",
-      "title": "test",
-      "our_person": "test",
-      "safety_person": "",
-      "partner": "test",
-      "partner_person": "",
-      "start_date": "2026-04-30",
-      "end_date": "2026-05-02",
-      "id": "jm0xj0c1"
-    }
-  ],
-  "daily": {
-    "jm0xj0c1/2026-04-30": {
-      "day": true,
-      "day_work": "",
-      "day_priority": "",
-      "day_priority_detail": "",
-      "day_our_person": "",
-      "day_safety_person": "aa",
-      "night": true,
-      "night_work": "",
-      "night_priority": "有",
-      "night_priority_detail": "test",
-      "night_our_person": "",
-      "night_safety_person": "bb"
-    }
-  }
+  "projects": [],
+  "daily": {}
 }
