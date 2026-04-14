@@ -1177,9 +1177,9 @@
     },
     "eb0275bc/2026-04-14": {
       "day": true,
-      "day_work": "",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_work": "電源接続、機器周り接続、AP取付",
+      "day_priority": "有",
+      "day_priority_detail": "電源接続",
       "day_our_person": "奥濱",
       "day_safety_person": "清水",
       "night": false,
