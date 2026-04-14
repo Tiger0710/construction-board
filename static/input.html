@@ -349,6 +349,14 @@
       font-size: 13px; font-family: inherit;
     }
     .dm-persons .dm-pgrid input:focus { outline: none; border-color: #1A2E5A; }
+    .dm-copy-btn {
+      width: 100%; margin-top: 12px; padding: 10px;
+      background: #f0f3fa; border: 1px dashed #b0b8c8; border-radius: 8px;
+      font-size: 13px; font-weight: 600; color: #1A2E5A;
+      cursor: pointer; font-family: inherit; transition: background 0.2s;
+    }
+    .dm-copy-btn:hover { background: #dde3f0; }
+    .dm-copy-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
     @media (max-width: 600px) {
       .legend { display: none; }
@@ -503,6 +511,7 @@
             <label>夜 安品:</label><input type="text" id="dm-night-safety" oninput="onDmField('night_safety_person',this.value)">
           </div>
         </details>
+        <button class="dm-copy-btn" id="dm-copy-prev" onclick="copyFromPrevDay()">前日からコピー</button>
       </div>
     </div>
   </div>
@@ -1050,6 +1059,29 @@
       document.getElementById("dm-night-our").placeholder = proj.our_person || "";
       document.getElementById("dm-night-safety").value = dd ? dd.night_safety_person || "" : "";
       document.getElementById("dm-night-safety").placeholder = proj.safety_person || "";
+
+      // 前日コピーボタン: 前日にデータがあれば有効
+      var prevDs = getPrevDate(proj, ds);
+      var prevDd = prevDs ? getDayData(dmState.projId, prevDs) : null;
+      document.getElementById("dm-copy-prev").disabled = !prevDd;
+    }
+
+    function copyFromPrevDay() {
+      var proj = state.data.projects.find(function(p) { return p.id === dmState.projId; });
+      if (!proj) return;
+      var prevDs = getPrevDate(proj, dmState.dateStr);
+      if (!prevDs) return;
+      var prevDd = getDayData(dmState.projId, prevDs);
+      if (!prevDd) return;
+
+      var dd = ensureDaily(dmState.projId, dmState.dateStr);
+      var fields = ["day", "day_work", "day_priority", "day_priority_detail",
+                    "day_our_person", "day_safety_person",
+                    "night", "night_work", "night_priority", "night_priority_detail",
+                    "night_our_person", "night_safety_person"];
+      fields.forEach(function(f) { dd[f] = prevDd[f]; });
+      markDirty();
+      populateDayEditor();
     }
 
     function getPrevDate(proj, ds) {
