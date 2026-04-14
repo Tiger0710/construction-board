@@ -44,8 +44,8 @@ def list_files(token, folder_node):
         print(f"  ファイル一覧エラー: {json.dumps(result, ensure_ascii=False, default=str)[:500]}")
         return []
 
-    # files キーまたは data.files を試行
-    files = result.get("files") or result.get("data", {}).get("files", [])
+    # lists / files / data.files を試行
+    files = result.get("lists") or result.get("files") or result.get("data", {}).get("files", [])
     return files
 
 

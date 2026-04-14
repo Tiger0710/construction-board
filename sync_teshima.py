@@ -58,24 +58,8 @@ def main():
     for yymm, folder_node in sorted(month_folders.items()):
         print(f"\n=== {yymm} ===")
         files = list_files(token, folder_node)
-        print(f"  ファイル数: {len(files)}")
-        if files:
-            for fi in files[:5]:
-                fname = fi.get("name", "") or fi.get("file_name", "")
-                print(f"    - {fname}")
         if not files:
-            # デバッグ: 直接APIを叩いてレスポンスを確認
-            import urllib.request as _ur
-            from sync_directcloud import _encode_node, API_BASE
-            _enc = _encode_node(folder_node)
-            _req = _ur.Request(f"{API_BASE}/openapp/v1/files/index/{_enc}")
-            _req.add_header("access_token", token)
-            with _ur.urlopen(_req) as _resp:
-                _raw = json.loads(_resp.read())
-            print(f"  DEBUG raw keys: {list(_raw.keys())}")
-            if "data" in _raw:
-                print(f"  DEBUG data keys: {list(_raw['data'].keys()) if isinstance(_raw['data'], dict) else type(_raw['data'])}")
-            print(f"  DEBUG raw preview: {json.dumps(_raw, ensure_ascii=False, default=str)[:500]}")
+            print("  ファイルなし")
             continue
 
         # 入力_手島.xlsm を探す

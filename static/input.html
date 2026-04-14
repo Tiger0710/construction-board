@@ -889,7 +889,7 @@
           var dd = getDayData(proj.id, ds);
           var dayOn = dd ? dd.day !== false : true;
           var nightOn = dd ? dd.night === true : false;
-          var hasPri = (dd && dd.day_priority === "有") || (dd && dd.night_priority === "有");
+          var hasPri = (dayOn && dd && dd.day_priority === "有") || (nightOn && dd && dd.night_priority === "有");
 
           // Determine cell color class
           var cls = 'gc ir';
@@ -962,7 +962,7 @@
           var adjDd = adjDaily[adjProj.id + '/' + ads] || null;
           var aDayOn = adjDd ? adjDd.day !== false : true;
           var aNightOn = adjDd ? adjDd.night === true : false;
-          var aHasPri = (adjDd && adjDd.day_priority === '有') || (adjDd && adjDd.night_priority === '有');
+          var aHasPri = (aDayOn && adjDd && adjDd.day_priority === '有') || (aNightOn && adjDd && adjDd.night_priority === '有');
 
           var acls = 'gc ir';
           if (aDayOn && aNightOn) acls += ' dn';
