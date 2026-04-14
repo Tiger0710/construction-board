@@ -5,6 +5,9 @@ on:
     - cron: "*/15 21-23,0-11 * * 0-5"  # JST 6:00-20:00 月〜土 (UTC: 日夜〜金昼)
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
