@@ -72,11 +72,11 @@
     }
     .legend-item { display: flex; align-items: center; gap: 4px; }
     .lsw { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.3); }
-    .lsw.l-day { background: #60a5fa; }
-    .lsw.l-night { background: #fbbf24; }
-    .lsw.l-both { background: linear-gradient(to bottom, #60a5fa 50%, #fbbf24 50%); }
+    .lsw.l-day { background: #fbbf24; }
+    .lsw.l-night { background: #60a5fa; }
+    .lsw.l-both { background: linear-gradient(to bottom, #fbbf24 50%, #60a5fa 50%); }
     .lsw.l-off { background: #d1d5db; }
-    .lsw.l-pri { background: #60a5fa; position: relative; }
+    .lsw.l-pri { background: #fbbf24; position: relative; }
     .lsw.l-pri::after {
       content: ''; position: absolute; top: 1px; right: 1px;
       width: 5px; height: 5px; background: #ef4444; border-radius: 50%;
@@ -178,9 +178,9 @@
     /* In-range cells: continuous bar look */
     .gc.ir { cursor: pointer; }
     .gc.ir:hover { filter: brightness(0.92); }
-    .gc.ir.day { background: #60a5fa; }
-    .gc.ir.ngt { background: #fbbf24; }
-    .gc.ir.dn { background: linear-gradient(to bottom, #60a5fa 50%, #fbbf24 50%); }
+    .gc.ir.day { background: #fbbf24; }
+    .gc.ir.ngt { background: #60a5fa; }
+    .gc.ir.dn { background: linear-gradient(to bottom, #fbbf24 50%, #60a5fa 50%); }
     .gc.ir.off { background: #d1d5db; }
     /* Remove internal borders for continuous bar */
     .gc.ir.bar-mid { border-right-color: transparent; }
@@ -320,7 +320,7 @@
     .dm-close:hover { color: #333; }
     .dm-body { padding: 16px 20px; }
     .dm-section { margin-bottom: 14px; padding: 12px; background: #f8f9fb; border-radius: 8px; }
-    .dm-section.night-section { background: #fffbeb; }
+    .dm-section.night-section { background: #eff6ff; }
     .dm-section .check-label {
       font-size: 14px; font-weight: 600; color: #333;
       display: flex; align-items: center; gap: 6px;
@@ -810,7 +810,7 @@
         var hasData = apiMembers.indexOf(name) >= 0;
         html += '<button class="person-btn" onclick="selectUser(\'' + esc(name) + '\')">';
         html += esc(name);
-        if (name === "手島") html += '<div class="excel-tag">Excel同期</div>';
+
         if (hasData) html += '<div class="person-count">データあり</div>';
         else html += '<div class="person-count">新規</div>';
         html += '</button>';

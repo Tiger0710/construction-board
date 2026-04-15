@@ -10,9 +10,9 @@
   --bg-header: #ffffff;
   --bg-table-header: #1a2e5a;
   --bg-row-even: #ffffff;
-  --bg-row-odd: #f7f7f7;
-  --bg-priority: #f0f3fa;
-  --bg-priority-odd: #e8ecf6;
+  --bg-row-odd: #f5f7fa;
+  --bg-priority: #eef2f9;
+  --bg-priority-odd: #e5eaf5;
 
   --text-primary: #111111;
   --text-secondary: #333333;
@@ -208,13 +208,13 @@ body {
 
 /* 重点作業行 */
 .board-row.row-priority.row-even {
-  background: var(--bg-priority);
-  border-left: 5px solid var(--accent-navy);
+  background: var(--bg-row-even);
+  border-left: 5px solid #f59e0b;
 }
 
 .board-row.row-priority.row-odd {
-  background: var(--bg-priority-odd);
-  border-left: 5px solid var(--accent-navy);
+  background: var(--bg-row-odd);
+  border-left: 5px solid #f59e0b;
 }
 
 /* ---------- セル共通: 折り返し表示 ---------- */
@@ -253,7 +253,7 @@ body {
 
 .priority-yes {
   color: #ffffff;
-  background: var(--accent-navy);
+  background: #f59e0b;
 }
 
 .priority-no {
@@ -265,26 +265,27 @@ body {
 
 /* 夜間作業行 (22:00-5:00) */
 .board-row.row-night.row-even {
-  background: #fef3c7;
-  border-left: 5px solid #d97706;
+  background: #3b6b9e;
+  border-left: 5px solid #93c5fd;
 }
 
 .board-row.row-night.row-odd {
-  background: #fde68a;
-  border-left: 5px solid #d97706;
+  background: #346091;
+  border-left: 5px solid #93c5fd;
 }
 
 .board-row.row-night .col {
-  color: #78350f;
+  color: #ffffff;
 }
 
 .board-row.row-night .priority-badge.priority-yes {
-  background: #d97706;
+  background: #f59e0b;
+  color: #fff;
 }
 
 .board-row.row-night .priority-badge.priority-no {
-  color: #92400e;
-  border-color: #d97706;
+  color: #93c5fd;
+  border-color: #93c5fd;
 }
 
 /* ---------- Row Entrance Animation ---------- */
