@@ -56,7 +56,6 @@
       "end_date": "2026-04-27"
     },
     {
-      "id": "47b1cef6",
       "client": "小田急エンジ",
       "title": "TXsXGP配線工事_総合基地",
       "our_person": "奥濱",
@@ -64,7 +63,8 @@
       "partner": "スリーライズ",
       "partner_person": "森",
       "start_date": "2026-04-01",
-      "end_date": "2026-04-18"
+      "end_date": "2026-04-16",
+      "id": "47b1cef6"
     },
     {
       "id": "eb0275bc",
