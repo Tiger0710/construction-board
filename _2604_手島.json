@@ -397,28 +397,30 @@
       "day_work": "測定、耐火処理",
       "day_priority": "無",
       "day_priority_detail": "",
-      "day_our_person": "西潟",
+      "day_our_person": "きんでん",
       "day_safety_person": "平野",
       "night": true,
       "night_work": "機器取付",
       "night_priority": "無",
       "night_priority_detail": "",
       "night_our_person": "西潟",
-      "night_safety_person": "平野"
+      "night_safety_person": "平野",
+      "night_partner_person": "河野"
     },
     "ecb99f56/2026-04-18": {
       "day": true,
       "day_work": "測定、耐火処理",
       "day_priority": "無",
       "day_priority_detail": "",
-      "day_our_person": "西潟",
+      "day_our_person": "きんでん",
       "day_safety_person": "平野",
       "night": true,
       "night_work": "機器取付",
       "night_priority": "無",
       "night_priority_detail": "",
       "night_our_person": "西潟",
-      "night_safety_person": "平野"
+      "night_safety_person": "平野",
+      "night_partner_person": "河野"
     },
     "ecb99f56/2026-04-19": {
       "day": false,
