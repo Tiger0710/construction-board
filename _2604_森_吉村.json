@@ -120,6 +120,116 @@
       "partner_person": "",
       "start_date": "2026-04-14",
       "end_date": "2026-04-14"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社ロジスティクス・ネットワーク東扇島物流センター　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-04-16",
+      "end_date": "2026-04-17",
+      "id": "j6abt8s7"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：佐竹鉄工株式会社本社工場　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-04-16",
+      "end_date": "2026-04-16",
+      "id": "r6ayrtcz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社コスモス薬品富士見店　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-16",
+      "end_date": "2026-04-16",
+      "id": "976y3wcz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：関西観光開発株式会社本社  保守",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-04-16",
+      "end_date": "2026-04-16",
+      "id": "k513du4y"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ジャパンマリンユナイテッド株式会社横浜事業所磯子工場　撤去",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-16",
+      "end_date": "2026-04-16",
+      "id": "q116egh4"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社オイシスはりま工場　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-04-17",
+      "end_date": "2026-04-17",
+      "id": "y1zxxkud"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力リニューアブルパワー株式会社佐久発電所　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-15",
+      "end_date": "2026-04-15",
+      "id": "cbnixdoy"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社三五八和田山工場　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "グローエレファ",
+      "partner_person": "河野",
+      "start_date": "2026-04-18",
+      "end_date": "2026-04-18",
+      "id": "568pl4cr"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：鉄道情報システム株式会社国立事業所　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-18",
+      "end_date": "2026-04-19",
+      "id": "ttie6r4w"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：鉄道情報システム株式会社中央システムセンター　施工",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-18",
+      "end_date": "2026-04-19",
+      "id": "qr72kiii"
     }
   ],
   "daily": {
