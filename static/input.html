@@ -507,8 +507,10 @@
           <div class="dm-pgrid">
             <label>昼 現場:</label><input type="text" id="dm-day-our" oninput="onDmField('day_our_person',this.value)">
             <label>昼 安品:</label><input type="text" id="dm-day-safety" oninput="onDmField('day_safety_person',this.value)">
+            <label>昼 協力担当:</label><input type="text" id="dm-day-partner-person" oninput="onDmField('day_partner_person',this.value)">
             <label>夜 現場:</label><input type="text" id="dm-night-our" oninput="onDmField('night_our_person',this.value)">
             <label>夜 安品:</label><input type="text" id="dm-night-safety" oninput="onDmField('night_safety_person',this.value)">
+            <label>夜 協力担当:</label><input type="text" id="dm-night-partner-person" oninput="onDmField('night_partner_person',this.value)">
           </div>
         </details>
         <button class="dm-copy-btn" id="dm-copy-prev" onclick="copyFromPrevDay()">前日からコピー</button>
@@ -583,9 +585,9 @@
       if (!state.data.daily[key]) {
         state.data.daily[key] = {
           day: true, day_work: "", day_priority: "", day_priority_detail: "",
-          day_our_person: "", day_safety_person: "",
+          day_our_person: "", day_safety_person: "", day_partner_person: "",
           night: false, night_work: "", night_priority: "", night_priority_detail: "",
-          night_our_person: "", night_safety_person: ""
+          night_our_person: "", night_safety_person: "", night_partner_person: ""
         };
       }
       return state.data.daily[key];
@@ -1055,10 +1057,14 @@
       document.getElementById("dm-day-our").placeholder = proj.our_person || "";
       document.getElementById("dm-day-safety").value = dd ? dd.day_safety_person || "" : "";
       document.getElementById("dm-day-safety").placeholder = proj.safety_person || "";
+      document.getElementById("dm-day-partner-person").value = dd ? dd.day_partner_person || "" : "";
+      document.getElementById("dm-day-partner-person").placeholder = proj.partner_person || "";
       document.getElementById("dm-night-our").value = dd ? dd.night_our_person || "" : "";
       document.getElementById("dm-night-our").placeholder = proj.our_person || "";
       document.getElementById("dm-night-safety").value = dd ? dd.night_safety_person || "" : "";
       document.getElementById("dm-night-safety").placeholder = proj.safety_person || "";
+      document.getElementById("dm-night-partner-person").value = dd ? dd.night_partner_person || "" : "";
+      document.getElementById("dm-night-partner-person").placeholder = proj.partner_person || "";
 
       // 前日コピーボタン: 前日にデータがあれば有効
       var prevDs = getPrevDate(proj, ds);
@@ -1076,9 +1082,9 @@
 
       var dd = ensureDaily(dmState.projId, dmState.dateStr);
       var fields = ["day", "day_work", "day_priority", "day_priority_detail",
-                    "day_our_person", "day_safety_person",
+                    "day_our_person", "day_safety_person", "day_partner_person",
                     "night", "night_work", "night_priority", "night_priority_detail",
-                    "night_our_person", "night_safety_person"];
+                    "night_our_person", "night_safety_person", "night_partner_person"];
       fields.forEach(function(f) { dd[f] = prevDd[f]; });
       markDirty();
       populateDayEditor();
