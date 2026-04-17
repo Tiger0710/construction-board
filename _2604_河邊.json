@@ -1,0 +1,27 @@
+{
+  "projects": [
+    {
+      "client": "アイング",
+      "title": "そごう千葉店　催事場配線工事(スイーツマーケット前半)",
+      "our_person": "田中(青)",
+      "safety_person": "高橋TK",
+      "partner": "萩原通信",
+      "partner_person": "富田",
+      "start_date": "2026-04-20",
+      "end_date": "2026-04-21",
+      "id": "sjwoj9un"
+    },
+    {
+      "client": "アイング",
+      "title": "そごう千葉店　催事場配線工事(スイーツマーケット後半)",
+      "our_person": "田中(青)",
+      "safety_person": "高橋TK",
+      "partner": "萩原通信",
+      "partner_person": "富田",
+      "start_date": "2026-04-28",
+      "end_date": "2026-04-29",
+      "id": "rn05ahhz"
+    }
+  ],
+  "daily": {}
+}
