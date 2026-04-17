@@ -155,7 +155,6 @@
       "end_date": "2026-04-22"
     },
     {
-      "id": "3fbd7d4e",
       "client": "きんでん",
       "title": "東京ﾒﾄﾛPHS撤去工事_南北線永田町駅",
       "our_person": "増田",
@@ -163,7 +162,19 @@
       "partner": "和光電設",
       "partner_person": "松田",
       "start_date": "2026-04-13",
-      "end_date": "2026-04-22"
+      "end_date": "2026-04-23",
+      "id": "3fbd7d4e"
+    },
+    {
+      "client": "きんでん",
+      "title": "東京ﾒﾄﾛPHS撤去工事_半蔵門線住吉駅",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "和光電設",
+      "partner_person": "松田",
+      "start_date": "2026-04-20",
+      "end_date": "2026-04-20",
+      "id": "vdg83xdf"
     }
   ],
   "daily": {
@@ -437,13 +448,13 @@
       "night_safety_person": "平野"
     },
     "ecb99f56/2026-04-20": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "機器周り配線、札付け",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "西潟",
+      "day_our_person": "きんでん",
       "day_safety_person": "平野",
-      "night": true,
+      "night": false,
       "night_work": "機器周り配線、札付け",
       "night_priority": "",
       "night_priority_detail": "",
@@ -2224,7 +2235,7 @@
       "day_priority_detail": "",
       "day_our_person": "増田",
       "day_safety_person": "平野",
-      "night": true,
+      "night": false,
       "night_work": "ケーブル撤去、配管撤去、機器撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
@@ -2466,6 +2477,36 @@
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
+    },
+    "vdg83xdf/2026-04-20": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "新設点検口調査、一部天井補修",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "3fbd7d4e/2026-04-23": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "増田",
+      "day_safety_person": "平野",
+      "night": true,
+      "night_work": "ケーブル撤去、配管撤去、機器撤去",
+      "night_priority": "有",
+      "night_priority_detail": "撤去作業",
+      "night_our_person": "増田",
+      "night_safety_person": "平野"
     }
   }
 }
