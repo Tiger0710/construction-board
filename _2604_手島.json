@@ -1524,7 +1524,7 @@
       "day_priority_detail": "",
       "day_our_person": "上野",
       "day_safety_person": "清水",
-      "night": true,
+      "night": false,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
