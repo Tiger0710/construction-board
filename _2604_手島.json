@@ -1127,7 +1127,7 @@
       "day_our_person": "奥濱",
       "day_safety_person": "清水",
       "night": true,
-      "night_work": "19インチラック、機器取付、他",
+      "night_work": "ケーブル配線、端末処理、他",
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "奥濱、増田",
@@ -2330,8 +2330,8 @@
       "night_partner_person": ""
     },
     "47b1cef6/2026-04-21": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "19インチラック・機器設置、他",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -2346,8 +2346,8 @@
       "night_partner_person": ""
     },
     "47b1cef6/2026-04-22": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "配管敷設、ケーブル配線、AP取付、GPS取付",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -2378,10 +2378,10 @@
       "night_partner_person": ""
     },
     "47b1cef6/2026-04-24": {
-      "day": false,
-      "day_work": "",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day": true,
+      "day_work": "電源接続、19インチラック設置、他",
+      "day_priority": "有",
+      "day_priority_detail": "電源接続",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
@@ -2433,10 +2433,10 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
-      "night_work": "",
-      "night_priority": "",
-      "night_priority_detail": "",
+      "night": true,
+      "night_work": "電源接続",
+      "night_priority": "有",
+      "night_priority_detail": "電源作業",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -2474,8 +2474,8 @@
       "night_partner_person": ""
     },
     "47b1cef6/2026-04-30": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "AP取付、資材搬出他",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
