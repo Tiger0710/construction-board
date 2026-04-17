@@ -15,6 +15,7 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
   "Content-Type": "application/json",
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
 };
 
 function getJSTNow() {
