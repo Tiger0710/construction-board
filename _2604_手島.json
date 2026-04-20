@@ -186,6 +186,17 @@
       "start_date": "2026-04-21",
       "end_date": "2026-04-22",
       "id": "bwlfhyas"
+    },
+    {
+      "client": "京王設備サービス",
+      "title": "聖蹟桜ヶ丘SC　ﾄﾞｺﾓ5G屋内対策工事",
+      "our_person": "石川達",
+      "safety_person": "清水",
+      "partner": "孝勇電設",
+      "partner_person": "廣瀬",
+      "start_date": "2026-04-30",
+      "end_date": "2026-04-30",
+      "id": "e543ni0h"
     }
   ],
   "daily": {
@@ -2549,6 +2560,22 @@
       "night_priority_detail": "",
       "night_our_person": "",
       "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "e543ni0h/2026-04-30": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "清水",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "光ケーブル敷設、接続、他",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "上野",
+      "night_safety_person": "清水",
       "night_partner_person": ""
     }
   }
