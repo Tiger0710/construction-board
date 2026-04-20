@@ -197,6 +197,17 @@
       "start_date": "2026-04-30",
       "end_date": "2026-04-30",
       "id": "e543ni0h"
+    },
+    {
+      "client": "NESIC",
+      "title": "つくば風力発電設備工事",
+      "our_person": "生田目",
+      "safety_person": "",
+      "partner": "アイ建設",
+      "partner_person": "鯉沼",
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-27",
+      "id": "rx34odxi"
     }
   ],
   "daily": {
@@ -2576,6 +2587,22 @@
       "night_priority_detail": "",
       "night_our_person": "上野",
       "night_safety_person": "清水",
+      "night_partner_person": ""
+    },
+    "rx34odxi/2026-04-27": {
+      "day": true,
+      "day_work": "接続、試験調整",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "保科",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
       "night_partner_person": ""
     }
   }
