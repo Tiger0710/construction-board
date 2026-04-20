@@ -51,7 +51,7 @@
 
   <script>
     // ===== 設定 =====
-    var MIN_ROW_HEIGHT = 72;
+    var MIN_ROW_HEIGHT = 80;
     var PAGE_ROTATE_SEC = 30;
     var GROUP_ROTATE_CYCLES = 1;
     var REFRESH_MS = 5 * 60 * 1000;
@@ -183,13 +183,13 @@
         ? '<span class="priority-badge priority-yes">' + escapeHtml(priorityText) + '</span>'
         : '<span class="priority-badge priority-no">-</span>';
 
-      return '<div class="board-row ' + evenOdd + priorityClass + nightClass + '" data-id="' + escapeAttr(rowId) + '" style="min-height:' + rowHeight + 'px;">' +
+      return '<div class="board-row ' + evenOdd + priorityClass + nightClass + '" data-id="' + escapeAttr(rowId) + '" style="height:' + rowHeight + 'px;">' +
         '<div class="col col-client">' + escapeHtml(item.client) + '</div>' +
         '<div class="col col-title">' + escapeHtml(item.title) + '</div>' +
-        '<div class="col col-our-person">' + escapeHtml(item.our_person) + '</div>' +
-        '<div class="col col-safety">' + escapeHtml(item.safety_person) + '</div>' +
+        '<div class="col col-our-person"><span class="nowrap">' + escapeHtml(item.our_person) + '</span></div>' +
+        '<div class="col col-safety"><span class="nowrap">' + escapeHtml(item.safety_person) + '</span></div>' +
         '<div class="col col-partner">' + escapeHtml(item.partner) + '</div>' +
-        '<div class="col col-partner-person">' + escapeHtml(item.partner_person) + '</div>' +
+        '<div class="col col-partner-person"><span class="nowrap">' + escapeHtml(item.partner_person) + '</span></div>' +
         '<div class="col col-work">' + escapeHtml(item.work_content) + '</div>' +
         '<div class="col col-time">' + escapeHtml(item.work_time) + '</div>' +
         '<div class="col col-priority">' + priorityBadge + '</div>' +
@@ -281,7 +281,15 @@
       var pageItems = group.items.slice(start, start + ROWS_PER_PAGE);
 
       var available = window.innerHeight - 88 - 62 - 40;
-      var rowHeight = pageItems.length > 0 ? Math.min(64, Math.floor(available / pageItems.length)) : 64;
+      var layout = (window.__layoutMode || "top");
+      var cap;
+      if (layout === "fill") cap = 9999;
+      else if (layout === "center") cap = Math.floor(MIN_ROW_HEIGHT * 1.3);
+      else cap = MIN_ROW_HEIGHT; // top
+      var rowHeight = pageItems.length > 0 ? Math.min(cap, Math.floor(available / pageItems.length)) : MIN_ROW_HEIGHT;
+      body.style.display = (layout === "center") ? "flex" : "";
+      body.style.flexDirection = (layout === "center") ? "column" : "";
+      body.style.justifyContent = (layout === "center") ? "center" : "";
 
       var html = pageItems.map(function(item, idx) {
         var rowId = item.title + "|" + item.date + "|" + item.partner;
@@ -357,12 +365,35 @@
       updatePageIndicator();
     }
 
+    // ===== スクリーン常時点灯（Wake Lock API） =====
+    var wakeLockSentinel = null;
+    async function acquireWakeLock() {
+      try {
+        if (!("wakeLock" in navigator)) {
+          console.log("[WakeLock] unsupported");
+          return;
+        }
+        if (wakeLockSentinel && !wakeLockSentinel.released) return;
+        wakeLockSentinel = await navigator.wakeLock.request("screen");
+        console.log("[WakeLock] acquired");
+        wakeLockSentinel.addEventListener("release", function() {
+          console.log("[WakeLock] released");
+        });
+      } catch (e) {
+        console.warn("[WakeLock] failed:", e && e.message);
+      }
+    }
+    document.addEventListener("visibilitychange", function() {
+      if (document.visibilityState === "visible") acquireWakeLock();
+    });
+
     // ===== フルスクリーン =====
     function requestFullscreen() {
       var el = document.documentElement;
       if (el.requestFullscreen) el.requestFullscreen();
       else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
       else if (el.msRequestFullscreen) el.msRequestFullscreen();
+      acquireWakeLock();
     }
 
     function toggleFullscreen() {
@@ -393,6 +424,46 @@
       }
     }
 
+    // ===== キーボード操作（テスト用） =====
+    function advancePage(delta) {
+      if (dateGroups.length === 0) return;
+      stopAllTimers();
+      var group = dateGroups[currentGroupIdx];
+      var total = group.totalPages;
+      currentPage = (currentPage + delta + total) % total;
+      renderCurrentGroupPage();
+      if (totalPages > 1 || dateGroups.length > 1) startPageRotation();
+    }
+
+    function advanceGroup() {
+      if (dateGroups.length <= 1) return;
+      stopAllTimers();
+      currentGroupIdx = (currentGroupIdx + 1) % dateGroups.length;
+      currentPage = 0;
+      groupCycleCount = 0;
+      var group = dateGroups[currentGroupIdx];
+      totalPages = group.totalPages;
+      renderCurrentGroupPage();
+      updateHeaderForGroup(group);
+      if (totalPages > 1 || dateGroups.length > 1) startPageRotation();
+    }
+
+    async function forceReload() {
+      var newData = await fetchData();
+      stopAllTimers();
+      currentPage = 0;
+      currentGroupIdx = 0;
+      groupCycleCount = 0;
+      renderBoard(newData);
+    }
+
+    function onKeyDown(e) {
+      if (e.key === "ArrowRight") { e.preventDefault(); advancePage(1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); advancePage(-1); }
+      else if (e.key === "n" || e.key === "N") { e.preventDefault(); advanceGroup(); }
+      else if (e.key === "r" || e.key === "R") { e.preventDefault(); forceReload(); }
+    }
+
     // ===== 初期化 =====
     async function initBoard() {
       ROWS_PER_PAGE = calcRowsPerPage();
@@ -413,10 +484,171 @@
 
       window.addEventListener("resize", onResize);
       document.addEventListener("click", toggleFullscreen);
+      document.addEventListener("keydown", onKeyDown);
       requestFullscreen();
+      acquireWakeLock();
     }
 
     document.addEventListener("DOMContentLoaded", initBoard);
+
+    // ===== テーマプレビュー (?preview=1) =====
+    (function() {
+      if (new URLSearchParams(location.search).get("preview") !== "1") return;
+      var THEMES = {
+        navy:     { label: "現状Navy",     main: "#1a2e5a", accent: "#2c4a8a", tomorrow: "#3a5aa3" },
+        midnight: { label: "深夜Midnight", main: "#0f1e3a", accent: "#1a2e5a", tomorrow: "#2c4a8a" },
+        charcoal: { label: "チャコール",    main: "#1f2937", accent: "#374151", tomorrow: "#4b5563" },
+        teal:     { label: "ダークティール", main: "#115e59", accent: "#0f766e", tomorrow: "#14b8a6" },
+        forest:   { label: "フォレスト",    main: "#14532d", accent: "#166534", tomorrow: "#15803d" },
+        wine:     { label: "ワイン",        main: "#7f1d1d", accent: "#991b1b", tomorrow: "#b91c1c" },
+        slate:    { label: "スレート",      main: "#334155", accent: "#475569", tomorrow: "#64748b" },
+        indigo:   { label: "インディゴ",    main: "#312e81", accent: "#3730a3", tomorrow: "#4338ca" }
+      };
+      var NIGHT_SHADES = {
+        dark:   { label: "夜A:暗",   color: "#243e6e" },
+        mid:    { label: "夜B:中",   color: "#2e4d7d" },
+        light:  { label: "夜C:明",   color: "#35588a" }
+      };
+      var BORDER_STRATEGIES = {
+        none:     { label: "枠D:無し",     desc: "両方無し（色とバッジで識別）推し" },
+        both:     { label: "枠A:両方",     desc: "夜=青/重点=橙(重複時は夜優先)" },
+        priority: { label: "枠B:重点のみ", desc: "夜ボーダー無/重点のみ橙" },
+        override: { label: "枠C:重点優先", desc: "両方、重複時は橙優先" }
+      };
+      var DENSITIES = {
+        spacious: { label: "疎 80px", height: 80 },
+        mid:      { label: "中 64px", height: 64 },
+        dense:    { label: "密 56px", height: 56 },
+        tight:    { label: "超密 48px", height: 48 }
+      };
+      var LAYOUTS = {
+        top:    { label: "上詰め",   desc: "下に隙間ができる" },
+        center: { label: "中央",     desc: "少数時は中央配置（推し）" },
+        fill:   { label: "フル伸長", desc: "全部フッターまで伸ばす" }
+      };
+      var state = { theme: "charcoal", night: "mid", border: "none", density: "spacious", layout: "top" };
+
+      function buildNightCss(n) {
+        return ".board-row.row-night.row-even, .board-row.row-night.row-odd { background: " + n.color + " !important; }";
+      }
+      function buildBorderCss(strategy) {
+        if (strategy === "none") {
+          return [
+            ".board-row.row-priority.row-even, .board-row.row-priority.row-odd { border-left: 0 !important; }",
+            ".board-row.row-night.row-even, .board-row.row-night.row-odd { border-left: 0 !important; }"
+          ].join("\n");
+        }
+        if (strategy === "both") {
+          return [
+            ".board-row.row-priority.row-even, .board-row.row-priority.row-odd { border-left: 10px solid #f59e0b !important; }",
+            ".board-row.row-night.row-even, .board-row.row-night.row-odd { border-left: 10px solid #7aa7d9 !important; }"
+          ].join("\n");
+        }
+        if (strategy === "priority") {
+          return [
+            ".board-row.row-priority.row-even, .board-row.row-priority.row-odd { border-left: 10px solid #f59e0b !important; }",
+            ".board-row.row-night.row-even, .board-row.row-night.row-odd { border-left: 0 !important; }",
+            ".board-row.row-night.row-priority.row-even, .board-row.row-night.row-priority.row-odd { border-left: 10px solid #f59e0b !important; }"
+          ].join("\n");
+        }
+        // override: both shown, but priority wins on conflict
+        return [
+          ".board-row.row-night.row-even, .board-row.row-night.row-odd { border-left: 10px solid #7aa7d9 !important; }",
+          ".board-row.row-priority.row-even, .board-row.row-priority.row-odd { border-left: 10px solid #f59e0b !important; }",
+          ".board-row.row-priority.row-night.row-even, .board-row.row-priority.row-night.row-odd { border-left: 10px solid #f59e0b !important; }"
+        ].join("\n");
+      }
+
+      function render() {
+        var t = THEMES[state.theme];
+        var n = NIGHT_SHADES[state.night];
+        var d = DENSITIES[state.density];
+        var root = document.documentElement;
+        root.style.setProperty("--accent-navy", t.main);
+        root.style.setProperty("--bg-table-header", t.main);
+        root.style.setProperty("--accent-navy-light", t.accent);
+        var s = document.getElementById("theme-override") || (function() {
+          var el = document.createElement("style"); el.id = "theme-override"; document.head.appendChild(el); return el;
+        })();
+        s.textContent = [
+          ".header-today-label { background: " + t.main + " !important; }",
+          ".header-today-label.label-tomorrow { background: " + t.accent + " !important; }",
+          ".date-section-header { background: " + t.main + " !important; }",
+          ".date-section-header.section-tomorrow { background: " + t.tomorrow + " !important; }",
+          ".board-header { border-bottom-color: " + t.main + " !important; }",
+          ".board-footer { border-top-color: " + t.main + " !important; }",
+          buildNightCss(n),
+          buildBorderCss(state.border)
+        ].join("\n");
+        // 行密度 + レイアウト適用
+        try {
+          MIN_ROW_HEIGHT = d.height;
+          window.__layoutMode = state.layout;
+          if (dateGroups && dateGroups.length > 0) {
+            stopAllTimers();
+            ROWS_PER_PAGE = calcRowsPerPage();
+            dateGroups.forEach(function(g) { g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE); });
+            var group = dateGroups[currentGroupIdx];
+            totalPages = group.totalPages;
+            if (currentPage >= totalPages) currentPage = 0;
+            renderCurrentGroupPage();
+            if (totalPages > 1 || dateGroups.length > 1) startPageRotation();
+          }
+        } catch (e) {}
+        // selected button highlighting
+        document.querySelectorAll(".tp-btn").forEach(function(b) {
+          var sel = (b.dataset.group === "theme" && b.dataset.key === state.theme)
+                 || (b.dataset.group === "night" && b.dataset.key === state.night)
+                 || (b.dataset.group === "border" && b.dataset.key === state.border)
+                 || (b.dataset.group === "density" && b.dataset.key === state.density)
+                 || (b.dataset.group === "layout" && b.dataset.key === state.layout);
+          b.style.background = sel ? t.main : "#fff";
+          b.style.color = sel ? "#fff" : "#333";
+          b.style.borderColor = sel ? t.main : "#ccc";
+        });
+        try { localStorage.setItem("tp-state", JSON.stringify(state)); } catch(e){}
+      }
+
+      function makeRow(title, group, options) {
+        var row = document.createElement("div");
+        row.style.cssText = "display:flex;gap:4px;align-items:center;flex-wrap:wrap;";
+        var lbl = document.createElement("span");
+        lbl.textContent = title;
+        lbl.style.cssText = "font-size:11px;color:#666;min-width:48px;font-weight:700;";
+        row.appendChild(lbl);
+        Object.keys(options).forEach(function(key) {
+          var btn = document.createElement("button");
+          btn.className = "tp-btn";
+          btn.dataset.group = group;
+          btn.dataset.key = key;
+          btn.textContent = options[key].label;
+          btn.style.cssText = "padding:4px 10px;border:1px solid #ccc;border-radius:4px;cursor:pointer;font-size:12px;";
+          btn.title = options[key].desc || "";
+          btn.onclick = function() { state[group] = key; render(); };
+          row.appendChild(btn);
+        });
+        return row;
+      }
+
+      var bar = document.createElement("div");
+      bar.style.cssText = "position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:9999;background:rgba(255,255,255,0.95);padding:8px 10px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:flex;flex-direction:column;gap:4px;font-family:sans-serif;";
+      bar.appendChild(makeRow("ヘッダー", "theme", THEMES));
+      bar.appendChild(makeRow("夜の色", "night", NIGHT_SHADES));
+      bar.appendChild(makeRow("左ボーダー", "border", BORDER_STRATEGIES));
+      bar.appendChild(makeRow("行密度", "density", DENSITIES));
+      bar.appendChild(makeRow("行配置", "layout", LAYOUTS));
+      document.body.appendChild(bar);
+
+      try {
+        var saved = JSON.parse(localStorage.getItem("tp-state"));
+        if (saved && typeof saved === "object") {
+          ["theme","night","border","density","layout"].forEach(function(k) {
+            if (saved[k]) state[k] = saved[k];
+          });
+        }
+      } catch(e){}
+      render();
+    })();
   </script>
 </body>
 </html>

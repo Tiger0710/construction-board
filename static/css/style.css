@@ -8,9 +8,9 @@
 :root {
   --bg-main: #ffffff;
   --bg-header: #ffffff;
-  --bg-table-header: #1a2e5a;
+  --bg-table-header: #1f2937;
   --bg-row-even: #ffffff;
-  --bg-row-odd: #f5f7fa;
+  --bg-row-odd: #ffffff;
   --bg-priority: #eef2f9;
   --bg-priority-odd: #e5eaf5;
 
@@ -19,8 +19,8 @@
   --text-muted: #888888;
   --text-on-dark: #ffffff;
 
-  --accent-navy: #1a2e5a;
-  --accent-navy-light: #2c4a8a;
+  --accent-navy: #1f2937;
+  --accent-navy-light: #374151;
   --accent-green: #16a34a;
   --accent-red: #dc2626;
 
@@ -158,6 +158,7 @@ body {
   padding: 0 16px;
   position: relative;
   z-index: 10;
+  border-bottom: 2px solid var(--border-main);
 }
 
 .board-table-header .col {
@@ -165,21 +166,34 @@ body {
   font-size: 22px;
   font-weight: 900;
   color: var(--text-on-dark);
-  letter-spacing: 3px;
+  letter-spacing: 1px;
   line-height: 1;
   white-space: nowrap;
 }
 
 /* ---------- Column Widths ---------- */
-.col-client         { width: 9%;  padding: 0 8px;  }
-.col-title          { width: 22%; padding: 0 10px; }
-.col-our-person     { width: 5%;  padding: 0 8px;  }
-.col-safety         { width: 5%;  padding: 0 8px;  }
-.col-partner        { width: 9%;  padding: 0 8px;  }
-.col-partner-person { width: 5%;  padding: 0 8px;  }
-.col-work           { width: 20%; padding: 0 10px; }
-.col-time           { width: 4%;  padding: 0 8px;  text-align: center; }
-.col-priority       { width: 12%; padding: 0 8px;  text-align: center; }
+.col-client         { width: 10%; padding: 0 8px;  }
+.col-title          { width: 23%; padding: 0 10px; }
+.col-our-person     { width: 8%;  padding: 0 8px;  }
+.col-safety         { width: 8%;  padding: 0 8px;  }
+.col-partner        { width: 11%; padding: 0 8px;  }
+.col-partner-person { width: 8%;  padding: 0 8px;  }
+.col-work           { width: 19%; padding: 0 10px; }
+.col-time           { width: 5%;  padding: 0 8px;  text-align: center; }
+.col-priority       { width: 8%;  padding: 0 8px;  text-align: center; }
+
+/* 人名列は1行固定（協力会社は2行可）。垂直中央維持のため子spanで省略処理 */
+.board-row .col-our-person .nowrap,
+.board-row .col-safety .nowrap,
+.board-row .col-partner-person .nowrap {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: normal;
+}
 
 /* ---------- Board Body ---------- */
 .board-body {
@@ -192,10 +206,12 @@ body {
 /* ---------- Board Rows ---------- */
 .board-row {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   padding: 0 16px;
-  border-bottom: 1px solid var(--border-row);
+  border-bottom: 2px solid var(--border-main);
   transition: background-color 0.2s ease;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .board-row.row-even {
@@ -206,15 +222,13 @@ body {
   background: var(--bg-row-odd);
 }
 
-/* 重点作業行 */
+/* 重点作業行（ボーダー廃止・バッジのみで表現） */
 .board-row.row-priority.row-even {
   background: var(--bg-row-even);
-  border-left: 5px solid #f59e0b;
 }
 
 .board-row.row-priority.row-odd {
   background: var(--bg-row-odd);
-  border-left: 5px solid #f59e0b;
 }
 
 /* ---------- セル共通: 折り返し表示 ---------- */
@@ -228,10 +242,17 @@ body {
   overflow-wrap: break-word;
   padding-top: 6px;
   padding-bottom: 6px;
+  display: flex;
+  align-items: center;
 }
 
 .board-row .col-time {
   white-space: nowrap;
+  justify-content: center;
+}
+
+.board-row .col-priority {
+  justify-content: center;
 }
 
 /* ---------- Priority Badge ---------- */
@@ -239,11 +260,11 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: 6px;
   font-family: var(--font-main);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 18px;
   letter-spacing: 0.5px;
   white-space: normal;
   word-break: break-all;
@@ -263,15 +284,10 @@ body {
   font-weight: 400;
 }
 
-/* 夜間作業行 (22:00-5:00) */
-.board-row.row-night.row-even {
-  background: #3b6b9e;
-  border-left: 5px solid #93c5fd;
-}
-
+/* 夜間作業行 (22:00-5:00) - ボーダー廃止、背景色のみで表現 */
+.board-row.row-night.row-even,
 .board-row.row-night.row-odd {
-  background: #346091;
-  border-left: 5px solid #93c5fd;
+  background: #2e4d7d;
 }
 
 .board-row.row-night .col {
@@ -284,8 +300,8 @@ body {
 }
 
 .board-row.row-night .priority-badge.priority-no {
-  color: #93c5fd;
-  border-color: #93c5fd;
+  color: #7aa7d9;
+  border-color: #7aa7d9;
 }
 
 /* ---------- Row Entrance Animation ---------- */
@@ -389,7 +405,7 @@ body {
 }
 
 .date-section-header.section-tomorrow {
-  background: var(--accent-navy-light);
+  background: #0f766e;
 }
 
 .date-section-tag {
