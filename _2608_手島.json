@@ -1,0 +1,97 @@
+{
+  "projects": [
+    {
+      "client": "きんでん",
+      "title": "AT TOK1 D棟_PH5",
+      "our_person": "太田",
+      "safety_person": "",
+      "partner": "萩原通信、スリーライズ",
+      "partner_person": "小川、金子",
+      "start_date": "2026-08-03",
+      "end_date": "2026-08-31",
+      "id": "pdp9tm6k"
+    }
+  ],
+  "daily": {
+    "pdp9tm6k/2026-08-08": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "pdp9tm6k/2026-08-09": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "pdp9tm6k/2026-08-22": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "pdp9tm6k/2026-08-23": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "pdp9tm6k/2026-08-30": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    }
+  }
+}
