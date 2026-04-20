@@ -459,7 +459,7 @@
       "night_safety_person": "平野"
     },
     "ecb99f56/2026-04-20": {
-      "day": false,
+      "day": true,
       "day_work": "機器周り配線、札付け",
       "day_priority": "",
       "day_priority_detail": "",
