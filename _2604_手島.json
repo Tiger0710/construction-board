@@ -539,7 +539,7 @@
       "day_priority_detail": "",
       "day_our_person": "西潟",
       "day_safety_person": "平野",
-      "night": true,
+      "night": false,
       "night_work": "インテグ",
       "night_priority": "無",
       "night_priority_detail": "",
