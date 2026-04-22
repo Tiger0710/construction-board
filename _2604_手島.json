@@ -122,15 +122,15 @@
       "end_date": "2026-04-28"
     },
     {
-      "id": "ad2635f0",
       "client": "きんでん",
-      "title": "麻布台ﾋﾙｽﾞ森JPﾀﾜｰJTOWER追加工事(SB収容変更)",
+      "title": "麻布台ﾋﾙｽﾞ森JPﾀﾜｰSB新設工事（Amazon個社対応）",
       "our_person": "西潟",
       "safety_person": "平野",
       "partner": "エス・ケー・ケー",
       "partner_person": "内田",
       "start_date": "2026-04-15",
-      "end_date": "2026-04-22"
+      "end_date": "2026-04-22",
+      "id": "ad2635f0"
     },
     {
       "id": "d4f8a0a9",
