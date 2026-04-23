@@ -1472,7 +1472,7 @@
       "day_priority_detail": "",
       "day_our_person": "楊",
       "day_safety_person": "清水",
-      "night": true,
+      "night": false,
       "night_work": "ケーブル敷設、配管敷設、AP取付、SW取付",
       "night_priority": "無",
       "night_priority_detail": "",
@@ -1486,7 +1486,7 @@
       "day_priority_detail": "",
       "day_our_person": "楊",
       "day_safety_person": "清水",
-      "night": true,
+      "night": false,
       "night_work": "ケーブル敷設、配管敷設、AP取付、SW取付",
       "night_priority": "無",
       "night_priority_detail": "",
@@ -1536,7 +1536,7 @@
       "night_safety_person": "清水"
     },
     "3eb25fca/2026-04-28": {
-      "day": true,
+      "day": false,
       "day_work": "機器周り調整、他",
       "day_priority": "無",
       "day_priority_detail": "",
