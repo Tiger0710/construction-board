@@ -2624,7 +2624,7 @@
       "night_partner_person": ""
     },
     "rx34odxi/2026-04-27": {
-      "day": true,
+      "day": false,
       "day_work": "接続、試験調整",
       "day_priority": "",
       "day_priority_detail": "",
