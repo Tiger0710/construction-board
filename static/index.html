@@ -20,6 +20,18 @@
       <div class="header-today" id="header-today"></div>
     </div>
     <div class="header-right">
+      <div class="header-summary" id="header-summary" title="全担当者合計（昼/夜を別件カウント）">
+        <div class="hs-item hs-today">
+          <span class="hs-label">本日稼働</span>
+          <span class="hs-value" id="summary-today">-</span>
+          <span class="hs-unit">件</span>
+        </div>
+        <div class="hs-item hs-tomorrow">
+          <span class="hs-label">明日稼働</span>
+          <span class="hs-value" id="summary-tomorrow">-</span>
+          <span class="hs-unit">件</span>
+        </div>
+      </div>
       <div id="clock" class="header-clock">00:00:00</div>
     </div>
   </header>
@@ -222,9 +234,24 @@
       return y + "-" + m + "-" + d;
     }
 
+    // ===== 本日/明日稼働計 更新 =====
+    function updateSummary(data, todayStr, tomorrowStr) {
+      var items = (data && data.items) || [];
+      var todayCount = items.filter(function(i) { return i.date === todayStr; }).length;
+      var tomorrowCount = items.filter(function(i) { return i.date === tomorrowStr; }).length;
+      var tEl = document.getElementById("summary-today");
+      var mEl = document.getElementById("summary-tomorrow");
+      if (tEl) tEl.textContent = todayCount;
+      if (mEl) mEl.textContent = tomorrowCount;
+    }
+
     // ===== ボード表示 =====
     function renderBoard(data) {
       var body = document.getElementById("board-body");
+
+      var todayStr = getLiveToday();
+      var tomorrowStr = getLiveTomorrow();
+      updateSummary(data, todayStr, tomorrowStr);
 
       if (data.error) {
         body.innerHTML =
@@ -237,8 +264,6 @@
         return;
       }
 
-      var todayStr = getLiveToday();
-      var tomorrowStr = getLiveTomorrow();
       var filtered = filterTodayTomorrow(data.items, todayStr, tomorrowStr);
 
       if (filtered.length === 0) {

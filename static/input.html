@@ -24,9 +24,22 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .app-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 2px; }
-    .header-links { display: flex; gap: 16px; }
+    .header-links { display: flex; gap: 16px; align-items: center; }
     .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
     .header-links a:hover { color: #fff; }
+    .summary-totals {
+      display: flex; gap: 14px; align-items: center;
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      padding: 6px 14px; border-radius: 8px;
+      font-size: 12px; color: rgba(255,255,255,0.85);
+      letter-spacing: 0.5px;
+    }
+    .summary-totals .st-item { display: flex; align-items: center; gap: 4px; }
+    .summary-totals .st-label { font-weight: 500; }
+    .summary-totals .st-value { font-size: 16px; font-weight: 700; color: #fff; }
+    .summary-totals .st-unit { font-size: 11px; color: rgba(255,255,255,0.7); }
+    .summary-totals .st-today .st-value { color: #fef3c7; }
+    .summary-totals .st-tomorrow .st-value { color: #a7f3d0; }
 
     /* === User Tabs === */
     .user-tabs {
@@ -260,6 +273,11 @@
       border-radius: 8px; font-size: 15px; font-family: inherit;
     }
     .form-group input:focus { outline: none; border-color: #1A2E5A; }
+    .form-group .fixed-hint {
+      display: inline-block; font-size: 10px; font-weight: 600;
+      background: #e0e7f5; color: #1A2E5A;
+      padding: 1px 6px; border-radius: 3px; margin-left: 6px;
+    }
     .form-row { display: flex; gap: 12px; }
     .form-row .form-group { flex: 1; }
     .modal-actions {
@@ -371,6 +389,18 @@
     <div class="header-top">
       <h1>工事予定表 入力</h1>
       <div class="header-links">
+        <div class="summary-totals" id="summary-totals" title="全担当者合計（昼/夜を別件カウント）">
+          <div class="st-item st-today">
+            <span class="st-label">本日稼働</span>
+            <span class="st-value" id="summary-today">-</span>
+            <span class="st-unit">件</span>
+          </div>
+          <div class="st-item st-tomorrow">
+            <span class="st-label">明日稼働</span>
+            <span class="st-value" id="summary-tomorrow">-</span>
+            <span class="st-unit">件</span>
+          </div>
+        </div>
         <a href="/">サイネージ表示</a>
         <a href="/manual.html">マニュアル</a>
       </div>
@@ -523,6 +553,18 @@
     var API = "/.netlify/functions/data";
     var WEEKDAYS = ["日","月","火","水","木","金","土"];
     var KNOWN_MEMBERS = ["手島", "森_吉村", "谷口", "河邊"];
+
+    // 担当者ごとの固定フィールド（新規/編集時に自動入力＆readonly）
+    var USER_FIXED_FIELDS = {
+      "森_吉村": { client: "KNSI", our_person: "森", safety_person: "髙橋" },
+      "谷口":   { client: "NESIC", safety_person: "保科" }
+    };
+    // フィールド名 → モーダル input ID
+    var FIXED_FIELD_INPUT_MAP = {
+      client: "m-client",
+      our_person: "m-our",
+      safety_person: "m-safety"
+    };
 
     // ===== 状態 =====
     var state = {
@@ -680,6 +722,24 @@
       renderGantt();
     }
 
+    // ===== 全体集計（本日/明日稼働計） =====
+    async function loadSummary() {
+      try {
+        var res = await fetch(API + "?signage=true&_t=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) return;
+        var d = await res.json();
+        var items = d.items || [];
+        var todayCount = items.filter(function(i) { return i.date === d.today; }).length;
+        var tomorrowCount = items.filter(function(i) { return i.date === d.tomorrow; }).length;
+        var tEl = document.getElementById("summary-today");
+        var mEl = document.getElementById("summary-tomorrow");
+        if (tEl) tEl.textContent = todayCount;
+        if (mEl) mEl.textContent = tomorrowCount;
+      } catch (e) {
+        // サマリ取得失敗は黙殺（メイン機能に影響させない）
+      }
+    }
+
     async function loadMembers() {
       try {
         var res = await fetch(API + "?month=" + state.month);
@@ -708,6 +768,7 @@
         state.dirty = false; updateDirtyUI();
         showStatus("保存しました", "success");
         setTimeout(function() { if (!state.dirty) showStatus("",""); }, 3000);
+        loadSummary();
       } catch (e) {
         showStatus("保存エラー: " + e.message, "error");
       }
@@ -1170,7 +1231,32 @@
         document.getElementById("m-start").value = y + "-" + String(mm).padStart(2,"0") + "-01";
         document.getElementById("m-end").value = y + "-" + String(mm).padStart(2,"0") + "-" + String(new Date(y,mm,0).getDate()).padStart(2,"0");
       }
+      applyUserFixedFields(!id);
       modal.classList.remove("hidden");
+    }
+
+    // 担当者ごとのデフォルト値をフォームに適用
+    //  - 新規/編集どちらでも常にデフォルト値を入れる（既存値は上書き）
+    //  - readonlyにはせず、ユーザーはその場で自由に修正可
+    //  - 編集時に修正せずそのまま保存すると既存データも自然にデフォルトで上書きされる
+    function applyUserFixedFields(isNew) {
+      var fixed = USER_FIXED_FIELDS[state.user] || {};
+      Object.keys(FIXED_FIELD_INPUT_MAP).forEach(function(field) {
+        var el = document.getElementById(FIXED_FIELD_INPUT_MAP[field]);
+        if (!el) return;
+        var existingHint = el.parentElement.querySelector(".fixed-hint");
+        if (existingHint) existingHint.remove();
+        el.readOnly = false;
+        if (fixed[field] === undefined) return;
+        el.value = fixed[field];
+        var label = el.parentElement.querySelector("label");
+        if (label) {
+          var hint = document.createElement("span");
+          hint.className = "fixed-hint";
+          hint.textContent = "初期値";
+          label.appendChild(hint);
+        }
+      });
     }
 
     function closeModal() {
@@ -1231,6 +1317,9 @@
         showPersonSelectMode();
         renderPersonSelect();
       }
+      loadSummary();
+      // 5分ごとにサマリ自動更新
+      setInterval(loadSummary, 5 * 60 * 1000);
 
       window.addEventListener("beforeunload", function(e) {
         if (state.dirty) { e.preventDefault(); e.returnValue = ""; }
