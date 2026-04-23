@@ -362,6 +362,28 @@
       "start_date": "2026-04-24",
       "end_date": "2026-04-24",
       "id": "ew09grjd"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社きらぼし銀行滝野川事務センター",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "OTS",
+      "partner_person": "西山",
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-27",
+      "id": "a1cbo8ho"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社高文本社営業部",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-29",
+      "end_date": "2026-04-29",
+      "id": "azvbca5t"
     }
   ],
   "daily": {
