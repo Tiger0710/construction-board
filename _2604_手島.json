@@ -2345,7 +2345,7 @@
       "day_our_person": "西潟",
       "day_safety_person": "平野",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "残作業、写真撮影",
       "night_priority": "",
       "night_priority_detail": "",
