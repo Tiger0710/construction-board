@@ -1,0 +1,55 @@
+{
+  "projects": [
+    {
+      "client": "KNSI",
+      "title": "小電力：名古屋港木材倉庫株式会社飛島倉庫",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-05-01",
+      "end_date": "2026-05-01",
+      "id": "cf0i53cq"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社きらぼし銀行竹ノ塚支店",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "OTS",
+      "partner_person": "西山",
+      "start_date": "2026-05-01",
+      "end_date": "2026-05-01",
+      "id": "e2065kbh"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社オイシスはりま工場",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-05-02",
+      "end_date": "2026-05-02",
+      "id": "sdwxm2rh"
+    }
+  ],
+  "daily": {
+    "cf0i53cq/2026-05-01": {
+      "day": true,
+      "day_work": "",
+      "day_priority": "有",
+      "day_priority_detail": "分電盤内作業",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    }
+  }
+}
