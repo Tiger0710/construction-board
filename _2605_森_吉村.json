@@ -142,6 +142,72 @@
       "start_date": "2026-05-13",
       "end_date": "2026-05-15",
       "id": "v60cbbn6"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：社会福祉法人みねやま福祉会総合老人福祉施設はごろも苑",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-15",
+      "id": "qa35p6wo"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社きらぼし銀行竹ノ塚支店",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "OTS",
+      "partner_person": "西山",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "je09mrrt"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社きらぼし銀行祖師谷支店",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-05-16",
+      "end_date": "2026-05-16",
+      "id": "u4dhgqgz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：木下酒店",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-05-19",
+      "end_date": "2026-05-19",
+      "id": "t8162vm7"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社ハウスメイトパートナーズ神奈川営業部",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-05-23",
+      "end_date": "2026-05-24",
+      "id": "ptgmywpn"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ハウスメイトワークス株式会社リニューアル事業部神奈川支店",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-05-23",
+      "end_date": "2026-05-24",
+      "id": "xgk6qtmh"
     }
   ],
   "daily": {
