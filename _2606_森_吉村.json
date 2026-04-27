@@ -1,0 +1,49 @@
+{
+  "projects": [
+    {
+      "client": "KNSI",
+      "title": "小電力：豊岡市立竹野学園",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "g0b25kwh"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：上野製薬株式会社四日市工場",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-06-17",
+      "end_date": "2026-06-19",
+      "id": "y664uz14"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社近鉄ロジスティクス・システムズ羽田営業所",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-06-27",
+      "end_date": "2026-06-28",
+      "id": "skm5i211"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社竹中工務店ＮＴＮ和歌山製作所　撤去",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "yxk4a7z8"
+    }
+  ],
+  "daily": {}
+}
