@@ -388,7 +388,7 @@
     {
       "client": "KNSI",
       "title": "小電力：学校法人中部大学中部大学",
-      "our_person": "",
+      "our_person": "森",
       "safety_person": "保科",
       "partner": "PND",
       "partner_person": "廣田",
@@ -399,7 +399,7 @@
     {
       "client": "KNSI",
       "title": "小電力：株式会社柴橋商会江東病院",
-      "our_person": "",
+      "our_person": "森",
       "safety_person": "保科",
       "partner": "OTS",
       "partner_person": "西山",
@@ -410,13 +410,35 @@
     {
       "client": "KNSI",
       "title": "小電力：株式会社テンポイノベーション　セーフティーイノベーション",
-      "our_person": "",
+      "our_person": "森",
       "safety_person": "保科",
       "partner": "アスロード",
       "partner_person": "大村",
       "start_date": "2026-04-30",
       "end_date": "2026-04-30",
       "id": "jzbglink"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社日本共創プラットフォーム本社　撤去",
+      "our_person": "森",
+      "safety_person": "保科",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-04-28",
+      "end_date": "2026-04-28",
+      "id": "93698yvb"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ジャパンマリンユナイテッド株式会社横浜事業所磯子工場　撤去",
+      "our_person": "森",
+      "safety_person": "保科",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-28",
+      "id": "aytf3zmo"
     }
   ],
   "daily": {
