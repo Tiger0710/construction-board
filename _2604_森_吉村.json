@@ -384,6 +384,28 @@
       "start_date": "2026-04-29",
       "end_date": "2026-04-29",
       "id": "azvbca5t"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：学校法人中部大学中部大学",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-27",
+      "id": "vs6zs9gm"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社柴橋商会江東病院",
+      "our_person": "",
+      "safety_person": "保科",
+      "partner": "OTS",
+      "partner_person": "西山",
+      "start_date": "2026-04-27",
+      "end_date": "2026-04-27",
+      "id": "oomm1aea"
     }
   ],
   "daily": {
