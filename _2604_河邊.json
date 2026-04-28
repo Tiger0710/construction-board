@@ -32,6 +32,28 @@
       "start_date": "2026-05-07",
       "end_date": "2026-05-13",
       "id": "9xva92o0"
+    },
+    {
+      "client": "アイング",
+      "title": "そごう千葉店　催事場配線工事(北海道　前半)",
+      "our_person": "田中(青)",
+      "safety_person": "高橋TK",
+      "partner": "萩原通信",
+      "partner_person": "富田",
+      "start_date": "2026-05-07",
+      "end_date": "2026-05-08",
+      "id": "rtyjxk99"
+    },
+    {
+      "client": "アイング",
+      "title": "そごう千葉店　催事場配線工事(北海道　後半)",
+      "our_person": "田中(青)",
+      "safety_person": "高橋TK",
+      "partner": "萩原通信",
+      "partner_person": "富田",
+      "start_date": "2026-05-19",
+      "end_date": "2026-05-20",
+      "id": "13qogcuw"
     }
   ],
   "daily": {
