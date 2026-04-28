@@ -2055,8 +2055,8 @@
       "night_safety_person": "清水"
     },
     "d4f8a0a9/2026-04-28": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "AP取付、PHS移設",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "楊",
@@ -2706,7 +2706,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "予備日",
       "night_priority": "",
       "night_priority_detail": "",
