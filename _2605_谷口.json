@@ -472,6 +472,17 @@
       "start_date": "2026-05-08",
       "end_date": "2026-05-08",
       "id": "kqat7ptl"
+    },
+    {
+      "client": "NESIC",
+      "title": "JIHS高レジリエンス情報基盤整備事業",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ビーバレー",
+      "partner_person": "関",
+      "start_date": "2026-05-07",
+      "end_date": "2026-05-29",
+      "id": "bc4qa87h"
     }
   ],
   "daily": {}
