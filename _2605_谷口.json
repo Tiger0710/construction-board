@@ -51,8 +51,8 @@
       "safety_person": "保科",
       "partner": "光エンジニアリング",
       "partner_person": "樋口",
-      "start_date": "2026-05-21",
-      "end_date": "2026-05-21",
+      "start_date": "2026-05-27",
+      "end_date": "2026-05-27",
       "id": "j3if31q7"
     },
     {
@@ -62,8 +62,8 @@
       "safety_person": "保科",
       "partner": "光エンジニアリング",
       "partner_person": "樋口",
-      "start_date": "2026-05-22",
-      "end_date": "2026-05-22",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
       "id": "ve9eavdw"
     },
     {
@@ -648,6 +648,72 @@
       "start_date": "2026-05-13",
       "end_date": "2026-05-13",
       "id": "bf9f0p59"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　北の峰郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "山田",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "pl1bk85i"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　向田郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "内城",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "4hyku6bt"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　寺館郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "渡辺",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "kyqq8tcy"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　東郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "小関",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "85l139yy"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　下神白郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "古川",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "poor3ps4"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　瑞穂郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-05-14",
+      "end_date": "2026-05-14",
+      "id": "0koyxwht"
     }
   ],
   "daily": {}
