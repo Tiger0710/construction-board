@@ -120,6 +120,17 @@
       "start_date": "2026-05-15",
       "end_date": "2026-05-15",
       "id": "dvvlxybt"
+    },
+    {
+      "client": "きんでん",
+      "title": "アーク森ビルSBリプレイス工事",
+      "our_person": "石川達",
+      "safety_person": "平野",
+      "partner": "エス",
+      "partner_person": "内田",
+      "start_date": "2026-05-15",
+      "end_date": "2026-05-15",
+      "id": "yxbiex2t"
     }
   ],
   "daily": {
@@ -1130,6 +1141,22 @@
       "night_our_person": "",
       "night_safety_person": "平野",
       "night_partner_person": "諏訪、有川"
+    },
+    "yxbiex2t/2026-05-15": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "22Fアンテナ撤去、ケーブル撤去",
+      "night_priority": "有",
+      "night_priority_detail": "撤去作業",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
     }
   }
 }
