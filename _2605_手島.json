@@ -227,7 +227,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "ケーブル撤去、配管撤去、機器撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
