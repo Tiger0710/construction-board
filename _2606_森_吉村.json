@@ -67,5 +67,22 @@
       "id": "51zo2t95"
     }
   ],
-  "daily": {}
+  "daily": {
+    "51zo2t95/2026-06-04": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    }
+  }
 }
