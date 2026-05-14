@@ -362,9 +362,9 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "軌道内ケーブル・配管撤去",
+      "night_work": "軌道内現地確認",
       "night_priority": "有",
-      "night_priority_detail": "軌道内作業/撤去作業",
+      "night_priority_detail": "軌道内作業",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
