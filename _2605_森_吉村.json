@@ -321,7 +321,7 @@
     },
     {
       "client": "KNSI",
-      "title": "E1051549-00株式会社竹中工務店ＳＣ神宮前５丁目商業施設　撤去",
+      "title": "株式会社竹中工務店ＳＣ神宮前５丁目商業施設　撤去",
       "our_person": "森",
       "safety_person": "髙橋",
       "partner": "リフェクト",
@@ -351,6 +351,28 @@
       "start_date": "2026-05-24",
       "end_date": "2026-05-24",
       "id": "208y9uf6"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社グランドボウル名古屋グランドボウル",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-05-27",
+      "end_date": "2026-05-28",
+      "id": "l1aumw2b"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力リニューアブルパワー株式会社羽根尾発電所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-05-27",
+      "end_date": "2026-05-28",
+      "id": "lwy6v99m"
     }
   ],
   "daily": {
