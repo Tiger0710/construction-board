@@ -58,7 +58,7 @@
     {
       "client": "京王設備サービス",
       "title": "大江戸線新宿駅PHS撤去工事",
-      "our_person": "川本・上野",
+      "our_person": "川本",
       "safety_person": "清水",
       "partner": "孝勇電設",
       "partner_person": "",
@@ -113,7 +113,7 @@
     {
       "client": "京王設備サービス",
       "title": "大江戸線新宿駅PHS撤去工事",
-      "our_person": "川本・上野",
+      "our_person": "川本",
       "safety_person": "清水",
       "partner": "アイ建設",
       "partner_person": "",
@@ -1034,7 +1034,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "ケーブル敷設",
       "night_priority": "",
       "night_priority_detail": "",
