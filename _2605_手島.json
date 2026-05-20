@@ -1090,8 +1090,8 @@
       "day_partner_person": "",
       "night": true,
       "night_work": "分電盤取付、電源接続、停電作業",
-      "night_priority": "",
-      "night_priority_detail": "",
+      "night_priority": "有",
+      "night_priority_detail": "電源接続",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
