@@ -2055,6 +2055,38 @@
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
+    },
+    "c5n9hsvw/2026-05-29": {
+      "day": true,
+      "day_work": "ケーブル敷設・端末・測定",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "c5n9hsvw/2026-05-30": {
+      "day": true,
+      "day_work": "切替",
+      "day_priority": "有",
+      "day_priority_detail": "切替",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
     }
   }
 }
