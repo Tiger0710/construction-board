@@ -683,7 +683,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
