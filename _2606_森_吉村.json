@@ -230,6 +230,39 @@
       "start_date": "2026-06-10",
       "end_date": "2026-06-10",
       "id": "cmkhkv86"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力リニューアブルパワー株式会社金井発電所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-11",
+      "end_date": "2026-06-11",
+      "id": "78cziy3h"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力リニューアブルパワー株式会社箱島発電所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-11",
+      "end_date": "2026-06-11",
+      "id": "xir009jk"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力リニューアブルパワー株式会社塩谷発電所　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-11",
+      "end_date": "2026-06-11",
+      "id": "zyi35njo"
     }
   ],
   "daily": {
