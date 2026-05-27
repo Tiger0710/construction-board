@@ -1,0 +1,49 @@
+{
+  "projects": [
+    {
+      "client": "NESIC",
+      "title": "創価学会さいたま緑文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-01",
+      "id": "1ykaevv6"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会神奈川文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "加藤",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-01",
+      "id": "9kaewnpf"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会埼玉平和会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-06-02",
+      "end_date": "2026-06-02",
+      "id": "o17p746d"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会横浜旭文化会館",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "加藤",
+      "start_date": "2026-06-02",
+      "end_date": "2026-06-02",
+      "id": "htnmb3ri"
+    }
+  ],
+  "daily": {}
+}
