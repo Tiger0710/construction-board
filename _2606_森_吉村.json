@@ -142,6 +142,39 @@
       "start_date": "2026-06-03",
       "end_date": "2026-06-03",
       "id": "oamuw44e"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：トヨタモビリティ東京株式会社ＴＨＥ　ＣＲＯＷＮ　東京虎ノ門　保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-06-03",
+      "end_date": "2026-06-03",
+      "id": "g8gw2u7h"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力リニューアブルパワー株式会社日光第二発電所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-04",
+      "end_date": "2026-06-04",
+      "id": "vehbl5zo"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：豊岡市立竹野学園　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "olpttoni"
     }
   ],
   "daily": {
