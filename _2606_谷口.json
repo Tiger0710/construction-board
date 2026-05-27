@@ -362,6 +362,94 @@
       "start_date": "2026-06-04",
       "end_date": "2026-06-04",
       "id": "c999o0pq"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　汐吹郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "evj3bibq"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　鬼柳郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "長澤",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "2zogljsz"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　上杉郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "鹿野",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "9pkrgtbi"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　矢口郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "坂本",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "3184a91d"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　浮金郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "石川",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "vaxiv23q"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　幡豆鳥羽郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "永田",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "ehad7dke"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　浜島迫子郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "望月",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "zk66dea6"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　中野白鷺郵便局　ＡＰ設置工事（再入局）",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "加藤",
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-05",
+      "id": "83oqfrdr"
     }
   ],
   "daily": {}
