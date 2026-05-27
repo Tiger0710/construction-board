@@ -1418,6 +1418,17 @@
       "start_date": "2026-05-29",
       "end_date": "2026-05-29",
       "id": "6uii4nyr"
+    },
+    {
+      "client": "NESIC",
+      "title": "火山監視カメラ工事現地調査（浅間山）",
+      "our_person": "山内",
+      "safety_person": "保科",
+      "partner": "カワバタ電王",
+      "partner_person": "湯地",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-01",
+      "id": "jf65j6h7"
     }
   ],
   "daily": {}
