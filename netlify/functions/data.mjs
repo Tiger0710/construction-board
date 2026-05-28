@@ -192,7 +192,7 @@ export async function handler(event) {
       // 重複排除
       const seen = new Set();
       allItems = allItems.filter((item) => {
-        const key = `${item.date}|${item.client}|${item.title}|${item.work_time}`;
+        const key = `${item.date}|${item.client}|${item.title}|${item.work_time}|${item.partner}|${item.partner_person}|${item.our_person}|${item.safety_person}`;
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
