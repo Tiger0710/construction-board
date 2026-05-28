@@ -1887,7 +1887,7 @@
       "night_work": "ケーブル撤去、配管撤去、機器撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "",
+      "night_our_person": "松田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -1951,7 +1951,7 @@
       "night_work": "天井スパンドレル撤去・復旧",
       "night_priority": "",
       "night_priority_detail": "",
-      "night_our_person": "",
+      "night_our_person": "松田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
