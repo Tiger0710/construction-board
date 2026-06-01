@@ -450,6 +450,83 @@
       "start_date": "2026-06-05",
       "end_date": "2026-06-05",
       "id": "83oqfrdr"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会川越文化会館　CSCコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-08",
+      "id": "ze27ylq2"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会川越平和会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "v23mlpbu"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会秋田文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ワールド通信",
+      "partner_person": "持主",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "sm9bbtw5"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会所沢平和会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-06-10",
+      "end_date": "2026-06-10",
+      "id": "lxxemgiz"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会秋田中央文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ワールド通信",
+      "partner_person": "持主",
+      "start_date": "2026-06-10",
+      "end_date": "2026-06-10",
+      "id": "jg1uu0pq"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会埼玉文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-06-11",
+      "end_date": "2026-06-11",
+      "id": "mini0nas"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会大曲文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ワールド通信",
+      "partner_person": "持主",
+      "start_date": "2026-06-11",
+      "end_date": "2026-06-11",
+      "id": "aqqgnq3o"
     }
   ],
   "daily": {}
