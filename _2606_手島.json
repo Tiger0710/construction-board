@@ -208,6 +208,28 @@
       "start_date": "2026-06-19",
       "end_date": "2026-06-19",
       "id": "fgrcvled"
+    },
+    {
+      "client": "きんでん",
+      "title": "東京ﾒﾄﾛPHS撤去工事_半蔵門線半蔵門駅",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "アイ建設/和光電設",
+      "partner_person": "松田",
+      "start_date": "2026-06-24",
+      "end_date": "2026-06-24",
+      "id": "tq8mw3z7"
+    },
+    {
+      "client": "きんでん",
+      "title": "東京ﾒﾄﾛPHS撤去工事_南北線永田町駅/有楽町線永田町駅",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "アイ建設/和光電設",
+      "partner_person": "松田",
+      "start_date": "2026-06-25",
+      "end_date": "2026-06-26",
+      "id": "95yh7dzz"
     }
   ],
   "daily": {
@@ -1220,6 +1242,54 @@
       "night_partner_person": ""
     },
     "fgrcvled/2026-06-19": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "天井パネル・スパンドレル調査",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "tq8mw3z7/2026-06-24": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "点検口新設調査",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "95yh7dzz/2026-06-25": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "天井パネル・スパンドレル調査",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "95yh7dzz/2026-06-26": {
       "day": false,
       "day_work": "",
       "day_priority": "",
