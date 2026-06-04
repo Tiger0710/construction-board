@@ -593,6 +593,83 @@
       "start_date": "2026-06-08",
       "end_date": "2026-06-08",
       "id": "8708953g"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　留辺蘂旭郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "山田",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "8mvscl32"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　紋別落石郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "jh09pojp"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　和賀郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "長澤",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "o6wnycok"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　野沢郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "坂本",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "r87h8056"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　飯崎郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "丹野",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "011s1zip"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　知多岡田郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "永田",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "gzcsznuc"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　上御糸郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "望月",
+      "start_date": "2026-06-09",
+      "end_date": "2026-06-09",
+      "id": "c1ss4ezn"
     }
   ],
   "daily": {}
