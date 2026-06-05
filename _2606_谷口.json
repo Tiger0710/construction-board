@@ -1121,6 +1121,83 @@
       "start_date": "2026-06-15",
       "end_date": "2026-06-15",
       "id": "tlzkz0me"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　登栄床郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "tb0xuar8"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　神居滝郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "山田",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "uj3kc70a"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　北鬼柳郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "高須賀",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "2npyxcxs"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　小菅郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "小関",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "eb3jk0bc"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　田村今泉郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "古川",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "77crhbur"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　野依郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "藤原",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "9820nrx9"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　尾鷲向井郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "永田",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "nbo9nmn3"
     }
   ],
   "daily": {}
