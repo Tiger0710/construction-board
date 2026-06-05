@@ -241,6 +241,17 @@
       "start_date": "2026-06-01",
       "end_date": "2026-06-30",
       "id": "1z50e1rc"
+    },
+    {
+      "client": "ソフトバンク",
+      "title": "テラス白金保守作業",
+      "our_person": "田中",
+      "safety_person": "平野",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-06-13",
+      "end_date": "2026-06-13",
+      "id": "ktpld6rj"
     }
   ],
   "daily": {
