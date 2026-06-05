@@ -1044,6 +1044,83 @@
       "start_date": "2026-06-22",
       "end_date": "2026-06-22",
       "id": "m2ld1uuq"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　留辺蘂栄町郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "1md4ro0r"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　湧別錦町郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "山田",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "b5amlxbp"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　富津内郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "渡辺",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "kqdto7nb"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　赤湯駅前郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "長井",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "04rpfy7y"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　高平郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "丹野",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "la5shidd"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　豊橋福祉村郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "藤原",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "gy119tx5"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　津泉ケ丘郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "永田",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "tlzkz0me"
     }
   ],
   "daily": {}
