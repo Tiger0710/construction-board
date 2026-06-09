@@ -1131,8 +1131,8 @@
       "night_partner_person": ""
     },
     "bkglm9sm/2026-06-10": {
-      "day": false,
-      "day_work": "ラック内ケーブル配線・接続・整線",
+      "day": true,
+      "day_work": "光・電源敷設",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -1147,8 +1147,8 @@
       "night_partner_person": ""
     },
     "bkglm9sm/2026-06-11": {
-      "day": false,
-      "day_work": "ラック内ケーブル配線・接続・整線",
+      "day": true,
+      "day_work": "光・電源敷設",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -1163,8 +1163,8 @@
       "night_partner_person": ""
     },
     "bkglm9sm/2026-06-12": {
-      "day": false,
-      "day_work": "ラック内ケーブル配線・接続・整線",
+      "day": true,
+      "day_work": "光・電源敷設",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
