@@ -527,6 +527,28 @@
       "start_date": "2026-06-20",
       "end_date": "2026-06-20",
       "id": "qtiiod4g"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社光洲産業恵比須工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-06-21",
+      "end_date": "2026-06-21",
+      "id": "61ejopi6"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社みずほ銀行川越支店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-06-21",
+      "end_date": "2026-06-21",
+      "id": "p4iu2ggk"
     }
   ],
   "daily": {
