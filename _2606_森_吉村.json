@@ -406,6 +406,28 @@
       "start_date": "2026-05-31",
       "end_date": "2026-06-01",
       "id": "ahlrujrw"
+    },
+    {
+      "client": "KNSI",
+      "title": "株式会社アマダ本社　8号棟 施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-14",
+      "end_date": "2026-06-14",
+      "id": "hrcb8aft"
+    },
+    {
+      "client": "KNSI",
+      "title": "三菱商事ライフサイエンス株式会社土浦工場　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-01",
+      "end_date": "2026-06-30",
+      "id": "sinubzqq"
     }
   ],
   "daily": {
