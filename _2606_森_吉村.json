@@ -450,6 +450,39 @@
       "start_date": "2026-06-15",
       "end_date": "2026-06-15",
       "id": "5uq8vvlv"
+    },
+    {
+      "client": "KNSI",
+      "title": "株式会社みずほ銀行立川支店　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "blqh6gme"
+    },
+    {
+      "client": "KNSI",
+      "title": "\"株式会社クラフティア常盤橋街区再開発ＰＪ衛生区分Ａ（ＴｏｒｃｈＴｏｗｅｒ）\t\"　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "f02ui0tw"
+    },
+    {
+      "client": "KNSI",
+      "title": "株式会社ユタカファーマシー　ドラッグユタカ能登川佐野店　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "森岡",
+      "start_date": "2026-06-16",
+      "end_date": "2026-06-16",
+      "id": "69dltywp"
     }
   ],
   "daily": {
