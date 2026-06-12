@@ -415,7 +415,7 @@
       "partner": "アスロード",
       "partner_person": "大村",
       "start_date": "2026-06-14",
-      "end_date": "2026-06-14",
+      "end_date": "2026-06-15",
       "id": "hrcb8aft"
     },
     {
@@ -425,9 +425,31 @@
       "safety_person": "髙橋",
       "partner": "アスロード",
       "partner_person": "大村",
-      "start_date": "2026-06-01",
-      "end_date": "2026-06-30",
+      "start_date": "2026-06-13",
+      "end_date": "2026-06-13",
       "id": "sinubzqq"
+    },
+    {
+      "client": "KNSI",
+      "title": "東京電力パワーグリッド株式会社銀座支店東内幸町変電所　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "西山",
+      "start_date": "2026-06-08",
+      "end_date": "2026-06-16",
+      "id": "5ukvqfxe"
+    },
+    {
+      "client": "KNSI",
+      "title": "株式会社イモト東京支店　施工",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-06-15",
+      "end_date": "2026-06-15",
+      "id": "5uq8vvlv"
     }
   ],
   "daily": {
