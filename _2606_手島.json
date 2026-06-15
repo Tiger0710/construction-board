@@ -1808,7 +1808,7 @@
       "night_partner_person": ""
     },
     "adp8dm5u/2026-06-15": {
-      "day": true,
+      "day": false,
       "day_work": "AP・配管・ケーブル撤去",
       "day_priority": "",
       "day_priority_detail": "",
