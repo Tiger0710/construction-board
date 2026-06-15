@@ -1572,6 +1572,83 @@
       "start_date": "2026-06-29",
       "end_date": "2026-06-29",
       "id": "kovj5c3u"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET小黒部郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "v0ng0qcr"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　江差南浜郵便局",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "山田",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "oeqtxk23"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　沢口郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "慶野",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "lk06kbhu"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　南野郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "坂本",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "9099hhk8"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　那倉郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "古川",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "wqkie9xt"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　名張滝之原郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "田中通信",
+      "partner_person": "永田",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "1ysxtoux"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　村崎野郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "高須賀",
+      "start_date": "2026-06-22",
+      "end_date": "2026-06-22",
+      "id": "vi2lgjgv"
     }
   ],
   "daily": {}
