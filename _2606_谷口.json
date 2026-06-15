@@ -1836,6 +1836,149 @@
       "start_date": "2026-06-26",
       "end_date": "2026-06-26",
       "id": "4usj0j5i"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　仲洞爺郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "55qdo0aj"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　寄木郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "内城",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "irjfk3f6"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　本荘竜巻郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "渡辺",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "y88s9shv"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　西袋郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "朝井",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "j8eqoqmj"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　江地郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "坂本",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "0rcsvgp2"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　新成郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "坂本",
+      "start_date": "2026-06-26",
+      "end_date": "2026-06-26",
+      "id": "piuj22b3"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　椿川郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "渡辺",
+      "start_date": "2026-06-29",
+      "end_date": "2026-06-29",
+      "id": "uwwblfdm"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　寺内郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "小関",
+      "start_date": "2026-06-29",
+      "end_date": "2026-06-29",
+      "id": "8uwixixz"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　岩内宮園郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "山田",
+      "start_date": "2026-06-29",
+      "end_date": "2026-06-29",
+      "id": "fg1kyvy1"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　五日市郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "内城",
+      "start_date": "2026-06-30",
+      "end_date": "2026-06-30",
+      "id": "djyhwgwh"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　長部郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "大平",
+      "start_date": "2026-06-30",
+      "end_date": "2026-06-30",
+      "id": "z6k7617t"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　玉ノ池郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "大野",
+      "start_date": "2026-06-30",
+      "end_date": "2026-06-30",
+      "id": "7ogw0416"
+    },
+    {
+      "client": "NESIC",
+      "title": "P-NET　犬川郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "日通ＮＥＣロジスティックス",
+      "partner_person": "及川",
+      "start_date": "2026-06-30",
+      "end_date": "2026-06-30",
+      "id": "yq4phyll"
     }
   ],
   "daily": {}
