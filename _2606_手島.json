@@ -2000,7 +2000,7 @@
       "night_partner_person": ""
     },
     "1z50e1rc/2026-06-19": {
-      "day": true,
+      "day": false,
       "day_work": "ケーブル敷設、ANT・分配器取付、端末処理、",
       "day_priority": "",
       "day_priority_detail": "",
