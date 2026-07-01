@@ -695,7 +695,7 @@
       "night_work": "搬入、資材置き場設営、電源ケーブル離線",
       "night_priority": "有",
       "night_priority_detail": "盤内配線作業",
-      "night_our_person": "内田、久保田",
+      "night_our_person": "内田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -711,7 +711,7 @@
       "night_work": "ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "内田、久保田",
+      "night_our_person": "内田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -727,7 +727,7 @@
       "night_work": "ケーブル撤去、電源ケーブル離線",
       "night_priority": "有",
       "night_priority_detail": "撤去作業、盤内配線作業",
-      "night_our_person": "内田、久保田",
+      "night_our_person": "内田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -743,7 +743,7 @@
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
-      "night_our_person": "内田、久保田",
+      "night_our_person": "内田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
