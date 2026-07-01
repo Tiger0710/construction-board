@@ -87,6 +87,17 @@
       "start_date": "2026-07-09",
       "end_date": "2026-07-10",
       "id": "55mnyc6r"
+    },
+    {
+      "client": "小田急エンジニアリング",
+      "title": "sXGP撤去工事_総合基地",
+      "our_person": "楊",
+      "safety_person": "清水",
+      "partner": "スリーライズ",
+      "partner_person": "",
+      "start_date": "2026-07-06",
+      "end_date": "2026-07-13",
+      "id": "t5nu0kgx"
     }
   ],
   "daily": {
@@ -1259,6 +1270,22 @@
       "night_partner_person": ""
     },
     "55mnyc6r/2026-07-10": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "t5nu0kgx/2026-07-13": {
       "day": false,
       "day_work": "",
       "day_priority": "",
