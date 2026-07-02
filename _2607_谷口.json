@@ -10,6 +10,39 @@
       "start_date": "2026-07-01",
       "end_date": "2026-07-31",
       "id": "blg910m1"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会岩手文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "シージェイシステム",
+      "partner_person": "藤根",
+      "start_date": "2026-07-01",
+      "end_date": "2026-07-01",
+      "id": "0e4xr2li"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会盛岡文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "シージェイシステム",
+      "partner_person": "藤根",
+      "start_date": "2026-07-02",
+      "end_date": "2026-07-02",
+      "id": "b3vl6sed"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会盛岡北平和会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "シージェイシステム",
+      "partner_person": "藤根",
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-03",
+      "id": "6jkx4mw2"
     }
   ],
   "daily": {}
