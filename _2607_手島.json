@@ -131,6 +131,17 @@
       "start_date": "2026-07-06",
       "end_date": "2026-07-31",
       "id": "p9a4buvg"
+    },
+    {
+      "client": "きんでん",
+      "title": "G計画SB屋内GPS撤去工事",
+      "our_person": "田中一",
+      "safety_person": "平野",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-07-07",
+      "end_date": "2026-07-07",
+      "id": "y41ttzbc"
     }
   ],
   "daily": {
@@ -2348,6 +2359,22 @@
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "内田",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "y41ttzbc/2026-07-07": {
+      "day": true,
+      "day_work": "NTT光回線工事",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
