@@ -142,6 +142,28 @@
       "start_date": "2026-07-10",
       "end_date": "2026-07-10",
       "id": "kgia1h1a"
+    },
+    {
+      "client": "NESIC",
+      "title": "火山監視カメラ工事現地調査（雲仙岳）",
+      "our_person": "山内",
+      "safety_person": "保科",
+      "partner": "ウイル",
+      "partner_person": "竹内",
+      "start_date": "2026-07-07",
+      "end_date": "2026-07-07",
+      "id": "bv85dxm8"
+    },
+    {
+      "client": "NESIC",
+      "title": "火山監視カメラ工事現地調査（九重山）",
+      "our_person": "山内",
+      "safety_person": "保科",
+      "partner": "ウイル",
+      "partner_person": "竹内",
+      "start_date": "2026-07-08",
+      "end_date": "2026-07-08",
+      "id": "12dycagd"
     }
   ],
   "daily": {}
