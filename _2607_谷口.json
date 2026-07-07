@@ -175,6 +175,28 @@
       "start_date": "2026-07-10",
       "end_date": "2026-07-10",
       "id": "oek0ltgu"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会横浜泉文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "加藤",
+      "start_date": "2026-07-13",
+      "end_date": "2026-07-13",
+      "id": "p22tvng8"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会入間文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "吉武",
+      "start_date": "2026-07-13",
+      "end_date": "2026-07-13",
+      "id": "s4pppq3v"
     }
   ],
   "daily": {}
