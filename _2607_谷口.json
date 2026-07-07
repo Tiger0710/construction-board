@@ -164,6 +164,17 @@
       "start_date": "2026-07-08",
       "end_date": "2026-07-08",
       "id": "12dycagd"
+    },
+    {
+      "client": "NESIC",
+      "title": "火山監視カメラ工事現地調査（霧島山）",
+      "our_person": "山内",
+      "safety_person": "保科",
+      "partner": "ウイル",
+      "partner_person": "竹内",
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-10",
+      "id": "oek0ltgu"
     }
   ],
   "daily": {}
