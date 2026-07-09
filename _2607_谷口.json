@@ -329,6 +329,28 @@
       "start_date": "2026-07-10",
       "end_date": "2026-07-10",
       "id": "4nx8mm88"
+    },
+    {
+      "client": "NESIC",
+      "title": "Ｐ－ＮＥＴ久著呂郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "池田",
+      "start_date": "2026-07-28",
+      "end_date": "2026-07-28",
+      "id": "n8weijv5"
+    },
+    {
+      "client": "NESIC",
+      "title": "Ｐ－ＮＥＴ作並郵便局　ＡＰ設置工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "加藤",
+      "start_date": "2026-07-29",
+      "end_date": "2026-07-29",
+      "id": "hqm3989i"
     }
   ],
   "daily": {}
