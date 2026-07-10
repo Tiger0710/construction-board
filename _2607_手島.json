@@ -1371,7 +1371,7 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "",
+      "night_work": "PHS撤去、LAN確認",
       "night_priority": "有",
       "night_priority_detail": "軌道内作業",
       "night_our_person": "",
