@@ -164,6 +164,17 @@
       "start_date": "2026-07-16",
       "end_date": "2026-07-17",
       "id": "j0eb3hcr"
+    },
+    {
+      "client": "小田急エンジニアリング",
+      "title": "sXGP撤去工事_柏の葉キャンパス駅",
+      "our_person": "楊",
+      "safety_person": "清水",
+      "partner": "スリーライズ",
+      "partner_person": "",
+      "start_date": "2026-07-14",
+      "end_date": "2026-07-15",
+      "id": "6npu7hnf"
     }
   ],
   "daily": {
@@ -2627,6 +2638,38 @@
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "6npu7hnf/2026-07-14": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "PHS撤去、LAN確認",
+      "night_priority": "有",
+      "night_priority_detail": "高所作業車使用",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "6npu7hnf/2026-07-15": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "PHS撤去、LAN確認",
+      "night_priority": "有",
+      "night_priority_detail": "高所作業車使用",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
