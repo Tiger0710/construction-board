@@ -200,7 +200,7 @@
     },
     {
       "client": "KNSI",
-      "title": "株式会社アマダ本社　防災エネルギーセンター",
+      "title": "小電力：株式会社アマダ本社　防災エネルギーセンター",
       "our_person": "森",
       "safety_person": "髙橋",
       "partner": "リフェクト",
@@ -219,6 +219,17 @@
       "start_date": "2026-07-13",
       "end_date": "2026-07-13",
       "id": "vnc08f2j"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：純とんこつラーメン大丸屋",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-07-13",
+      "end_date": "2026-07-13",
+      "id": "40dtuhh4"
     }
   ],
   "daily": {}
