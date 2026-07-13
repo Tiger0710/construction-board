@@ -274,6 +274,17 @@
       "start_date": "2026-07-14",
       "end_date": "2026-07-14",
       "id": "m052n2hp"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京電力パワーグリッド株式会社銀座支店北新橋変電所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "西山",
+      "start_date": "2026-07-14",
+      "end_date": "2026-07-17",
+      "id": "rsuy6b0y"
     }
   ],
   "daily": {}
