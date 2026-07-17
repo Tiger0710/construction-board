@@ -3501,6 +3501,38 @@
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
+    },
+    "f4sgoq0e/2026-07-21": {
+      "day": true,
+      "day_work": "総合基地：施工確認検査",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "f4sgoq0e/2026-07-22": {
+      "day": true,
+      "day_work": "柏たなか駅・変電所、柏の葉キャンパス駅、みらい平駅・小貝川ＡＴＰ：施工確認検査",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
     }
   }
 }
