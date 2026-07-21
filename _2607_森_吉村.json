@@ -472,6 +472,39 @@
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
       "id": "j3yzd7su"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：富士フイルムホールディングス株式会社ＦＭＳ埼玉支店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "髙田",
+      "start_date": "2026-07-30",
+      "end_date": "2026-07-30",
+      "id": "dlqvvnbo"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：全薬販売株式会社大阪営業所　保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-07-30",
+      "end_date": "2026-07-30",
+      "id": "ez6lw76o"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：上野製薬株式会社四日市工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-07-31",
+      "end_date": "2026-07-31",
+      "id": "1st9b9ja"
     }
   ],
   "daily": {
