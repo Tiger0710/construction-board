@@ -288,17 +288,6 @@
     },
     {
       "client": "KNSI",
-      "title": "小電力：東京電力パワーグリッド株式会社銀座支店北新橋変電所",
-      "our_person": "森",
-      "safety_person": "髙橋",
-      "partner": "OTS",
-      "partner_person": "廣田",
-      "start_date": "2026-07-21",
-      "end_date": "2026-07-21",
-      "id": "s13aqghu"
-    },
-    {
-      "client": "KNSI",
       "title": "小電力：株式会社オークネット東扇島倉庫",
       "our_person": "森",
       "safety_person": "髙橋",
@@ -384,6 +373,17 @@
       "start_date": "2026-07-26",
       "end_date": "2026-07-26",
       "id": "c7ib9u6t"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社アレフびっくりドンキー聖蹟桜ヶ丘店 　保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-07-22",
+      "end_date": "2026-07-22",
+      "id": "2k56lpdr"
     }
   ],
   "daily": {}
