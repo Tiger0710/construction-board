@@ -428,6 +428,28 @@
       "start_date": "2026-07-27",
       "end_date": "2026-07-27",
       "id": "mmcehb15"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東海理研株式会社第一組立工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-07-28",
+      "end_date": "2026-07-28",
+      "id": "7ljch5i9"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社コスモス薬品粟宮店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-07-28",
+      "end_date": "2026-07-28",
+      "id": "xivrhjoc"
     }
   ],
   "daily": {}
