@@ -3126,7 +3126,7 @@
     },
     "xw45xk17/2026-07-29": {
       "day": true,
-      "day_work": "PHS配管ケーブル撤去 新設分確認",
+      "day_work": "PHS配管・ケーブル撤去",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "奥濱",
@@ -3149,7 +3149,7 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "PHS配管ケーブル撤去 新設分確認",
+      "night_work": "PHS配管・ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "軌道内作業",
       "night_our_person": "上野・奥濱",
@@ -3165,7 +3165,7 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "PHS配管ケーブル撤去 新設分確認",
+      "night_work": "PHS配管・ケーブル撤去",
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "奥濱",
@@ -3174,7 +3174,7 @@
     },
     "xw45xk17/2026-07-27": {
       "day": true,
-      "day_work": "PHS配管ケーブル撤去 新設分確認",
+      "day_work": "PHS配管・ケーブル撤去 ",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -3190,7 +3190,7 @@
     },
     "xw45xk17/2026-07-28": {
       "day": true,
-      "day_work": "PHS配管ケーブル撤去 新設分確認",
+      "day_work": "PHS配管・ケーブル撤去 ",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -3647,7 +3647,7 @@
       "night": true,
       "night_work": "同軸ケーブル撤去、施工写真、耐火処理",
       "night_priority": "有",
-      "night_priority_detail": "7尺9尺脚立作業",
+      "night_priority_detail": "長尺脚立使用",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -3663,7 +3663,7 @@
       "night": true,
       "night_work": "同軸ケーブル撤去、施工写真、耐火処理",
       "night_priority": "有",
-      "night_priority_detail": "7尺9尺脚立作業",
+      "night_priority_detail": "長尺脚立使用",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -3679,7 +3679,7 @@
       "night": true,
       "night_work": "同軸ケーブル撤去、施工写真、耐火処理",
       "night_priority": "有",
-      "night_priority_detail": "7尺9尺脚立作業",
+      "night_priority_detail": "長尺脚立使用",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -3695,7 +3695,7 @@
       "night": true,
       "night_work": "同軸ケーブル撤去、施工写真、耐火処理",
       "night_priority": "有",
-      "night_priority_detail": "7尺9尺脚立作業",
+      "night_priority_detail": "長尺脚立使用",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -3743,7 +3743,7 @@
       "night": true,
       "night_work": "同軸ケーブル撤去、施工写真、耐火処理",
       "night_priority": "有",
-      "night_priority_detail": "7尺9尺脚立作業",
+      "night_priority_detail": "長尺脚立使用",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
