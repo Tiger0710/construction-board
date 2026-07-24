@@ -1101,7 +1101,7 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "ケーブル撤去",
+      "night_work": "ケーブル撤去、B1F電源離線",
       "night_priority": "有",
       "night_priority_detail": "電源離線",
       "night_our_person": "",
