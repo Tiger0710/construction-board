@@ -65,6 +65,17 @@
       "start_date": "2026-08-04",
       "end_date": "2026-08-05",
       "id": "34lqsiq2"
+    },
+    {
+      "client": "小田急エンジニアリング",
+      "title": "sXGP撤去_八潮駅（新通機器室）",
+      "our_person": "楊",
+      "safety_person": "清水",
+      "partner": "孝勇電設",
+      "partner_person": "松谷",
+      "start_date": "2026-08-07",
+      "end_date": "2026-08-07",
+      "id": "xv262pla"
     }
   ],
   "daily": {
@@ -861,6 +872,22 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "xv262pla/2026-08-07": {
+      "day": true,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "楊、奥濱",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
