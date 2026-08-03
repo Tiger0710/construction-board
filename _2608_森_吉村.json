@@ -98,6 +98,28 @@
       "start_date": "2026-08-05",
       "end_date": "2026-08-05",
       "id": "j7ukrdn2"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：マクドナルド高槻センター街店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-08-08",
+      "end_date": "2026-08-08",
+      "id": "hprgi1yf"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：伊藤ハム米久ホールディングス株式会社米久デリカフーズ沼津工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-08-09",
+      "end_date": "2026-08-09",
+      "id": "mahgdw0q"
     }
   ],
   "daily": {
