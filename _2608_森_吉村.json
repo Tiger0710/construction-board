@@ -1,0 +1,38 @@
+{
+  "projects": [
+    {
+      "client": "KNSI",
+      "title": "小電力：紀の川市 鞆渕出張所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-08-03",
+      "end_date": "2026-08-03",
+      "id": "7w2ieudi"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：東京都下水道サービス株式会社清水谷ポンプ所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-08-03",
+      "end_date": "2026-08-03",
+      "id": "68gii4m6"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：社会医療法人ペガサス馬場記念病院",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-08-03",
+      "end_date": "2026-08-03",
+      "id": "1yoszb7g"
+    }
+  ],
+  "daily": {}
+}
