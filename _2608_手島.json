@@ -1484,7 +1484,7 @@
       "night_partner_person": ""
     },
     "pdp9tm6k/2026-08-10": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -1517,9 +1517,9 @@
     },
     "pdp9tm6k/2026-08-12": {
       "day": true,
-      "day_work": "",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_work": "天井内配線・ジョイント作業、コンセント取付・リールコンセント取付",
+      "day_priority": "有",
+      "day_priority_detail": "高所作業車、高所作業",
       "day_our_person": "太田、内田",
       "day_safety_person": "",
       "day_partner_person": "",
@@ -1533,9 +1533,9 @@
     },
     "pdp9tm6k/2026-08-13": {
       "day": true,
-      "day_work": "",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_work": "天井内配線・ジョイント作業、コンセント取付・リールコンセント取付",
+      "day_priority": "有",
+      "day_priority_detail": "高所作業車、高所作業",
       "day_our_person": "太田、内田",
       "day_safety_person": "",
       "day_partner_person": "",
@@ -1549,9 +1549,9 @@
     },
     "pdp9tm6k/2026-08-14": {
       "day": true,
-      "day_work": "",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_work": "天井内配線・ジョイント作業、コンセント取付・リールコンセント取付",
+      "day_priority": "有",
+      "day_priority_detail": "高所作業車、高所作業",
       "day_our_person": "太田、内田",
       "day_safety_person": "",
       "day_partner_person": "",
