@@ -1570,7 +1570,7 @@
       "night_partner_person": ""
     },
     "pdp9tm6k/2026-08-14": {
-      "day": true,
+      "day": false,
       "day_work": "天井内配線・ジョイント作業、コンセント取付・リールコンセント取付",
       "day_priority": "有",
       "day_priority_detail": "高所作業車、高所作業",
