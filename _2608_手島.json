@@ -697,7 +697,7 @@
       "day_our_person": "河野",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "1F～2F　ケーブル敷設、アンテナ/分配器取付 　各RU廻り 　B4F～6F　同軸測定",
       "night_priority": "",
       "night_priority_detail": "",
