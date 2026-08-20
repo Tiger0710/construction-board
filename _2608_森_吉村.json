@@ -263,6 +263,28 @@
       "start_date": "2026-08-22",
       "end_date": "2026-08-22",
       "id": "o3h9put3"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社アマダ本社　AGIC",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-08-23",
+      "end_date": "2026-08-23",
+      "id": "dyk4poan"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：カシオヒューマンシステムズ株式会社本社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-08-23",
+      "end_date": "2026-08-23",
+      "id": "99xyzl1r"
     }
   ],
   "daily": {
