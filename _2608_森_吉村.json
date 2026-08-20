@@ -329,6 +329,28 @@
       "start_date": "2026-08-25",
       "end_date": "2026-08-25",
       "id": "uf7b47m1"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社第一ビルディングＤＮタワー２１",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-08-26",
+      "end_date": "2026-08-26",
+      "id": "0tx4y0pl"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：コーセーインダストリーズ株式会社南アルプス工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-08-26",
+      "end_date": "2026-08-26",
+      "id": "2k2qk1mw"
     }
   ],
   "daily": {
