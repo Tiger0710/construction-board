@@ -1661,7 +1661,7 @@
       "night_partner_person": ""
     },
     "ynzyzdra/2026-08-24": {
-      "day": true,
+      "day": false,
       "day_work": "配管敷設、ケーブル通線",
       "day_priority": "",
       "day_priority_detail": "",
