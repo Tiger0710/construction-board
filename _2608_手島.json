@@ -690,7 +690,7 @@
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "小井沼",
-      "day_safety_person": "",
+      "day_safety_person": "保科",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
@@ -705,7 +705,7 @@
       "day_work": "※装置検査/残作業",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "河野",
+      "day_our_person": "小井沼",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
@@ -721,7 +721,7 @@
       "day_work": "残作業",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "河野",
+      "day_our_person": "小井沼",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
@@ -737,7 +737,7 @@
       "day_work": "※JTOWER検査",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "河野",
+      "day_our_person": "小井沼",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
@@ -749,7 +749,7 @@
       "night_partner_person": ""
     },
     "5whqclgi/2026-08-28": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -797,7 +797,7 @@
       "night_partner_person": ""
     },
     "5whqclgi/2026-08-31": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
