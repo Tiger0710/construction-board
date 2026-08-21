@@ -2324,7 +2324,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "銀座線青山一丁目駅：点検口新設・配線撤去・機器回り撤去",
       "night_priority": "",
       "night_priority_detail": "",
