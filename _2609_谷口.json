@@ -164,6 +164,39 @@
       "start_date": "2026-09-16",
       "end_date": "2026-09-16",
       "id": "nq2y151o"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会鶴岡文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ヤマキ電気",
+      "partner_person": "伊東",
+      "start_date": "2026-09-17",
+      "end_date": "2026-09-17",
+      "id": "89m4qxya"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会　天童文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ヤマキ電気",
+      "partner_person": "伊東",
+      "start_date": "2026-09-29",
+      "end_date": "2026-09-29",
+      "id": "m1el6m0e"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会山形平和会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "ヤマキ電気",
+      "partner_person": "伊東",
+      "start_date": "2026-09-30",
+      "end_date": "2026-09-30",
+      "id": "0pascvdw"
     }
   ],
   "daily": {}
