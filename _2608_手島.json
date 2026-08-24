@@ -2066,7 +2066,7 @@
       "day_priority": "有",
       "day_priority_detail": "足場組立・解体",
       "day_our_person": "",
-      "day_safety_person": "",
+      "day_safety_person": "平野",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
@@ -2082,7 +2082,7 @@
       "day_priority": "有",
       "day_priority_detail": "足場組立・解体",
       "day_our_person": "",
-      "day_safety_person": "",
+      "day_safety_person": "平野",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
@@ -2098,7 +2098,7 @@
       "day_priority": "有",
       "day_priority_detail": "高所作業車、高所作業",
       "day_our_person": "",
-      "day_safety_person": "",
+      "day_safety_person": "平野",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
@@ -2114,7 +2114,7 @@
       "day_priority": "有",
       "day_priority_detail": "高所作業車、高所作業",
       "day_our_person": "",
-      "day_safety_person": "",
+      "day_safety_person": "平野",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
@@ -2130,7 +2130,7 @@
       "day_priority": "有",
       "day_priority_detail": "高所作業車、高所作業",
       "day_our_person": "",
-      "day_safety_person": "",
+      "day_safety_person": "平野",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
@@ -2345,8 +2345,8 @@
       "night_priority": "有",
       "night_priority_detail": "脚立７尺、電源接続",
       "night_our_person": "",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_safety_person": "高橋",
+      "night_partner_person": "河野"
     },
     "ea9csks1/2026-08-25": {
       "day": false,
@@ -2361,8 +2361,8 @@
       "night_priority": "有",
       "night_priority_detail": "脚立７尺、電源接続",
       "night_our_person": "",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_safety_person": "高橋",
+      "night_partner_person": "河野"
     },
     "ea9csks1/2026-08-26": {
       "day": false,
@@ -2377,8 +2377,8 @@
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_safety_person": "高橋",
+      "night_partner_person": "河野"
     },
     "ea9csks1/2026-08-27": {
       "day": false,
@@ -2393,7 +2393,7 @@
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "",
-      "night_safety_person": "",
+      "night_safety_person": "高橋",
       "night_partner_person": ""
     },
     "ix8tb82r/2026-08-21": {
@@ -2403,6 +2403,22 @@
       "day_priority_detail": "",
       "day_our_person": "",
       "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "pdp9tm6k/2026-08-31": {
+      "day": true,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "平野",
       "day_partner_person": "",
       "night": false,
       "night_work": "",
