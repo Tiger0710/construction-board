@@ -21,6 +21,17 @@
       "start_date": "2026-09-01",
       "end_date": "2026-09-04",
       "id": "08mj5xbd"
+    },
+    {
+      "client": "きんでん",
+      "title": "ビナウォーク1番館SB屋外工事",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "ラビットイノベーション",
+      "partner_person": "遠藤",
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-15",
+      "id": "sn20oyla"
     }
   ],
   "daily": {
@@ -149,6 +160,22 @@
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "sn20oyla/2026-09-04": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "資材搬入",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "増田",
       "night_safety_person": "",
       "night_partner_person": ""
     }
