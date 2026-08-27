@@ -797,11 +797,11 @@
       "night_partner_person": ""
     },
     "5whqclgi/2026-08-31": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "資材回収等",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "河野",
+      "day_our_person": "石川達",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
