@@ -797,7 +797,7 @@
       "night_partner_person": ""
     },
     "5whqclgi/2026-08-31": {
-      "day": true,
+      "day": false,
       "day_work": "資材回収等",
       "day_priority": "",
       "day_priority_detail": "",
@@ -2525,7 +2525,7 @@
       "night_partner_person": ""
     },
     "5whqclgi/2026-09-01": {
-      "day": true,
+      "day": false,
       "day_work": "DCM対応",
       "day_priority": "",
       "day_priority_detail": "",
@@ -2557,7 +2557,7 @@
       "night_partner_person": ""
     },
     "5whqclgi/2026-09-03": {
-      "day": true,
+      "day": false,
       "day_work": "DCM電測対応",
       "day_priority": "",
       "day_priority_detail": "",
