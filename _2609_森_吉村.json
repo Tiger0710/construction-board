@@ -1,0 +1,27 @@
+{
+  "projects": [
+    {
+      "client": "KNSI",
+      "title": "小電力：有限会社水戸興産麻生ビル",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "村上",
+      "start_date": "2026-09-01",
+      "end_date": "2026-09-01",
+      "id": "9wvtg6f8"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ヤマト運輸株式会社つくば南営業所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-09-01",
+      "end_date": "2026-09-01",
+      "id": "brkja2yn"
+    }
+  ],
+  "daily": {}
+}
