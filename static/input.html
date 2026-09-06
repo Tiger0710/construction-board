@@ -18,25 +18,30 @@
     /* === Header === */
     .app-header {
       background: linear-gradient(135deg, #1A2E5A 0%, #2c4a8a 100%);
-      color: #fff; padding: 14px 20px 8px; flex-shrink: 0;
+      color: #fff; padding: 0 20px; flex-shrink: 0;
     }
     .header-top {
-      display: flex; justify-content: space-between; align-items: center;
+      min-height: 46px; display: flex; justify-content: space-between; align-items: center;
+      gap: 12px;
     }
-    .app-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 2px; }
-    .header-links { display: flex; gap: 16px; align-items: center; }
+    .header-primary { display: flex; align-items: center; min-width: 0; }
+    .app-header h1 {
+      flex-shrink: 0; margin-right: 16px; font-size: 16px; font-weight: 700;
+      letter-spacing: 1px; white-space: nowrap;
+    }
+    .header-links { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
     .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
     .header-links a:hover { color: #fff; }
     .summary-totals {
-      display: flex; gap: 14px; align-items: center;
+      display: flex; gap: 10px; align-items: center;
       background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-      padding: 6px 14px; border-radius: 8px;
-      font-size: 12px; color: rgba(255,255,255,0.85);
+      padding: 4px 10px; border-radius: 7px;
+      font-size: 11px; color: rgba(255,255,255,0.85);
       letter-spacing: 0.5px;
     }
     .summary-totals .st-item { display: flex; align-items: center; gap: 4px; }
     .summary-totals .st-label { font-weight: 500; }
-    .summary-totals .st-value { font-size: 16px; font-weight: 700; color: #fff; }
+    .summary-totals .st-value { font-size: 14px; font-weight: 700; color: #fff; }
     .summary-totals .st-unit { font-size: 11px; color: rgba(255,255,255,0.7); }
     .summary-totals .st-today .st-value { color: #fef3c7; }
     .summary-totals .st-tomorrow .st-value { color: #a7f3d0; }
@@ -44,54 +49,57 @@
     /* === Company / User Tabs === */
     .company-tabs,
     .user-tabs {
-      display: flex; gap: 0; margin-top: 12px; border-bottom: 2px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; gap: 2px;
     }
     .company-tab,
     .user-tab {
       background: transparent; border: none; color: rgba(255,255,255,0.6);
-      padding: 10px 24px; font-size: 15px; font-weight: 600;
-      cursor: pointer; font-family: inherit; border-bottom: 3px solid transparent;
-      transition: all 0.2s; position: relative; top: 2px;
+      padding: 6px 12px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit; border: 1px solid transparent;
+      transition: all 0.2s; white-space: nowrap;
     }
-    .company-tab { padding: 11px 26px; font-size: 16px; font-weight: 700; }
+    .company-tab { padding: 10px 13px 9px; font-size: 13px; font-weight: 700; border-radius: 5px; }
     .company-tab:hover,
     .user-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); }
     .company-tab.active,
     .user-tab.active {
-      color: #fff; border-bottom-color: #fff;
+      color: #fff; border-color: rgba(255,255,255,0.35);
       background: rgba(255,255,255,0.1);
     }
-    .user-tabs { margin-top: 0; }
-    #current-user-label {
-      margin-left: auto; align-self: center;
-      font-family: inherit; font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,0.55);
+    .user-tabs {
+      margin-left: 8px; padding-left: 9px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+    }
+    .user-tab { padding: 4px 10px; border-radius: 999px; }
+    .user-tab.active {
+      background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.45);
     }
 
     /* === Toolbar === */
     .toolbar {
       display: flex; align-items: center; justify-content: space-between;
-      margin-top: 10px; gap: 12px; flex-wrap: wrap; padding-bottom: 10px;
+      min-height: 40px; gap: 12px; border-top: 1px solid rgba(255,255,255,0.15);
     }
-    .month-nav { display: flex; align-items: center; gap: 12px; }
+    .toolbar-left, .toolbar-actions { display: flex; align-items: center; gap: 14px; }
+    .month-nav { display: flex; align-items: center; gap: 9px; }
     .month-nav button {
       background: rgba(255,255,255,0.15); border: none; color: #fff;
-      width: 32px; height: 32px; border-radius: 6px; font-size: 16px;
+      width: 27px; height: 27px; border-radius: 5px; font-size: 14px;
       cursor: pointer; transition: background 0.2s;
     }
     .month-nav button:hover { background: rgba(255,255,255,0.3); }
-    .month-label { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
+    .month-label { font-size: 17px; font-weight: 700; letter-spacing: 1px; }
     .add-proj-btn {
       background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-      color: #fff; padding: 7px 16px; border-radius: 6px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
+      color: #fff; padding: 6px 13px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
       font-family: inherit; transition: background 0.2s;
     }
     .add-proj-btn:hover { background: rgba(255,255,255,0.35); }
 
     /* === Legend === */
     .legend {
-      display: flex; gap: 14px; align-items: center;
+      display: flex; gap: 10px; align-items: center;
       font-size: 11px; color: rgba(255,255,255,0.8);
     }
     .legend-item { display: flex; align-items: center; gap: 4px; }
@@ -242,22 +250,18 @@
       border-radius: 3px; margin-left: 4px;
     }
 
-    /* === Save Footer === */
-    .save-footer {
-      flex-shrink: 0; background: #fff; border-top: 2px solid #e0e0e0;
-      padding: 10px 20px; display: flex; align-items: center; gap: 16px;
-    }
-    .save-footer.dirty { border-top-color: #1A2E5A; }
+    /* === Save controls === */
     .save-btn {
-      background: #1A2E5A; color: #fff; border: none;
-      padding: 10px 28px; border-radius: 8px; font-size: 15px;
+      background: rgba(255,255,255,0.2); color: #fff;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 6px 18px; border-radius: 6px; font-size: 13px;
       font-weight: 600; cursor: pointer; font-family: inherit;
     }
     .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .save-btn:not(:disabled):hover { background: #2a4070; }
-    .save-status { font-size: 13px; color: #666; }
-    .save-status.error { color: #dc2626; }
-    .save-status.success { color: #16a34a; }
+    .save-status { min-width: 0; font-size: 12px; color: rgba(255,255,255,0.75); white-space: nowrap; }
+    .save-status.error { color: #fff; }
+    .save-status.success { color: #a7f3d0; }
 
     /* === Empty & Loading === */
     .loading { text-align: center; padding: 60px 20px; color: #888; font-size: 16px; }
@@ -396,20 +400,31 @@
     .dm-copy-btn:hover { background: #dde3f0; }
     .dm-copy-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+    @media (max-width: 1279px) {
+      .header-top { flex-wrap: wrap; padding: 4px 0; }
+      .header-primary, .company-tabs, .user-tabs { flex-wrap: wrap; }
+      .toolbar { flex-wrap: wrap; padding: 4px 0; }
+    }
+
     @media (max-width: 600px) {
       .legend { display: none; }
       .s1 { width: 140px; min-width: 140px; max-width: 140px; }
       .s2 { left: 170px; }
       .s3 { left: 220px; width: 120px; min-width: 120px; max-width: 120px; }
-      .company-tab { padding: 9px 18px; font-size: 14px; }
-      .user-tab { padding: 8px 16px; font-size: 13px; }
+      .header-links a { display: none; }
+      .company-tab { padding: 7px 10px; font-size: 12px; }
+      .user-tab { padding: 4px 9px; font-size: 11px; }
     }
   </style>
 </head>
 <body>
   <header class="app-header">
     <div class="header-top">
-      <h1>工事予定表 入力</h1>
+      <div class="header-primary">
+        <h1>工事予定表 入力</h1>
+        <div class="company-tabs" id="company-tabs" style="display:none"></div>
+        <div class="user-tabs" id="user-tabs" style="display:none"></div>
+      </div>
       <div class="header-links">
         <div class="summary-totals" id="summary-totals" title="全担当者合計（昼/夜を別件カウント）">
           <div class="st-item st-today">
@@ -428,32 +443,30 @@
       </div>
     </div>
 
-    <div class="company-tabs" id="company-tabs" style="display:none"></div>
-    <div class="user-tabs" id="user-tabs" style="display:none"></div>
-
     <div class="toolbar" id="toolbar" style="display:none">
-      <div class="month-nav">
-        <button onclick="changeMonth(-1)">&#9664;</button>
-        <span class="month-label" id="month-label"></span>
-        <button onclick="changeMonth(1)">&#9654;</button>
+      <div class="toolbar-left">
+        <div class="month-nav">
+          <button onclick="changeMonth(-1)">&#9664;</button>
+          <span class="month-label" id="month-label"></span>
+          <button onclick="changeMonth(1)">&#9654;</button>
+        </div>
+        <div class="legend">
+          <span class="legend-item"><span class="lsw l-day"></span>昼</span>
+          <span class="legend-item"><span class="lsw l-night"></span>夜</span>
+          <span class="legend-item"><span class="lsw l-both"></span>昼+夜</span>
+          <span class="legend-item"><span class="lsw l-off"></span>休み</span>
+          <span class="legend-item"><span class="lsw l-pri"></span>重点</span>
+        </div>
       </div>
-      <div class="legend">
-        <span class="legend-item"><span class="lsw l-day"></span>昼</span>
-        <span class="legend-item"><span class="lsw l-night"></span>夜</span>
-        <span class="legend-item"><span class="lsw l-both"></span>昼+夜</span>
-        <span class="legend-item"><span class="lsw l-off"></span>休み</span>
-        <span class="legend-item"><span class="lsw l-pri"></span>重点</span>
+      <div class="toolbar-actions">
+        <button class="save-btn" id="save-btn" disabled onclick="saveData()">保存</button>
+        <span class="save-status" id="save-status"></span>
+        <button class="add-proj-btn" onclick="openModal()">+ 案件追加</button>
       </div>
-      <button class="add-proj-btn" onclick="openModal()">+ 案件追加</button>
     </div>
   </header>
 
   <main class="main" id="main"></main>
-
-  <div class="save-footer" id="save-footer" style="display:none">
-    <button class="save-btn" id="save-btn" disabled onclick="saveData()">保存</button>
-    <span class="save-status" id="save-status"></span>
-  </div>
 
   <!-- 案件モーダル -->
   <div class="modal-overlay hidden" id="modal" onclick="if(event.target===this)closeModal()">
@@ -610,12 +623,31 @@
     // org.json 取得失敗時のフォールバック（org.json と同内容を保つ）
     var DEFAULT_ORG = {
       companies: [
-        { id: "hsj",        name: "HSJ",                   short: "HSJ",      members: ["手島", "森_吉村", "谷口", "河邊"] },
-        { id: "kowa_tokyo", name: "コーワシステム（東京）", short: "コーワ東京", members: ["コーワ東京"] },
-        { id: "kowa_osaka", name: "コーワシステム（大阪）", short: "コーワ大阪", members: ["コーワ大阪"] },
-        { id: "koyo",       name: "光洋エンジニアリング",   short: "光洋",     members: ["光洋"] }
+        { id: "hsj",  name: "HSJ",                   short: "HSJ",   members: ["手島", "森_吉村", "谷口", "河邊"] },
+        { id: "kowa", name: "コーワシステム",         short: "コーワ", members: [{ id: "コーワ東京", label: "東京" }, { id: "コーワ大阪", label: "大阪" }] },
+        { id: "koyo", name: "光洋エンジニアリング",   short: "光洋",  members: ["光洋"] }
       ]
     };
+
+    function memberId(member) {
+      return typeof member === "object" && member !== null ? member.id : member;
+    }
+
+    function memberLabel(member) {
+      if (typeof member === "object" && member !== null) return member.label || member.id;
+      var id = memberId(member);
+      for (var i = 0; i < org.companies.length; i++) {
+        var members = org.companies[i].members || [];
+        for (var j = 0; j < members.length; j++) {
+          if (memberId(members[j]) === id) {
+            return typeof members[j] === "object" && members[j] !== null
+              ? (members[j].label || members[j].id)
+              : members[j];
+          }
+        }
+      }
+      return id;
+    }
 
     async function loadOrg() {
       try {
@@ -629,7 +661,8 @@
       KNOWN_MEMBERS = [];
       org.companies.forEach(function(company) {
         (company.members || []).forEach(function(member) {
-          if (KNOWN_MEMBERS.indexOf(member) === -1) KNOWN_MEMBERS.push(member);
+          var id = memberId(member);
+          if (KNOWN_MEMBERS.indexOf(id) === -1) KNOWN_MEMBERS.push(id);
         });
       });
     }
@@ -639,7 +672,7 @@
     function companyOfMember(member) {
       if (!member) return OTHER_COMPANY;
       for (var i = 0; i < org.companies.length; i++) {
-        if ((org.companies[i].members || []).indexOf(member) !== -1) return org.companies[i];
+        if ((org.companies[i].members || []).some(function(item) { return memberId(item) === member; })) return org.companies[i];
       }
       return OTHER_COMPANY;
     }
@@ -853,9 +886,7 @@
 
     function updateDirtyUI() {
       var btn = document.getElementById("save-btn");
-      var footer = document.getElementById("save-footer");
       btn.disabled = !state.dirty;
-      footer.classList.toggle("dirty", state.dirty);
     }
 
     function showStatus(msg, type) {
@@ -865,19 +896,6 @@
     }
 
     // ===== Company / User Tabs =====
-    function currentUserLabelHtml(currentCompany, companyMembers) {
-      if (!state.user) return '<span id="current-user-label"></span>';
-      var text;
-      if (currentCompany.id === "other") {
-        text = "その他 ／ " + state.user;
-      } else if (companyMembers.length >= 2) {
-        text = currentCompany.name + " ／ " + state.user;
-      } else {
-        text = currentCompany.name;
-      }
-      return '<span id="current-user-label">' + esc(text) + '</span>';
-    }
-
     function updateUserTabs() {
       var currentCompany = companyOfMember(state.user);
       var companies = org.companies.slice();
@@ -895,7 +913,6 @@
           + '" onclick="switchCompany(decodeURIComponent(\'' + encodeURIComponent(company.id) + '\'))">'
           + esc(company.name) + '</button>';
       });
-      companyHtml += currentUserLabelHtml(currentCompany, companyMembers);
       document.getElementById("company-tabs").innerHTML = companyHtml;
 
       var userTabs = document.getElementById("user-tabs");
@@ -909,7 +926,7 @@
         var active = member === state.user ? " active" : "";
         userHtml += '<button class="user-tab' + active + '" data-user="' + esc(member)
           + '" onclick="switchUser(decodeURIComponent(\'' + encodeURIComponent(member) + '\'))">'
-          + esc(member) + '</button>';
+          + esc(memberLabel(member)) + '</button>';
       });
       userTabs.innerHTML = userHtml;
       userTabs.style.display = "";
@@ -935,7 +952,6 @@
     function showGanttMode() {
       document.getElementById("company-tabs").style.display = "";
       document.getElementById("toolbar").style.display = "";
-      document.getElementById("save-footer").style.display = "";
       document.getElementById("month-label").textContent = formatMonth(state.month);
       updateUserTabs();
     }
@@ -944,7 +960,6 @@
       document.getElementById("company-tabs").style.display = "none";
       document.getElementById("user-tabs").style.display = "none";
       document.getElementById("toolbar").style.display = "none";
-      document.getElementById("save-footer").style.display = "none";
     }
 
     function selectUser(user) {
@@ -997,7 +1012,7 @@
         membersOfCompany(company.id).forEach(function(name) {
           var hasData = apiMembers.indexOf(name) >= 0;
           html += '<button class="person-btn" onclick="selectUser(decodeURIComponent(\'' + encodeURIComponent(name) + '\'))">';
-          html += esc(name);
+          html += esc(memberLabel(name));
           html += '<div class="person-count">' + (hasData ? 'データあり' : '新規') + '</div></button>';
         });
         html += '</div></section>';
@@ -1010,11 +1025,6 @@
     function renderGantt() {
       var main = document.getElementById("main");
       var projects = state.data.projects;
-
-      if (projects.length === 0 && state.adjProjects.length === 0) {
-        main.innerHTML = '<div class="empty-state">案件がありません。<br>「+ 案件追加」ボタンから追加してください。</div>';
-        return;
-      }
 
       var yy = parseInt(state.month.slice(0,2));
       var mm = parseInt(state.month.slice(2,4));
@@ -1183,7 +1193,11 @@
         html += '</tr>';
       }
 
-      html += '</tbody></table></div>';
+      html += '</tbody></table>';
+      if (projects.length === 0 && state.adjProjects.length === 0) {
+        html += '<div class="empty-state">案件がありません。<br>「+ 案件追加」ボタンから追加してください。</div>';
+      }
+      html += '</div>';
       main.innerHTML = html;
       scrollToToday();
     }

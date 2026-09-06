@@ -109,10 +109,20 @@
       }
     }
 
+    function memberId(member) {
+      return typeof member === "string" ? member : member && member.id;
+    }
+
+    function memberLabel(member) {
+      return typeof member === "string" ? member : member && (member.label || member.id);
+    }
+
     function companyOfMember(member) {
       if (!member) return null;
       for (var i = 0; i < org.companies.length; i++) {
-        if ((org.companies[i].members || []).indexOf(member) !== -1) return org.companies[i];
+        if ((org.companies[i].members || []).some(function (m) { return memberId(m) === member; })) {
+          return org.companies[i];
+        }
       }
       return { id: "other", name: "その他", short: "その他" };
     }
