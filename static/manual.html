@@ -202,192 +202,304 @@
       .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .card { box-shadow: none; border: 1px solid #ddd; }
     }
+
+    .toc {
+      list-style: none;
+      counter-reset: toc;
+      padding: 0;
+    }
+    .toc li {
+      counter-increment: toc;
+      border-bottom: 1px solid #eef1f5;
+    }
+    .toc li:last-child { border-bottom: none; }
+    .toc a {
+      display: block;
+      padding: 9px 0 9px 34px;
+      position: relative;
+      color: #1A2E5A;
+      text-decoration: none;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .toc a::before {
+      content: counter(toc);
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 22px;
+      height: 22px;
+      background: #e8ecf1;
+      color: #1A2E5A;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toc a:hover { color: #2c4a8a; text-decoration: underline; }
+
+    .fixed-note { color: #666; font-size: 14px; }
   </style>
 </head>
 <body>
 
   <div class="header">
     <h1>工事予定表の使い方</h1>
-    <p>ブラウザから入力するだけで、大画面に自動で表示されます</p>
+    <p>ブラウザで工事の予定を入力すると、事務所の大画面に表示されます</p>
   </div>
 
   <div class="container">
 
-    <!-- しくみ -->
     <div class="card">
-      <h2>このシステムのしくみ</h2>
-      <p>やることはとてもシンプルです。</p>
-
-      <div class="simple-flow">
-        <span>フォームに入力</span>
-        <span class="arrow">&rarr;</span>
-        <span>保存ボタン</span>
-        <span class="arrow">&rarr;</span>
-        <span>大画面に自動表示</span>
-      </div>
-
-      <p>ブラウザの入力フォームから工事の予定を入力して保存するだけで、事務所の50インチ画面に自動で映し出されます。</p>
-
-      <div class="point">
-        <strong>ポイント:</strong> Excelやファイルの操作は不要です。ブラウザだけで完結します。<br>
-        保存するとすぐに大画面に反映されます。
-      </div>
-    </div>
-
-    <!-- 入力方法 -->
-    <div class="card">
-      <h2>入力フォームの使い方</h2>
-      <p>下のボタンから入力フォームを開いてください。</p>
-
-      <p><a href="https://hsj-construction-board.netlify.app/input.html" class="link-btn" target="_blank">入力フォームを開く</a></p>
-
-      <ol class="big-steps">
-        <li>
-          フォームを開いたら、<strong>会社タブ→担当者タブ</strong>の順に選びます<br>
-          <small style="color:#666;">担当者が1人の会社は会社タブを選ぶだけです。案件一覧では左右の矢印で前月・翌月に切り替えられます</small>
-        </li>
-        <li>
-          <strong>「+ 案件追加」</strong>ボタンで新しい工事を登録します<br>
-          <small style="color:#666;">客先、工事件名、担当者、協力会社、開始日、終了日を入力</small>
-        </li>
-        <li>
-          案件カードをクリックすると<strong>日次入力</strong>が開きます<br>
-          <small style="color:#666;">各日の工事内容、昼/夜、重点工事を入力します</small>
-        </li>
-        <li>
-          入力が終わったら画面下の<strong>「保存」ボタン</strong>を押します<br>
-          <small style="color:#666;">保存するとすぐに大画面サイネージに反映されます</small>
-        </li>
+      <h2>目次</h2>
+      <ol class="toc">
+        <li><a href="#s1">この画面でできること</a></li>
+        <li><a href="#s2">はじめに: 会社と担当者を選ぶ</a></li>
+        <li><a href="#s3">画面の見方</a></li>
+        <li><a href="#s4">案件を追加する</a></li>
+        <li><a href="#s5">日ごとの内容を入れる</a></li>
+        <li><a href="#s6">案件を編集・削除する</a></li>
+        <li><a href="#s7">保存する</a></li>
+        <li><a href="#s8">サイネージ（大画面の表示）</a></li>
+        <li><a href="#s9">よくある質問</a></li>
       </ol>
     </div>
 
-    <!-- 案件登録 -->
-    <div class="card">
-      <h2>案件の登録</h2>
-      <p>「+ 案件追加」ボタンを押すと、入力画面が出ます。</p>
+    <!-- 1 -->
+    <div class="card" id="s1">
+      <h2>1. この画面でできること</h2>
+      <p>担当している工事を月ごとのガント表に登録し、日ごとに昼・夜の作業内容を入力します。</p>
+      <p>入力して「保存」を押した内容が、事務所の大画面（サイネージ）に本日・明日の予定として表示されます。</p>
+      <p>使うのはブラウザだけです。Excelファイルのやり取りはありません。</p>
+    </div>
+
+    <!-- 2 -->
+    <div class="card" id="s2">
+      <h2>2. はじめに: 会社と担当者を選ぶ</h2>
+      <p>入力画面を開くと、最初に「入力担当者を選んでください」という画面が出ます。</p>
+      <p>会社が3列に並び、その下に担当者のボタンがあります。</p>
 
       <table>
-        <tr><th>入力する項目</th><th>書く内容</th></tr>
-        <tr><td>客先</td><td>発注元の会社名</td></tr>
-        <tr><td>工事件名</td><td>工事の名前</td></tr>
+        <tr><th>会社</th><th>担当者のボタン</th></tr>
+        <tr><td>HSJ</td><td>手島 / 森_吉村 / 谷口 / 河邊</td></tr>
+        <tr><td>コーワシステム</td><td>東京 / 大阪</td></tr>
+        <tr><td>光洋エンジニアリング</td><td>光洋</td></tr>
+      </table>
+
+      <p>ボタンの右側には「データあり」または「新規」と出ます。まだ一度も入力していない場合は「新規」です。</p>
+
+      <div class="point">
+        <strong>次回から早く開く:</strong> 担当者を選ぶと、アドレスの末尾が <strong>#担当者/年月</strong>（例: #手島/2609）に変わります。この状態でブラウザのお気に入りに登録しておくと、次回は担当者を選ばずに自分の画面が開きます。
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="card" id="s3">
+      <h2>3. 画面の見方</h2>
+
+      <p><strong>ヘッダー1行目</strong></p>
+      <table>
+        <tr><th>場所</th><th>内容</th></tr>
+        <tr><td>会社タブ</td><td>HSJ / コーワシステム / 光洋エンジニアリング を切り替えます</td></tr>
+        <tr><td>担当者タブ</td><td>会社タブの右にあります。担当者を切り替えます。担当者が1人の会社（光洋エンジニアリング）では表示されません</td></tr>
+        <tr><td>本日稼働 / 明日稼働</td><td>全担当者の合計件数です。昼と夜は別の件数として数えます</td></tr>
+        <tr><td>サイネージ表示</td><td>大画面と同じ表示を開きます</td></tr>
+        <tr><td>マニュアル</td><td>このページです</td></tr>
+      </table>
+
+      <p><strong>ヘッダー2行目</strong></p>
+      <table>
+        <tr><th>場所</th><th>内容</th></tr>
+        <tr><td>◀ 年月 ▶</td><td>前の月・次の月に切り替えます</td></tr>
+        <tr><td>凡例</td><td>昼 / 夜 / 昼+夜 / 休み / 重点 の色見本です</td></tr>
+        <tr><td>保存</td><td>右上にあります。変更があるときだけ押せます</td></tr>
+        <tr><td>+ 案件追加</td><td>新しい工事を登録します</td></tr>
+      </table>
+
+      <p><strong>ガント表の左側（横スクロールしても残る列）</strong></p>
+      <table>
+        <tr><th>列</th><th>内容</th></tr>
+        <tr><td>鉛筆ボタン</td><td>案件の編集画面を開きます</td></tr>
+        <tr><td>工事件名</td><td>上段が客先、下段が工事件名です</td></tr>
+        <tr><td>担当</td><td>案件に登録した現場担当者です</td></tr>
+        <tr><td>協力会社</td><td>案件に登録した協力会社名です</td></tr>
+      </table>
+
+      <p><strong>日付セルの色</strong></p>
+      <table>
+        <tr><th>色</th><th>意味</th></tr>
+        <tr><td>黄色</td><td>昼の作業あり</td></tr>
+        <tr><td>紺青</td><td>夜間工事のみ</td></tr>
+        <tr><td>上が黄・下が紺青</td><td>昼と夜の両方</td></tr>
+        <tr><td>灰色</td><td>休み（昼と夜のどちらも入っていない日）</td></tr>
+        <tr><td>右上の赤い点</td><td>重点工事「有」の日</td></tr>
+      </table>
+
+      <div class="point">
+        セルにマウスを乗せると、日付・昼夜・作業内容が小さく表示されます。今日の列は薄い青の背景になり、画面を開いたとき今日のあたりまで自動でスクロールします。
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="card" id="s4">
+      <h2>4. 案件を追加する</h2>
+      <p>「+ 案件追加」を押すと入力欄が開きます。</p>
+
+      <table>
+        <tr><th>欄</th><th>書く内容</th></tr>
+        <tr><td>客先</td><td>発注元の会社名（必須）</td></tr>
+        <tr><td>工事件名</td><td>工事の名前（必須）</td></tr>
         <tr><td>現場担当者</td><td>自社の現場担当者</td></tr>
-        <tr><td>安品担当者</td><td>安全品質管理の担当者</td></tr>
+        <tr><td>安品担当者</td><td>安全品質の担当者</td></tr>
         <tr><td>協力会社名</td><td>協力会社の名前</td></tr>
-        <tr><td>協力会社担当者</td><td>協力会社の担当者</td></tr>
-        <tr><td>開始日</td><td>工事が始まる日</td></tr>
-        <tr><td>終了日</td><td>工事が終わる日</td></tr>
+        <tr><td>協力会社担当者</td><td>協力会社側の担当者</td></tr>
+        <tr><td>開始日</td><td>工事の開始日（必須）</td></tr>
+        <tr><td>終了日</td><td>工事の終了日（必須。開始日以降）</td></tr>
       </table>
+
+      <p>入力したら「保存」を押します。表に新しい行が追加されます。</p>
+
+      <div class="point">
+        <strong>「初期値」の表示:</strong> 森_吉村と谷口では、客先・現場担当者・安品担当者にあらかじめ値が入ります。欄の名前の横に「初期値」と出ます。違う場合はそのまま書き換えられます。
+      </div>
 
       <div class="caution">
-        <strong>大事:</strong> 「開始日」と「終了日」は必ず入れてください。日付がないと大画面に表示されません。
-      </div>
-
-      <div class="point">
-        <strong>編集・削除:</strong> 案件カードの右上の「編集」ボタンから、内容の変更や削除ができます。
-      </div>
-
-      <div class="point">
-        案件を保存すると期間内の土日は自動で休みになります。土日に働く場合はその日をクリックして昼/夜を入れてください。
+        <strong>土日について:</strong> 案件を保存すると、開始日から終了日までの土曜・日曜は自動で「休み」（灰色）になります。土日に作業する場合は、その日のセルをクリックして昼または夜にチェックを入れてください。
       </div>
     </div>
 
-    <!-- 日次入力 -->
-    <div class="card">
-      <h2>日次入力</h2>
-      <p>案件カードをクリックすると、開始日から終了日までの日付一覧が開きます。<br>
-      各日について以下を入力します。</p>
-
-      <table>
-        <tr><th>項目</th><th>入力方法</th></tr>
-        <tr><td><strong>昼チェック</strong></td><td>チェックON = 昼の工事あり（デフォルトON）</td></tr>
-        <tr><td><strong>夜チェック</strong></td><td>チェックON = 夜の工事あり（デフォルトOFF）</td></tr>
-        <tr><td><strong>工事内容</strong></td><td>その日にやる作業を書く</td></tr>
-        <tr><td><strong>重点工事</strong></td><td>「重点:有」を選ぶと大画面で目立つ表示になります</td></tr>
-        <tr><td><strong>重点内容</strong></td><td>重点工事が「有」のとき、内容を記入（例: 高所作業）</td></tr>
-      </table>
-
-      <div class="point">
-        <strong>ポイント:</strong><br>
-        ・昼のチェックを外すと、その日は大画面に表示されません（休みの日など）<br>
-        ・夜にチェックを入れると、夜間工事の入力欄が表示されます<br>
-        ・「担当者変更」を押すと、その日だけ現場・安品・協力会社担当者を変更できます<br>
-        ・今日の日付には <strong>TODAY</strong> マークが付いています
-      </div>
-    </div>
-
-    <!-- 大画面の見方 -->
-    <div class="card">
-      <h2>大画面の見方</h2>
-      <p>事務所の50インチ画面には、<strong>今日と明日</strong>の工事予定が自動で表示されます。</p>
-
-      <table>
-        <tr><th>表示のしかた</th><th>内容</th></tr>
-        <tr><td>ページ切り替え</td><td>30秒ごとに自動で切り替わります</td></tr>
-        <tr><td>重点工事</td><td>左側にオレンジのラインが付き、重点内容がオレンジバッジに表示されます</td></tr>
-        <tr><td>夜間工事</td><td>青い背景・白文字で表示されます</td></tr>
-        <tr><td>データ更新</td><td>5分ごとに自動で最新データを取得します</td></tr>
-        <tr><td>時計</td><td>右上に現在時刻が出ています</td></tr>
-      </table>
-    </div>
-
-    <!-- 月が変わるとき -->
-    <div class="card">
-      <h2>新しい月の準備</h2>
-      <p>月末になったら、入力フォームで翌月のデータを準備します。</p>
+    <!-- 5 -->
+    <div class="card" id="s5">
+      <h2>5. 日ごとの内容を入れる</h2>
+      <p>工事期間内のセル（灰色の休みの日も含む）をクリックすると、その日の入力画面が開きます。</p>
 
       <ol class="big-steps">
-        <li>入力フォームを開く</li>
-        <li>右矢印ボタンで<strong>翌月に切り替え</strong></li>
-        <li>「+ 案件追加」で翌月の工事を登録</li>
-        <li>日次入力を記入して保存</li>
+        <li>
+          <strong>昼の工事</strong> のチェックを入れる／外す<br>
+          <small style="color:#666;">外すとその日は休み（灰色）になり、大画面にも出ません</small>
+        </li>
+        <li>
+          <strong>工事内容</strong> にその日の作業を書く<br>
+          <small style="color:#666;">ここに書いた内容が大画面の「作業内容」に出ます</small>
+        </li>
+        <li>
+          <strong>重点工事</strong> を「有」にすると、<strong>重点内容</strong> を書けます<br>
+          <small style="color:#666;">表のセルに赤い点が付き、大画面では重点作業として目立ちます</small>
+        </li>
+        <li>
+          夜も作業する日は <strong>夜間工事</strong> にチェックを入れる<br>
+          <small style="color:#666;">夜の工事内容・重点工事の欄が出ます</small>
+        </li>
       </ol>
 
+      <div class="point">
+        <strong>担当者変更:</strong> 「担当者変更」を開くと、その日だけ現場・安品・協力担当を変えられます。空欄のままなら案件に登録した担当者が使われます。
+      </div>
+
+      <div class="point">
+        <strong>前日からコピー:</strong> 前の日と同じ内容のときは「前日からコピー」を押すと、昼夜・工事内容・重点・担当者がまとめて入ります。前の日にデータがないときは押せません。
+      </div>
+
+      <p>上部の ◀ ▶ で、同じ案件の前の日・次の日に移動できます。工事の期間外には移動しません。</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="card" id="s6">
+      <h2>6. 案件を編集・削除する</h2>
+      <p>表のいちばん左にある鉛筆ボタンを押すと「案件編集」が開きます。内容を直して「保存」を押します。</p>
+      <p>「削除」を押すと確認が出ます。案件と、その案件の日ごとの入力もいっしょに消えます。</p>
+
+      <div class="point">
+        <strong>期間を延ばしたとき:</strong> 保存すると、新しく増えた期間の土日が自動で休みになります。すでに入力済みの日はそのままです。
+      </div>
+
+      <div class="point">
+        <strong>土日を休みにする:</strong> 案件編集の画面には「土日を休みにする」ボタンがあります。以前に登録した長い工事で土日が埋まっていない場合に押すと、まだ何も入っていない土日をまとめて休みにします。何日分を休みにしたかが画面に出ます。
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="card" id="s7">
+      <h2>7. 保存する</h2>
+      <p>入力が終わったら、ヘッダー2行目の右側にある「保存」を押します。</p>
+      <p>変更がないときは「保存」は押せない状態になっています。何か変更すると押せるようになります。</p>
+
       <div class="caution">
-        <strong>月またぎ:</strong> 前月から翌月にまたがる工事がある場合は、翌月のデータにも同じ案件を登録してください。<br>
-        前月のデータは翌月初でも表示されるので、急がなくても大丈夫です。
+        <strong>保存しないと反映されません:</strong> 案件の追加や日ごとの入力は、「保存」を押すまで自分の画面の中だけの状態です。保存せずにページを閉じようとすると、ブラウザから確認が出ます。担当者や月を切り替えるときも「未保存の変更があります。破棄しますか？」と確認が出ます。
+      </div>
+
+      <p>保存に成功すると「保存しました」と数秒表示されます。</p>
+
+      <div class="caution">
+        <strong>他の人と同時に保存したとき:</strong> 「データが他のユーザーによって更新されています。ページをリロードしてください。」と赤字で出ることがあります。この場合は保存されていません。ページを再読み込みして最新の状態にしてから、入力し直して保存してください。
       </div>
     </div>
 
-    <!-- よくある質問 -->
-    <div class="card">
-      <h2>よくある質問</h2>
+    <!-- 8 -->
+    <div class="card" id="s8">
+      <h2>8. サイネージ（大画面の表示）</h2>
+      <p>大画面には、全担当者の本日・明日の工事予定が表示されます。ヘッダーの「サイネージ表示」からも同じ画面を開けます。</p>
+
+      <table>
+        <tr><th>項目</th><th>内容</th></tr>
+        <tr><td>ページ送り</td><td>30秒ごとに切り替わります。全ページを一巡すると本日から明日へ、明日から本日へ切り替わります</td></tr>
+        <tr><td>会社の区別</td><td>いちばん左の「会社」列に HSJ / コーワ / 光洋 と出ます</td></tr>
+        <tr><td>表示される列</td><td>会社・客先・工事件名・現場・安品・協力会社・担当・作業内容・昼/夜・重点作業</td></tr>
+        <tr><td>データの更新</td><td>5分ごとに自動で読み直します。保存してから反映まで最大5分かかります</td></tr>
+      </table>
+
+      <div class="point">
+        <strong>すぐに反映したいとき:</strong> サイネージの画面でキーボードの <strong>r</strong> キーを押すと、その場で最新のデータを読み直します。◀ ▶ キーでページ送り、<strong>n</strong> キーで本日と明日の切り替えができます。
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="card" id="s9">
+      <h2>9. よくある質問</h2>
 
       <div class="qa">
-        <div class="qa-q">保存したのに大画面に反映されない</div>
+        <div class="qa-q">担当者が増えたときは</div>
         <div class="qa-a">
-          大画面は5分ごとにデータを更新します。少し待ってみてください。
+          最初の選択画面に出る担当者はあらかじめ決まっています。一覧にない担当者を追加するには設定の変更が必要なので、管理者（REVA 加藤）に連絡してください。
         </div>
       </div>
 
       <div class="qa">
-        <div class="qa-q">間違えて入力した / 消したい</div>
+        <div class="qa-q">自分が入れたはずの案件が表示されない</div>
         <div class="qa-a">
-          入力フォームで修正して保存すればOKです。案件ごと削除したい場合は、編集ボタンから「削除」を押してください。
+          まず、ヘッダーの担当者タブが自分になっているか、◀ ▶ の月が合っているかを確認してください。案件は登録した月のデータとして保存されます。
         </div>
       </div>
 
       <div class="qa">
-        <div class="qa-q">他の人が同時に編集したらどうなる？</div>
+        <div class="qa-q">土日に作業するとき</div>
         <div class="qa-a">
-          同時に保存しようとすると「データが更新されています」というメッセージが出ます。<br>
-          ページをリロードして最新データを取得してから、もう一度入力してください。
+          その日のセルをクリックして「昼の工事」または「夜間工事」にチェックを入れてください。灰色から色付きに変わります。
         </div>
       </div>
 
       <div class="qa">
-        <div class="qa-q">スマホからも入力できる？</div>
+        <div class="qa-q">月をまたぐ工事はどうなる</div>
         <div class="qa-a">
-          はい、スマホのブラウザからも入力できます。同じURLにアクセスしてください。
+          今月・来月にまたがる案件は、隣の月のデータからも読み込まれ、表の下のほうに薄い行として「○月」のバッジ付きで表示されます。この行のセルをクリックすると、その案件が登録されている月に切り替わります。切り替えた月で内容を編集してください。
+        </div>
+      </div>
+
+      <div class="qa">
+        <div class="qa-q">間違えて入力した</div>
+        <div class="qa-a">
+          保存前なら、ページを再読み込みすると入力前の状態に戻ります（確認が出ます）。保存した後は、正しい内容を入力し直してもう一度保存してください。案件ごと消す場合は鉛筆ボタンから「削除」です。
         </div>
       </div>
     </div>
 
-    <!-- リンク -->
     <div class="card">
       <h2>関連ページ</h2>
       <p>
-        <a href="https://hsj-construction-board.netlify.app/input.html" class="link-btn" target="_blank">入力フォーム</a>
-        <a href="https://hsj-construction-board.netlify.app/" class="link-btn" style="background:#5a6f8a;" target="_blank">大画面表示（本番）</a>
+        <a href="input.html" class="link-btn">入力画面</a>
+        <a href="/" class="link-btn" style="background:#5a6f8a;">サイネージ表示</a>
       </p>
     </div>
 
