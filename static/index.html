@@ -37,6 +37,7 @@
   </header>
 
   <div class="board-table-header">
+    <div class="col col-company">会社</div>
     <div class="col col-client">客先</div>
     <div class="col col-title">工事件名</div>
     <div class="col col-our-person">現場</div>
@@ -69,6 +70,7 @@
     var REFRESH_MS = 5 * 60 * 1000;
     var CACHE_KEY = "construction-board-data";
     var API_URL = "/.netlify/functions/data?signage=true";
+    var org = { companies: [] };
 
     // ===== グローバル変数 =====
     var ROWS_PER_PAGE = 10;
@@ -94,6 +96,25 @@
 
     function escapeAttr(str) {
       return escapeHtml(str);
+    }
+
+    async function loadOrg() {
+      try {
+        var res = await fetch("org.json?_t=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        var loaded = await res.json();
+        org = loaded && Array.isArray(loaded.companies) ? loaded : { companies: [] };
+      } catch (e) {
+        org = { companies: [] };
+      }
+    }
+
+    function companyOfMember(member) {
+      if (!member) return null;
+      for (var i = 0; i < org.companies.length; i++) {
+        if ((org.companies[i].members || []).indexOf(member) !== -1) return org.companies[i];
+      }
+      return { id: "other", name: "その他", short: "その他" };
     }
 
     // ===== データ取得 =====
@@ -194,8 +215,10 @@
       var priorityBadge = item.is_priority
         ? '<span class="priority-badge priority-yes">' + escapeHtml(priorityText) + '</span>'
         : '<span class="priority-badge priority-no">-</span>';
+      var company = companyOfMember(item.user) || { short: "その他" };
 
       return '<div class="board-row ' + evenOdd + priorityClass + nightClass + '" data-id="' + escapeAttr(rowId) + '" style="height:' + rowHeight + 'px;">' +
+        '<div class="col col-company"><span class="nowrap">' + escapeHtml(company.short) + '</span></div>' +
         '<div class="col col-client">' + escapeHtml(item.client) + '</div>' +
         '<div class="col col-title">' + escapeHtml(item.title) + '</div>' +
         '<div class="col col-our-person"><span class="nowrap">' + escapeHtml(item.our_person) + '</span></div>' +
@@ -494,6 +517,7 @@
       ROWS_PER_PAGE = calcRowsPerPage();
       startClock();
 
+      await loadOrg();
       var data = await fetchData();
       renderBoard(data);
 

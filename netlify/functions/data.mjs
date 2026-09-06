@@ -3,12 +3,12 @@
  *
  * GET  ?month=2604              → 担当者一覧 { members: [...] }
  * GET  ?month=2604&user=手島    → 担当者データ { projects, daily, _sha }
- * GET  ?signage=true            → 全担当者統合 items[] (前月+当月+翌月)
+ * GET  ?signage=true            → 全担当者統合 items[] (前月+当月+翌月、各itemにuserを含む)
  * PUT  { month, user, data, sha } → 担当者データ保存
  */
 
 const REPO = "Tiger0710/construction-board";
-const BRANCH = "main";
+const BRANCH = process.env.DATA_BRANCH || "main";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -79,7 +79,7 @@ function findMemberFiles(allFiles, month) {
     }));
 }
 
-function expandToItems(data) {
+function expandToItems(data, user) {
   const items = [];
   const projects = data.projects || [];
   const daily = data.daily || {};
@@ -100,6 +100,7 @@ function expandToItems(data) {
       if (dayActive) {
         const pri = dd?.day_priority || "";
         items.push({
+          user,
           date: ds,
           client: proj.client,
           title: proj.title,
@@ -118,6 +119,7 @@ function expandToItems(data) {
       if (nightActive) {
         const pri = dd?.night_priority || "";
         items.push({
+          user,
           date: ds,
           client: proj.client,
           title: proj.title,
@@ -175,24 +177,28 @@ export async function handler(event) {
         const memberFiles = findMemberFiles(allFiles, m);
         if (memberFiles.length > 0) {
           for (const mf of memberFiles) {
-            fetchPromises.push(fetchFileData(GITHUB_TOKEN, mf.path));
+            fetchPromises.push(
+              fetchFileData(GITHUB_TOKEN, mf.path).then((data) => ({ data, user: mf.name }))
+            );
           }
         } else {
           // 後方互換: 旧形式 _YYMM.json
-          fetchPromises.push(fetchFileData(GITHUB_TOKEN, `_${m}.json`));
+          fetchPromises.push(
+            fetchFileData(GITHUB_TOKEN, `_${m}.json`).then((data) => ({ data, user: "" }))
+          );
         }
       }
 
       const results = await Promise.all(fetchPromises);
       let allItems = [];
-      for (const data of results) {
-        if (data) allItems.push(...expandToItems(data));
+      for (const result of results) {
+        if (result.data) allItems.push(...expandToItems(result.data, result.user));
       }
 
       // 重複排除
       const seen = new Set();
       allItems = allItems.filter((item) => {
-        const key = `${item.date}|${item.client}|${item.title}|${item.work_time}|${item.partner}|${item.partner_person}|${item.our_person}|${item.safety_person}`;
+        const key = `${item.date}|${item.client}|${item.title}|${item.work_time}|${item.partner}|${item.partner_person}|${item.our_person}|${item.safety_person}|${item.user}`;
         if (seen.has(key)) return false;
         seen.add(key);
         return true;
