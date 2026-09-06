@@ -1,0 +1,7 @@
+{
+  "companies": [
+    { "id": "hsj",  "name": "HSJ",                   "short": "HSJ",    "members": ["手島", "森_吉村", "谷口", "河邊"] },
+    { "id": "kowa", "name": "コーワシステム",         "short": "コーワ", "members": [{ "id": "コーワ東京", "label": "東京" }, { "id": "コーワ大阪", "label": "大阪" }] },
+    { "id": "koyo", "name": "光洋エンジニアリング",   "short": "光洋",   "members": ["光洋"] }
+  ]
+}

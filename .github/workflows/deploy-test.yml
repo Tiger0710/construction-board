@@ -1,0 +1,31 @@
+name: Deploy Construction Board (TEST)
+
+on:
+  push:
+    branches: [test]
+    paths:
+      - "static/**"
+      - "netlify/**"
+      - "ci_pipeline.py"
+      - ".github/workflows/deploy-test.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build (static → deploy)
+        run: python ci_pipeline.py
+
+      - name: Deploy to Netlify
+        run: npx netlify-cli deploy --prod --dir deploy --functions netlify/functions --site ${{ secrets.NETLIFY_TEST_SITE_ID }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

@@ -18,69 +18,88 @@
     /* === Header === */
     .app-header {
       background: linear-gradient(135deg, #1A2E5A 0%, #2c4a8a 100%);
-      color: #fff; padding: 14px 20px 8px; flex-shrink: 0;
+      color: #fff; padding: 0 20px; flex-shrink: 0;
     }
     .header-top {
-      display: flex; justify-content: space-between; align-items: center;
+      min-height: 46px; display: flex; justify-content: space-between; align-items: center;
+      gap: 12px;
     }
-    .app-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 2px; }
-    .header-links { display: flex; gap: 16px; align-items: center; }
+    .header-primary { display: flex; align-items: center; min-width: 0; }
+    .app-header h1 {
+      flex-shrink: 0; margin-right: 16px; font-size: 16px; font-weight: 700;
+      letter-spacing: 1px; white-space: nowrap;
+    }
+    .header-links { display: flex; gap: 12px; align-items: center; flex-shrink: 0; }
     .header-links a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; }
     .header-links a:hover { color: #fff; }
     .summary-totals {
-      display: flex; gap: 14px; align-items: center;
+      display: flex; gap: 10px; align-items: center;
       background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
-      padding: 6px 14px; border-radius: 8px;
-      font-size: 12px; color: rgba(255,255,255,0.85);
+      padding: 4px 10px; border-radius: 7px;
+      font-size: 11px; color: rgba(255,255,255,0.85);
       letter-spacing: 0.5px;
     }
     .summary-totals .st-item { display: flex; align-items: center; gap: 4px; }
     .summary-totals .st-label { font-weight: 500; }
-    .summary-totals .st-value { font-size: 16px; font-weight: 700; color: #fff; }
+    .summary-totals .st-value { font-size: 14px; font-weight: 700; color: #fff; }
     .summary-totals .st-unit { font-size: 11px; color: rgba(255,255,255,0.7); }
     .summary-totals .st-today .st-value { color: #fef3c7; }
     .summary-totals .st-tomorrow .st-value { color: #a7f3d0; }
 
-    /* === User Tabs === */
+    /* === Company / User Tabs === */
+    .company-tabs,
     .user-tabs {
-      display: flex; gap: 0; margin-top: 12px; border-bottom: 2px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; gap: 2px;
     }
+    .company-tab,
     .user-tab {
       background: transparent; border: none; color: rgba(255,255,255,0.6);
-      padding: 10px 24px; font-size: 15px; font-weight: 600;
-      cursor: pointer; font-family: inherit; border-bottom: 3px solid transparent;
-      transition: all 0.2s; position: relative; top: 2px;
+      padding: 6px 12px; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit; border: 1px solid transparent;
+      transition: all 0.2s; white-space: nowrap;
     }
+    .company-tab { padding: 10px 13px 9px; font-size: 13px; font-weight: 700; border-radius: 5px; }
+    .company-tab:hover,
     .user-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); }
+    .company-tab.active,
     .user-tab.active {
-      color: #fff; border-bottom-color: #fff;
+      color: #fff; border-color: rgba(255,255,255,0.35);
       background: rgba(255,255,255,0.1);
+    }
+    .user-tabs {
+      margin-left: 8px; padding-left: 9px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+    }
+    .user-tab { padding: 4px 10px; border-radius: 999px; }
+    .user-tab.active {
+      background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.45);
     }
 
     /* === Toolbar === */
     .toolbar {
       display: flex; align-items: center; justify-content: space-between;
-      margin-top: 10px; gap: 12px; flex-wrap: wrap; padding-bottom: 10px;
+      min-height: 40px; gap: 12px; border-top: 1px solid rgba(255,255,255,0.15);
     }
-    .month-nav { display: flex; align-items: center; gap: 12px; }
+    .toolbar-left, .toolbar-actions { display: flex; align-items: center; gap: 14px; }
+    .month-nav { display: flex; align-items: center; gap: 9px; }
     .month-nav button {
       background: rgba(255,255,255,0.15); border: none; color: #fff;
-      width: 32px; height: 32px; border-radius: 6px; font-size: 16px;
+      width: 27px; height: 27px; border-radius: 5px; font-size: 14px;
       cursor: pointer; transition: background 0.2s;
     }
     .month-nav button:hover { background: rgba(255,255,255,0.3); }
-    .month-label { font-size: 20px; font-weight: 700; letter-spacing: 2px; }
+    .month-label { font-size: 17px; font-weight: 700; letter-spacing: 1px; }
     .add-proj-btn {
       background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-      color: #fff; padding: 7px 16px; border-radius: 6px;
-      font-size: 14px; font-weight: 600; cursor: pointer;
+      color: #fff; padding: 6px 13px; border-radius: 6px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
       font-family: inherit; transition: background 0.2s;
     }
     .add-proj-btn:hover { background: rgba(255,255,255,0.35); }
 
     /* === Legend === */
     .legend {
-      display: flex; gap: 14px; align-items: center;
+      display: flex; gap: 10px; align-items: center;
       font-size: 11px; color: rgba(255,255,255,0.8);
     }
     .legend-item { display: flex; align-items: center; gap: 4px; }
@@ -101,22 +120,36 @@
       justify-content: center; flex: 1; gap: 24px; padding: 40px 20px;
     }
     .person-select h2 { font-size: 20px; color: #1A2E5A; font-weight: 700; }
+    .person-companies {
+      display: grid;
+      grid-template-columns: repeat(var(--company-count, 3), minmax(220px, 280px));
+      gap: 24px; justify-content: center; align-items: start;
+    }
+    @media (max-width: 900px) {
+      .person-companies { grid-template-columns: repeat(auto-fit, minmax(220px, 280px)) !important; }
+    }
+    .person-company h3 {
+      color: #1A2E5A; font-size: 16px; margin: 0 0 10px;
+      padding-bottom: 6px; border-bottom: 2px solid #1A2E5A;
+    }
     .person-grid {
-      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      display: flex; flex-direction: column; gap: 10px;
     }
     .person-btn {
-      background: #fff; border: 2px solid #d0d5dd; border-radius: 14px;
-      padding: 28px 40px; font-size: 20px; font-weight: 700; color: #1A2E5A;
+      background: #fff; border: 2px solid #d0d5dd; border-radius: 10px;
+      padding: 0 16px; font-size: 15px; font-weight: 700; color: #1A2E5A;
       cursor: pointer; transition: all 0.2s; font-family: inherit;
-      min-width: 160px; text-align: center;
+      width: 100%; min-height: 56px; box-sizing: border-box;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      text-align: left;
       box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .person-btn:hover { border-color: #1A2E5A; background: #f0f3fa; box-shadow: 0 4px 16px rgba(26,46,90,0.12); }
-    .person-btn .person-count { font-size: 12px; font-weight: 400; color: #888; margin-top: 6px; }
+    .person-btn .person-count { font-size: 12px; font-weight: 400; color: #888; white-space: nowrap; }
     .person-btn .excel-tag {
       display: inline-block; font-size: 10px; font-weight: 600;
       background: #dcfce7; color: #166534; padding: 2px 8px;
-      border-radius: 4px; margin-top: 6px;
+      border-radius: 4px;
     }
 
     /* === Gantt Area === */
@@ -133,14 +166,15 @@
     }
 
     /* Sticky columns */
-    .s0, .s1, .s2 { position: sticky; z-index: 2; }
+    .s0, .s1, .s2, .s3 { position: sticky; z-index: 2; }
     .s0 { left: 0; width: 30px; min-width: 30px; }
     .s1 { left: 30px; width: 190px; min-width: 190px; max-width: 190px; }
     .s2 { left: 220px; width: 50px; min-width: 50px; }
+    .s3 { left: 270px; width: 130px; min-width: 130px; max-width: 130px; }
     thead th { position: sticky; top: 0; z-index: 3; }
-    thead th.s0, thead th.s1, thead th.s2 { z-index: 5; }
-    tbody td.s0, tbody td.s1, tbody td.s2 { background: #fff; z-index: 2; }
-    tbody tr:hover td.s0, tbody tr:hover td.s1, tbody tr:hover td.s2 { background: #f0f3fa; }
+    thead th.s0, thead th.s1, thead th.s2, thead th.s3 { z-index: 5; }
+    tbody td.s0, tbody td.s1, tbody td.s2, tbody td.s3 { background: #fff; z-index: 2; }
+    tbody tr:hover td.s0, tbody tr:hover td.s1, tbody tr:hover td.s2, tbody tr:hover td.s3 { background: #f0f3fa; }
 
     /* Header cells */
     .gh {
@@ -168,8 +202,11 @@
       max-width: 190px; font-weight: 500; color: #1A2E5A;
     }
     .s2.sc { font-size: 11px; color: #555; text-align: center; }
-    .s2.sc { border-right: 2px solid #b0b8c8; }
-    thead th.s2 { border-right: 2px solid #0f1f3e; }
+    .s3.sc {
+      font-size: 11px; color: #555; overflow: hidden;
+      text-overflow: ellipsis; border-right: 2px solid #b0b8c8;
+    }
+    thead th.s3 { border-right: 2px solid #0f1f3e; }
     tbody tr:hover td { background-color: rgba(219,234,254,0.15); }
     .ebtn {
       background: none; border: none; cursor: pointer;
@@ -222,22 +259,18 @@
       border-radius: 3px; margin-left: 4px;
     }
 
-    /* === Save Footer === */
-    .save-footer {
-      flex-shrink: 0; background: #fff; border-top: 2px solid #e0e0e0;
-      padding: 10px 20px; display: flex; align-items: center; gap: 16px;
-    }
-    .save-footer.dirty { border-top-color: #1A2E5A; }
+    /* === Save controls === */
     .save-btn {
-      background: #1A2E5A; color: #fff; border: none;
-      padding: 10px 28px; border-radius: 8px; font-size: 15px;
+      background: rgba(255,255,255,0.2); color: #fff;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 6px 18px; border-radius: 6px; font-size: 13px;
       font-weight: 600; cursor: pointer; font-family: inherit;
     }
     .save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .save-btn:not(:disabled):hover { background: #2a4070; }
-    .save-status { font-size: 13px; color: #666; }
-    .save-status.error { color: #dc2626; }
-    .save-status.success { color: #16a34a; }
+    .save-status { min-width: 0; font-size: 12px; color: rgba(255,255,255,0.75); white-space: nowrap; }
+    .save-status.error { color: #fff; }
+    .save-status.success { color: #a7f3d0; }
 
     /* === Empty & Loading === */
     .loading { text-align: center; padding: 60px 20px; color: #888; font-size: 16px; }
@@ -281,7 +314,7 @@
     .form-row { display: flex; gap: 12px; }
     .form-row .form-group { flex: 1; }
     .modal-actions {
-      display: flex; gap: 10px; padding: 16px 24px 20px;
+      display: flex; flex-wrap: wrap; gap: 10px; padding: 16px 24px 20px;
       border-top: 1px solid #eee;
     }
     .btn-primary {
@@ -290,6 +323,16 @@
       font-weight: 600; cursor: pointer; font-family: inherit;
     }
     .btn-primary:hover { background: #2a4070; }
+    .btn-secondary {
+      background: #e0e7f5; color: #1A2E5A; border: none;
+      padding: 12px 16px; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .btn-secondary:hover { background: #cbd6eb; }
+    .modal-message {
+      width: 100%; min-height: 18px; color: #287a4b;
+      font-size: 13px; text-align: center;
+    }
     .btn-danger {
       background: #dc2626; color: #fff; border: none;
       padding: 12px 20px; border-radius: 8px; font-size: 15px;
@@ -376,18 +419,31 @@
     .dm-copy-btn:hover { background: #dde3f0; }
     .dm-copy-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+    @media (max-width: 1279px) {
+      .header-top { flex-wrap: wrap; padding: 4px 0; }
+      .header-primary, .company-tabs, .user-tabs { flex-wrap: wrap; }
+      .toolbar { flex-wrap: wrap; padding: 4px 0; }
+    }
+
     @media (max-width: 600px) {
       .legend { display: none; }
       .s1 { width: 140px; min-width: 140px; max-width: 140px; }
       .s2 { left: 170px; }
-      .user-tab { padding: 8px 16px; font-size: 13px; }
+      .s3 { left: 220px; width: 120px; min-width: 120px; max-width: 120px; }
+      .header-links a { display: none; }
+      .company-tab { padding: 7px 10px; font-size: 12px; }
+      .user-tab { padding: 4px 9px; font-size: 11px; }
     }
   </style>
 </head>
 <body>
   <header class="app-header">
     <div class="header-top">
-      <h1>工事予定表 入力</h1>
+      <div class="header-primary">
+        <h1>工事予定表 入力</h1>
+        <div class="company-tabs" id="company-tabs" style="display:none"></div>
+        <div class="user-tabs" id="user-tabs" style="display:none"></div>
+      </div>
       <div class="header-links">
         <div class="summary-totals" id="summary-totals" title="全担当者合計（昼/夜を別件カウント）">
           <div class="st-item st-today">
@@ -406,36 +462,30 @@
       </div>
     </div>
 
-    <div class="user-tabs" id="user-tabs" style="display:none">
-      <button class="user-tab" data-user="手島" onclick="switchUser('手島')">手島</button>
-      <button class="user-tab" data-user="森_吉村" onclick="switchUser('森_吉村')">森_吉村</button>
-      <button class="user-tab" data-user="谷口" onclick="switchUser('谷口')">谷口</button>
-      <button class="user-tab" data-user="河邊" onclick="switchUser('河邊')">河邊</button>
-    </div>
-
     <div class="toolbar" id="toolbar" style="display:none">
-      <div class="month-nav">
-        <button onclick="changeMonth(-1)">&#9664;</button>
-        <span class="month-label" id="month-label"></span>
-        <button onclick="changeMonth(1)">&#9654;</button>
+      <div class="toolbar-left">
+        <div class="month-nav">
+          <button onclick="changeMonth(-1)">&#9664;</button>
+          <span class="month-label" id="month-label"></span>
+          <button onclick="changeMonth(1)">&#9654;</button>
+        </div>
+        <div class="legend">
+          <span class="legend-item"><span class="lsw l-day"></span>昼</span>
+          <span class="legend-item"><span class="lsw l-night"></span>夜</span>
+          <span class="legend-item"><span class="lsw l-both"></span>昼+夜</span>
+          <span class="legend-item"><span class="lsw l-off"></span>休み</span>
+          <span class="legend-item"><span class="lsw l-pri"></span>重点</span>
+        </div>
       </div>
-      <div class="legend">
-        <span class="legend-item"><span class="lsw l-day"></span>昼</span>
-        <span class="legend-item"><span class="lsw l-night"></span>夜</span>
-        <span class="legend-item"><span class="lsw l-both"></span>昼+夜</span>
-        <span class="legend-item"><span class="lsw l-off"></span>休み</span>
-        <span class="legend-item"><span class="lsw l-pri"></span>重点</span>
+      <div class="toolbar-actions">
+        <button class="save-btn" id="save-btn" disabled onclick="saveData()">保存</button>
+        <span class="save-status" id="save-status"></span>
+        <button class="add-proj-btn" onclick="openModal()">+ 案件追加</button>
       </div>
-      <button class="add-proj-btn" onclick="openModal()">+ 案件追加</button>
     </div>
   </header>
 
   <main class="main" id="main"></main>
-
-  <div class="save-footer" id="save-footer" style="display:none">
-    <button class="save-btn" id="save-btn" disabled onclick="saveData()">保存</button>
-    <span class="save-status" id="save-status"></span>
-  </div>
 
   <!-- 案件モーダル -->
   <div class="modal-overlay hidden" id="modal" onclick="if(event.target===this)closeModal()">
@@ -464,9 +514,11 @@
         </div>
       </div>
       <div class="modal-actions">
+        <button class="btn-secondary hidden" id="modal-weekends-off" onclick="applyWeekendsOffFromModal()">土日を休みにする</button>
         <button class="btn-primary" onclick="saveProject()">保存</button>
         <button class="btn-danger hidden" id="modal-delete" onclick="deleteProject()">削除</button>
         <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+        <div class="modal-message" id="modal-message" aria-live="polite"></div>
       </div>
     </div>
   </div>
@@ -552,7 +604,9 @@
     // ===== 定数 =====
     var API = "/.netlify/functions/data";
     var WEEKDAYS = ["日","月","火","水","木","金","土"];
-    var KNOWN_MEMBERS = ["手島", "森_吉村", "谷口", "河邊"];
+    var org = { companies: [] };
+    var KNOWN_MEMBERS = [];
+    var apiMembers = [];
 
     // 担当者ごとの固定フィールド（新規/編集時に自動入力＆readonly）
     var USER_FIXED_FIELDS = {
@@ -585,6 +639,79 @@
     function esc(s) {
       if (s == null) return "";
       return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    // org.json 取得失敗時のフォールバック（org.json と同内容を保つ）
+    var DEFAULT_ORG = {
+      companies: [
+        { id: "hsj",  name: "HSJ",                   short: "HSJ",   members: ["手島", "森_吉村", "谷口", "河邊"] },
+        { id: "kowa", name: "コーワシステム",         short: "コーワ", members: [{ id: "コーワ東京", label: "東京" }, { id: "コーワ大阪", label: "大阪" }] },
+        { id: "koyo", name: "光洋エンジニアリング",   short: "光洋",  members: ["光洋"] }
+      ]
+    };
+
+    function memberId(member) {
+      return typeof member === "object" && member !== null ? member.id : member;
+    }
+
+    function memberLabel(member) {
+      if (typeof member === "object" && member !== null) return member.label || member.id;
+      var id = memberId(member);
+      for (var i = 0; i < org.companies.length; i++) {
+        var members = org.companies[i].members || [];
+        for (var j = 0; j < members.length; j++) {
+          if (memberId(members[j]) === id) {
+            return typeof members[j] === "object" && members[j] !== null
+              ? (members[j].label || members[j].id)
+              : members[j];
+          }
+        }
+      }
+      return id;
+    }
+
+    async function loadOrg() {
+      try {
+        var res = await fetch("org.json?_t=" + Date.now(), { cache: "no-store" });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        var loaded = await res.json();
+        org = loaded && Array.isArray(loaded.companies) && loaded.companies.length > 0 ? loaded : DEFAULT_ORG;
+      } catch (e) {
+        org = DEFAULT_ORG;
+      }
+      KNOWN_MEMBERS = [];
+      org.companies.forEach(function(company) {
+        (company.members || []).forEach(function(member) {
+          var id = memberId(member);
+          if (KNOWN_MEMBERS.indexOf(id) === -1) KNOWN_MEMBERS.push(id);
+        });
+      });
+    }
+
+    var OTHER_COMPANY = { id: "other", name: "その他", short: "その他", members: [] };
+
+    function companyOfMember(member) {
+      if (!member) return OTHER_COMPANY;
+      for (var i = 0; i < org.companies.length; i++) {
+        if ((org.companies[i].members || []).some(function(item) { return memberId(item) === member; })) return org.companies[i];
+      }
+      return OTHER_COMPANY;
+    }
+
+    function allMembers() {
+      var members = KNOWN_MEMBERS.slice();
+      apiMembers.forEach(function(member) {
+        if (members.indexOf(member) === -1) members.push(member);
+      });
+      if (state.user && members.indexOf(state.user) === -1) members.push(state.user);
+      return members;
+    }
+
+    function membersOfCompany(companyId) {
+      return allMembers().filter(function(member) {
+        var company = companyOfMember(member);
+        return company && company.id === companyId;
+      });
     }
 
     function formatMonth(yymm) {
@@ -633,6 +760,33 @@
         };
       }
       return state.data.daily[key];
+    }
+
+    function applyWeekendsOff(projId, startDate, endDate) {
+      var startParts = startDate.split("-");
+      var endParts = endDate.split("-");
+      var current = new Date(+startParts[0], +startParts[1]-1, +startParts[2]);
+      var end = new Date(+endParts[0], +endParts[1]-1, +endParts[2]);
+      var applied = 0;
+
+      while (current <= end) {
+        var dow = current.getDay();
+        if (dow === 0 || dow === 6) {
+          var ds = dateStr(current.getFullYear(), current.getMonth()+1, current.getDate());
+          var key = projId + "/" + ds;
+          if (!Object.prototype.hasOwnProperty.call(state.data.daily, key)) {
+            state.data.daily[key] = {
+              day: false, day_work: "", day_priority: "", day_priority_detail: "",
+              day_our_person: "", day_safety_person: "", day_partner_person: "",
+              night: false, night_work: "", night_priority: "", night_priority_detail: "",
+              night_our_person: "", night_safety_person: "", night_partner_person: ""
+            };
+            applied++;
+          }
+        }
+        current.setDate(current.getDate() + 1);
+      }
+      return applied;
     }
 
     // ===== ハッシュ管理 =====
@@ -780,9 +934,7 @@
 
     function updateDirtyUI() {
       var btn = document.getElementById("save-btn");
-      var footer = document.getElementById("save-footer");
       btn.disabled = !state.dirty;
-      footer.classList.toggle("dirty", state.dirty);
     }
 
     function showStatus(msg, type) {
@@ -791,12 +943,47 @@
       el.className = "save-status" + (type ? " " + type : "");
     }
 
-    // ===== User Tabs =====
+    // ===== Company / User Tabs =====
     function updateUserTabs() {
-      var tabs = document.querySelectorAll(".user-tab");
-      tabs.forEach(function(tab) {
-        tab.classList.toggle("active", tab.dataset.user === state.user);
+      var currentCompany = companyOfMember(state.user);
+      var companies = org.companies.slice();
+      var hasOther = allMembers().some(function(member) {
+        return companyOfMember(member).id === "other";
       });
+      if (hasOther) companies.push(OTHER_COMPANY);
+
+      var companyMembers = membersOfCompany(currentCompany.id);
+
+      var companyHtml = "";
+      companies.forEach(function(company) {
+        var active = currentCompany.id === company.id ? " active" : "";
+        companyHtml += '<button class="company-tab' + active + '" data-company="' + esc(company.id)
+          + '" onclick="switchCompany(decodeURIComponent(\'' + encodeURIComponent(company.id) + '\'))">'
+          + esc(company.name) + '</button>';
+      });
+      document.getElementById("company-tabs").innerHTML = companyHtml;
+
+      var userTabs = document.getElementById("user-tabs");
+      if (companyMembers.length <= 1) {
+        userTabs.innerHTML = "";
+        userTabs.style.display = "none";
+        return;
+      }
+      var userHtml = "";
+      companyMembers.forEach(function(member) {
+        var active = member === state.user ? " active" : "";
+        userHtml += '<button class="user-tab' + active + '" data-user="' + esc(member)
+          + '" onclick="switchUser(decodeURIComponent(\'' + encodeURIComponent(member) + '\'))">'
+          + esc(memberLabel(member)) + '</button>';
+      });
+      userTabs.innerHTML = userHtml;
+      userTabs.style.display = "";
+    }
+
+    function switchCompany(companyId) {
+      if (companyOfMember(state.user).id === companyId) return;
+      var members = membersOfCompany(companyId);
+      if (members.length > 0) switchUser(members[0]);
     }
 
     function switchUser(user) {
@@ -811,17 +998,16 @@
 
     // ===== 画面切り替え =====
     function showGanttMode() {
-      document.getElementById("user-tabs").style.display = "";
+      document.getElementById("company-tabs").style.display = "";
       document.getElementById("toolbar").style.display = "";
-      document.getElementById("save-footer").style.display = "";
       document.getElementById("month-label").textContent = formatMonth(state.month);
       updateUserTabs();
     }
 
     function showPersonSelectMode() {
+      document.getElementById("company-tabs").style.display = "none";
       document.getElementById("user-tabs").style.display = "none";
       document.getElementById("toolbar").style.display = "none";
-      document.getElementById("save-footer").style.display = "none";
     }
 
     function selectUser(user) {
@@ -850,6 +1036,7 @@
       state.dirty = false;
       setHash(state.user, newMonth);
       document.getElementById("month-label").textContent = formatMonth(newMonth);
+      loadMembers().then(function(members) { apiMembers = members; updateUserTabs(); });
       loadData(newMonth);
     }
 
@@ -858,27 +1045,29 @@
       var main = document.getElementById("main");
       main.innerHTML = '<div class="loading">担当者情報を取得中...</div>';
 
-      var apiMembers = await loadMembers();
+      apiMembers = await loadMembers();
       // KNOWN_MEMBERS + APIから取得した担当者をマージ（重複排除）
-      var allMembers = KNOWN_MEMBERS.slice();
-      apiMembers.forEach(function(m) {
-        if (allMembers.indexOf(m) === -1) allMembers.push(m);
-      });
+      var members = allMembers();
+      var companies = org.companies.slice();
+      if (members.some(function(member) { return companyOfMember(member).id === "other"; })) {
+        companies.push(OTHER_COMPANY);
+      }
 
       var html = '<div class="person-select">';
       html += '<h2>入力担当者を選んでください</h2>';
-      html += '<div class="person-grid">';
-      for (var i = 0; i < allMembers.length; i++) {
-        var name = allMembers[i];
-        var hasData = apiMembers.indexOf(name) >= 0;
-        html += '<button class="person-btn" onclick="selectUser(\'' + esc(name) + '\')">';
-        html += esc(name);
-
-        if (hasData) html += '<div class="person-count">データあり</div>';
-        else html += '<div class="person-count">新規</div>';
-        html += '</button>';
-      }
-      html += '</div></div>';
+      html += '<div class="person-companies" style="--company-count:' + companies.length + '">';
+      companies.forEach(function(company) {
+        html += '<section class="person-company"><h3>' + esc(company.name) + '</h3><div class="person-grid">';
+        membersOfCompany(company.id).forEach(function(name) {
+          var hasData = apiMembers.indexOf(name) >= 0;
+          html += '<button class="person-btn" onclick="selectUser(decodeURIComponent(\'' + encodeURIComponent(name) + '\'))">';
+          html += esc(memberLabel(name));
+          html += '<div class="person-count">' + (hasData ? 'データあり' : '新規') + '</div></button>';
+        });
+        html += '</div></section>';
+      });
+      html += '</div>';
+      html += '</div>';
       main.innerHTML = html;
     }
 
@@ -886,11 +1075,6 @@
     function renderGantt() {
       var main = document.getElementById("main");
       var projects = state.data.projects;
-
-      if (projects.length === 0 && state.adjProjects.length === 0) {
-        main.innerHTML = '<div class="empty-state">案件がありません。<br>「+ 案件追加」ボタンから追加してください。</div>';
-        return;
-      }
 
       var yy = parseInt(state.month.slice(0,2));
       var mm = parseInt(state.month.slice(2,4));
@@ -905,6 +1089,7 @@
       html += '<th class="s0 gh"></th>';
       html += '<th class="s1 gh">工事件名</th>';
       html += '<th class="s2 gh">担当</th>';
+      html += '<th class="s3 gh">協力会社</th>';
 
       // Day header
       for (var d = 1; d <= dim; d++) {
@@ -931,6 +1116,7 @@
         html += '<td class="s1 sc" title="' + esc(proj.client) + ' / ' + esc(proj.title) + '">'
               + '<span class="pclient">' + esc(proj.client) + '</span><br>' + esc(proj.title) + '</td>';
         html += '<td class="s2 sc">' + esc(proj.our_person || '') + '</td>';
+        html += '<td class="s3 sc" title="' + esc(proj.partner || '') + '">' + esc(proj.partner || '') + '</td>';
 
         for (var d = 1; d <= dim; d++) {
           var ds = dateStr(year, mm, d);
@@ -1004,6 +1190,7 @@
               + '<span class="pclient">' + esc(adjProj.client) + '</span><br>' + esc(adjProj.title)
               + '<span class="adj-badge">' + adjMonthLabel + '</span></td>';
         html += '<td class="s2 sc">' + esc(adjProj.our_person || '') + '</td>';
+        html += '<td class="s3 sc" title="' + esc(adjProj.partner || '') + '">' + esc(adjProj.partner || '') + '</td>';
 
         for (var ad = 1; ad <= dim; ad++) {
           var ads = dateStr(year, mm, ad);
@@ -1056,7 +1243,11 @@
         html += '</tr>';
       }
 
-      html += '</tbody></table></div>';
+      html += '</tbody></table>';
+      if (projects.length === 0 && state.adjProjects.length === 0) {
+        html += '<div class="empty-state">案件がありません。<br>「+ 案件追加」ボタンから追加してください。</div>';
+      }
+      html += '</div>';
       main.innerHTML = html;
       scrollToToday();
     }
@@ -1202,12 +1393,15 @@
       var modal = document.getElementById("modal");
       var title = document.getElementById("modal-title");
       var delBtn = document.getElementById("modal-delete");
+      var weekendsBtn = document.getElementById("modal-weekends-off");
+      document.getElementById("modal-message").textContent = "";
 
       if (id) {
         var proj = state.data.projects.find(function(p) { return p.id === id; });
         if (!proj) return;
         title.textContent = "案件編集";
         delBtn.classList.remove("hidden");
+        weekendsBtn.classList.remove("hidden");
         document.getElementById("m-client").value = proj.client || "";
         document.getElementById("m-title").value = proj.title || "";
         document.getElementById("m-our").value = proj.our_person || "";
@@ -1219,6 +1413,7 @@
       } else {
         title.textContent = "案件追加";
         delBtn.classList.add("hidden");
+        weekendsBtn.classList.add("hidden");
         var yy = parseInt(state.month.slice(0,2));
         var mm = parseInt(state.month.slice(2,4));
         var y = 2000 + yy;
@@ -1264,6 +1459,23 @@
       state.editingId = null;
     }
 
+    function applyWeekendsOffFromModal() {
+      if (!state.editingId) return;
+      var startDate = document.getElementById("m-start").value;
+      var endDate = document.getElementById("m-end").value;
+      if (!startDate || !endDate) { alert("開始日と終了日は必須です"); return; }
+      if (startDate > endDate) { alert("終了日は開始日以降にしてください"); return; }
+
+      var applied = applyWeekendsOff(state.editingId, startDate, endDate);
+      if (applied > 0) {
+        markDirty();
+        renderGantt();
+        document.getElementById("modal-message").textContent = "土日 " + applied + "日を休みにしました";
+      } else {
+        document.getElementById("modal-message").textContent = "休みにする土日はありません（すべて入力済み）";
+      }
+    }
+
     function saveProject() {
       var client = document.getElementById("m-client").value.trim();
       var title = document.getElementById("m-title").value.trim();
@@ -1289,6 +1501,7 @@
         projData.id = genId();
         state.data.projects.push(projData);
       }
+      applyWeekendsOff(projData.id, startDate, endDate);
       markDirty(); closeModal(); renderGantt();
     }
 
@@ -1305,11 +1518,13 @@
     }
 
     // ===== 初期化 =====
-    function init() {
+    async function init() {
+      await loadOrg();
       var parsed = parseHash();
       state.month = parsed.month;
 
       if (parsed.user) {
+        apiMembers = await loadMembers();
         state.user = parsed.user;
         showGanttMode();
         loadData(state.month);
@@ -1342,7 +1557,9 @@
           state.user = p.user;
           state.month = p.month;
           state.dirty = false;
-          showGanttMode(); loadData(state.month);
+          showGanttMode();
+          loadMembers().then(function(members) { apiMembers = members; updateUserTabs(); });
+          loadData(state.month);
         }
       });
     }
