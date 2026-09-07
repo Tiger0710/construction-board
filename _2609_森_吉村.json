@@ -186,6 +186,17 @@
       "start_date": "2026-09-12",
       "end_date": "2026-09-12",
       "id": "bo4m7cmg"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社エム・エス・シー　コレットマーレオペレーションセンター",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-09-13",
+      "end_date": "2026-09-13",
+      "id": "n13zmgk4"
     }
   ],
   "daily": {
@@ -223,6 +234,22 @@
     },
     "bo4m7cmg/2026-09-12": {
       "day": true,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "n13zmgk4/2026-09-13": {
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
