@@ -248,7 +248,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "資材搬入",
       "night_priority": "",
       "night_priority_detail": "",
@@ -705,7 +705,7 @@
       "night_partner_person": ""
     },
     "sn20oyla/2026-09-07": {
-      "day": true,
+      "day": false,
       "day_work": "足場組立、配管・電源・光ケーブル敷設",
       "day_priority": "有",
       "day_priority_detail": "足場組立",
@@ -722,9 +722,9 @@
     },
     "sn20oyla/2026-09-08": {
       "day": true,
-      "day_work": "配管・電源・光ケーブル敷設",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_work": "足場組立、配管・電源・光ケーブル敷設",
+      "day_priority": "有",
+      "day_priority_detail": "足場組立",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
