@@ -429,8 +429,8 @@
     "e58xx87s/2026-09-25": {
       "day": true,
       "day_work": "ケーブル敷設　機器設置",
-      "day_priority": "有",
-      "day_priority_detail": "分電盤作業",
+      "day_priority": "",
+      "day_priority_detail": "",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
