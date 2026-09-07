@@ -190,7 +190,7 @@
   ],
   "daily": {
     "u4fuu1yz/2026-09-12": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -206,7 +206,7 @@
       "night_partner_person": ""
     },
     "sz96s30k/2026-09-12": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -222,7 +222,7 @@
       "night_partner_person": ""
     },
     "bo4m7cmg/2026-09-12": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
