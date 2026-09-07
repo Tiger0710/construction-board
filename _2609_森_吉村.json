@@ -153,7 +153,89 @@
       "start_date": "2026-09-09",
       "end_date": "2026-09-09",
       "id": "r4lwoue3"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：大星ビル管理株式会社日本生命川崎ビル",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-09-12",
+      "end_date": "2026-09-12",
+      "id": "u4fuu1yz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ドラッグユタカ綾部店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-09-12",
+      "end_date": "2026-09-12",
+      "id": "sz96s30k"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：キユーピー株式会社キユーピータマゴ栗源工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-09-12",
+      "end_date": "2026-09-12",
+      "id": "bo4m7cmg"
     }
   ],
-  "daily": {}
+  "daily": {
+    "u4fuu1yz/2026-09-12": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "sz96s30k/2026-09-12": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "bo4m7cmg/2026-09-12": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    }
+  }
 }
