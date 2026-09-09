@@ -14,7 +14,7 @@
   <header class="board-header">
     <div class="header-left">
       <h1 class="header-title">工事予定表</h1>
-      <span class="header-subtitle">Construction Schedule</span>
+      <span class="header-subtitle" id="header-company"></span>
     </div>
     <div class="header-center">
       <div class="header-today" id="header-today"></div>
@@ -58,7 +58,7 @@
     </div>
     <div class="footer-center" id="page-indicator"></div>
     <div class="footer-right">
-      全 <span id="total-count" class="footer-value">0</span> 件
+      全社合計 <span id="total-count" class="footer-value">0</span> 件
     </div>
   </footer>
 
@@ -80,6 +80,7 @@
     var currentGroupIdx = 0;
     var groupCycleCount = 0;
     var pageRotateTimer = null;
+    var pageTransitionTimer = null;
 
     var WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -200,7 +201,23 @@
           groups.push({ date: dt, label: "", dateFormatted: formatDateLabel(dt), items: otherItems.filter(function(i) { return i.date === dt; }) });
         });
       }
-      return groups;
+      // 会社ごとに本日→明日を表示し、全ページを終えてから次の会社へ。
+      var companies = org.companies.slice();
+      companies.push({ id: "other", name: "その他", short: "その他" });
+      var companyGroups = [];
+      companies.forEach(function(company) {
+        groups.forEach(function(group) {
+          var companyItems = group.items.filter(function(item) {
+            var owner = companyOfMember(item.user);
+            return (owner ? owner.id : "other") === company.id;
+          });
+          if (companyItems.length > 0) {
+            companyGroups.push({ date: group.date, label: group.label,
+              dateFormatted: group.dateFormatted, company: company, items: companyItems });
+          }
+        });
+      });
+      return companyGroups;
     }
 
     // ===== 表示件数を画面サイズから自動計算 =====
@@ -243,6 +260,7 @@
 
     // ===== ヘッダー日付表示更新 =====
     function updateHeaderForGroup(group) {
+      document.getElementById("header-company").textContent = group.company.short;
       var todayEl = document.getElementById("header-today");
       if (!todayEl) return;
       var labelClass = group.label === "明日" ? "header-today-label label-tomorrow" : "header-today-label";
@@ -287,6 +305,9 @@
       updateSummary(data, todayStr, tomorrowStr);
 
       if (data.error) {
+        dateGroups = [];
+        currentGroupIdx = currentPage = 0;
+        document.getElementById("header-company").textContent = "";
         body.innerHTML =
           '<div class="board-message">' +
             '<div class="board-message-icon">&#9888;</div>' +
@@ -300,6 +321,9 @@
       var filtered = filterTodayTomorrow(data.items, todayStr, tomorrowStr);
 
       if (filtered.length === 0) {
+        dateGroups = [];
+        currentGroupIdx = currentPage = 0;
+        document.getElementById("header-company").textContent = "";
         body.innerHTML =
           '<div class="board-message">' +
             '<div class="board-message-icon">&#128736;</div>' +
@@ -310,7 +334,15 @@
         return;
       }
 
+      var previousGroup = dateGroups[currentGroupIdx];
       dateGroups = buildDateGroups(filtered, todayStr, tomorrowStr);
+      if (previousGroup) {
+        var preservedIndex = dateGroups.findIndex(function(g) {
+          return g.company.id === previousGroup.company.id && g.date === previousGroup.date;
+        });
+        currentGroupIdx = preservedIndex >= 0 ? preservedIndex : 0;
+        if (preservedIndex < 0) currentPage = 0;
+      }
       dateGroups.forEach(function(g) {
         g.totalPages = Math.ceil(g.items.length / ROWS_PER_PAGE);
       });
@@ -368,7 +400,8 @@
         body.classList.add("fade-out");
         body.classList.remove("fade-in");
 
-        setTimeout(function() {
+        pageTransitionTimer = setTimeout(function() {
+          pageTransitionTimer = null;
           var nextPage = currentPage + 1;
           if (nextPage >= group.totalPages) {
             groupCycleCount++;
@@ -393,6 +426,11 @@
     }
 
     function stopAllTimers() {
+      if (pageTransitionTimer) {
+        clearTimeout(pageTransitionTimer);
+        pageTransitionTimer = null;
+        document.getElementById("board-body").classList.remove("fade-out");
+      }
       if (pageRotateTimer) {
         clearInterval(pageRotateTimer);
         pageRotateTimer = null;
@@ -402,7 +440,7 @@
     function updatePageIndicator() {
       var indicator = document.getElementById("page-indicator");
       var group = dateGroups[currentGroupIdx];
-      if (!group) return;
+      if (!group) { indicator.textContent = ""; return; }
       if (group.totalPages > 1) {
         indicator.textContent = (currentPage + 1) + " / " + group.totalPages;
       } else {
@@ -512,6 +550,7 @@
       currentPage = 0;
       currentGroupIdx = 0;
       groupCycleCount = 0;
+      dateGroups = [];
       renderBoard(newData);
     }
 
@@ -535,9 +574,6 @@
       setInterval(async function() {
         var newData = await fetchData();
         stopAllTimers();
-        currentPage = 0;
-        currentGroupIdx = 0;
-        groupCycleCount = 0;
         renderBoard(newData);
       }, REFRESH_MS);
 
