@@ -164,6 +164,39 @@
       "start_date": "2026-09-25",
       "end_date": "2026-09-25",
       "id": "qvrxzdqn"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "MS大阪三国1-0ZJ0他１",
+      "our_person": "山本",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-09-28",
+      "end_date": "2026-09-28",
+      "id": "w3fnkkeq"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "大久保南ノ口-04S8",
+      "our_person": "山本",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-09-29",
+      "end_date": "2026-09-29",
+      "id": "fg2mrghv"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "MSD京都PTP1-0594他8",
+      "our_person": "山本",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-09-29",
+      "end_date": "2026-10-07",
+      "id": "7613r2ur"
     }
   ],
   "daily": {
@@ -2376,6 +2409,38 @@
       "night_partner_person": ""
     },
     "nt8697nt/2026-09-14": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "7613r2ur/2026-10-03": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "7613r2ur/2026-10-04": {
       "day": false,
       "day_work": "",
       "day_priority": "",
