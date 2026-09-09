@@ -209,7 +209,7 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "配管、配線、点検口取付",
+      "night_work": "配管、配線、点検口取付、搬入",
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "",
