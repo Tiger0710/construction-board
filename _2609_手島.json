@@ -555,7 +555,7 @@
       "night": true,
       "night_work": "電源・光ケーブル敷設、電源接続",
       "night_priority": "有",
-      "night_priority_detail": "盤内配線作業",
+      "night_priority_detail": "電源接続",
       "night_our_person": "楊",
       "night_safety_person": "",
       "night_partner_person": ""
