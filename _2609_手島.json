@@ -796,7 +796,7 @@
       "night_work": "機器回り・ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "",
+      "night_our_person": "松田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -812,7 +812,7 @@
       "night_work": "機器回り・ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "",
+      "night_our_person": "松田",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -823,7 +823,7 @@
       "day_priority_detail": "",
       "day_our_person": "",
       "day_safety_person": "",
-      "day_partner_person": "",
+      "day_partner_person": "松田",
       "night": true,
       "night_work": "通信ケーブル確認・機器回り・ケーブル撤去",
       "night_priority": "有",
