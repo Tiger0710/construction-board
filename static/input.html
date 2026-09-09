@@ -301,11 +301,11 @@
       display: block; font-size: 13px; font-weight: 500;
       color: #555; margin-bottom: 4px;
     }
-    .form-group input {
+    .form-group input, .form-group select {
       width: 100%; padding: 10px 12px; border: 1px solid #d0d5dd;
       border-radius: 8px; font-size: 15px; font-family: inherit;
     }
-    .form-group input:focus { outline: none; border-color: #1A2E5A; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #1A2E5A; }
     .form-group .fixed-hint {
       display: inline-block; font-size: 10px; font-weight: 600;
       background: #e0e7f5; color: #1A2E5A;
@@ -525,6 +525,11 @@
           <div class="form-group"><label>開始日</label><input id="m-start" type="date" min="2000-01-01" max="2099-12-31"></div>
           <div class="form-group"><label>終了日</label><input id="m-end" type="date" min="2000-01-01" max="2099-12-31"></div>
         </div>
+        <div class="form-group">
+          <label for="m-default-shift">基本の作業時間</label>
+          <select id="m-default-shift"><option value="day">昼</option><option value="night">夜</option></select>
+          <p style="font-size:12px;color:#666;margin-top:6px">未入力の日に適用します。日ごとに設定した昼夜・休みは変更されません。土日は自動で休みになります。</p>
+        </div>
       </div>
       <div class="modal-actions">
         <button class="btn-secondary hidden" id="modal-weekends-off" onclick="applyWeekendsOffFromModal()">土日を休みにする</button>
@@ -667,7 +672,7 @@
       companies: [
         { id: "hsj",  name: "HSJ",                   short: "HSJ",   members: ["手島", "森_吉村", "谷口", "河邊"] },
         { id: "kowa", name: "コーワシステム",         short: "コーワ", members: [{ id: "コーワ東京", label: "東京" }, { id: "コーワ大阪", label: "大阪" }] },
-        { id: "koyo", name: "光洋エンジニアリング",   short: "光洋",  members: ["光洋", "森", "神邊", "猪股", "日向野"] }
+        { id: "koyo", name: "光洋エンジニアリング",   short: "光洋",  members: [{ id: "光洋", label: "佐藤" }, "森", "神邊", "猪股", "日向野"] }
       ]
     };
 
@@ -770,13 +775,20 @@
       return state.data.daily[projId + "/" + ds] || null;
     }
 
+    function projectShifts(proj, dd) {
+      if (dd) return { day: dd.day !== false, night: dd.night === true };
+      var night = proj && proj.default_shift === "night";
+      return { day: !night, night: night };
+    }
+
     function ensureDaily(projId, ds) {
       var key = projId + "/" + ds;
       if (!state.data.daily[key]) {
+        var shifts = projectShifts(state.data.projects.find(function(p) { return p.id === projId; }), null);
         state.data.daily[key] = {
-          day: true, day_work: "", day_priority: "", day_priority_detail: "",
+          day: shifts.day, day_work: "", day_priority: "", day_priority_detail: "",
           day_our_person: "", day_safety_person: "", day_partner_person: "",
-          night: false, night_work: "", night_priority: "", night_priority_detail: "",
+          night: shifts.night, night_work: "", night_priority: "", night_priority_detail: "",
           night_our_person: "", night_safety_person: "", night_partner_person: ""
         };
       }
@@ -1135,8 +1147,9 @@
           }
 
           var dd = getDayData(proj.id, ds);
-          var dayOn = dd ? dd.day !== false : true;
-          var nightOn = dd ? dd.night === true : false;
+          var shifts = projectShifts(proj, dd);
+          var dayOn = shifts.day;
+          var nightOn = shifts.night;
           var hasPri = (dayOn && dd && dd.day_priority === "有") || (nightOn && dd && dd.night_priority === "有");
 
           // Determine cell color class
@@ -1210,8 +1223,9 @@
       if (!proj) return;
       var ds = dmState.dateStr;
       var dd = getDayData(dmState.projId, ds);
-      var dayOn = dd ? dd.day !== false : true;
-      var nightOn = dd ? dd.night === true : false;
+      var shifts = projectShifts(proj, dd);
+      var dayOn = shifts.day;
+      var nightOn = shifts.night;
 
       document.getElementById("dm-proj-name").textContent = proj.client + " / " + proj.title;
       var p = ds.split("-");
@@ -1425,6 +1439,7 @@
         document.getElementById("m-partner-person").value = proj.partner_person || "";
         document.getElementById("m-start").value = proj.start_date || "";
         document.getElementById("m-end").value = proj.end_date || "";
+        document.getElementById("m-default-shift").value = proj.default_shift || "day";
       } else {
         title.textContent = "案件追加";
         delBtn.classList.add("hidden");
@@ -1440,6 +1455,7 @@
         document.getElementById("m-partner-person").value = "";
         document.getElementById("m-start").value = y + "-" + String(mm).padStart(2,"0") + "-01";
         document.getElementById("m-end").value = y + "-" + String(mm).padStart(2,"0") + "-" + String(new Date(y,mm,0).getDate()).padStart(2,"0");
+        document.getElementById("m-default-shift").value = "day";
       }
       applyUserFixedFields(!id);
       modal.classList.remove("hidden");
@@ -1509,7 +1525,8 @@
         safety_person: document.getElementById("m-safety").value.trim(),
         partner: document.getElementById("m-partner").value.trim(),
         partner_person: document.getElementById("m-partner-person").value.trim(),
-        start_date: startDate, end_date: endDate
+        start_date: startDate, end_date: endDate,
+        default_shift: document.getElementById("m-default-shift").value
       };
 
       if (state.editingId) {

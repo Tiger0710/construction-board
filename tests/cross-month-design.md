@@ -4,6 +4,10 @@
 
 工事は開始日～終了日を1つの案件として登録し、その期間のどの月でも同じ行を編集する。月移動は未保存の入力を保持する。別担当への移動は未保存確認、保存中の別担当移動は禁止。
 
+2026-09-09追加: 光洋の担当枠 `id:光洋` は表示名を「佐藤」に変更。IDを維持するため、既存データと旧リンクを引き継ぐ。
+
+案件の「基本の作業時間」は `default_shift:day/night` として保存。省略時は昼。未入力日の表示・日次編集の初期値・サイネージで共通に使用する。既存の明示的な日次データ（部分設定も含む）は従来どおり `day!==false` / `night===true` を維持し、基本設定変更時に上書きしない。土日の自動休みも保持。案件統合は異なる実効デフォルト同士を候補にせず、未設定と昼は互換扱い。
+
 既存の別ID案件は勝手に統合しない。「案件をまとめる」で、同じ基本情報かつ連続・重複する期間を候補表示する。選択した案件の日次設定が同日に異なる場合は、残す設定を選ぶまで統合できない。候補提示・プレビューは変更なし、統合確認はローカル変更、ヘッダーの保存で反映。
 
 ## 保存・互換性
@@ -33,13 +37,14 @@ node --test tests/data-api.test.mjs tests/project-merge.test.cjs
 node tests/company-rotation.cjs
 node tests/month-boundary.cjs
 node tests/month-merge-ui.cjs
+node tests/default-shift.cjs
 git diff --check
 ```
 
-単体・統合35件、会社別表示14項目、月またぎ編集12項目、統合画面24項目、合計85項目PASS。ブラウザテストはPlaywright＋Chrome、モックAPIを使用。
+単体・統合45件、会社別表示14項目、月またぎ編集12項目、統合画面24項目、佐藤表示・昼夜デフォルト15項目、合計110項目PASS。ブラウザテストはPlaywright＋Chrome、モックAPIを使用。
 
 実データの形式検証: 担当別26ファイル・7担当の全月統合後・旧集約1ファイルがすべてPASS。元データは未変更。
 
-実際のGit書込と関数配信は、テストsiteのDraftと `DATA_BRANCH=test` を使い、専用の合成担当者で初回移行・翌月保存・再読込・古いrevisionと旧画面の拒否など11項目PASS。作成した合成担当者ファイル2つは検証後に同じtestブランチから削除済み。本番反映前はDraftで利用者が操作確認する。
+実際のGit書込と関数配信は、テストsiteのDraftと `DATA_BRANCH=test` を使い、専用の合成担当者で初回移行・翌月保存・再読込・古いrevisionと旧画面の拒否・夜デフォルトの保持など13項目PASS。作成した合成担当者ファイル2つは検証後に同じtestブランチから削除済み。本番反映前はDraftで利用者が操作確認する。
 
-確認用Draft: https://6aa13e32b23e0bf58e3d10a1--hsj-construction-board-test.netlify.app 。配信後もサイネージ・入力（実データ116案件中、9月表示10行）・月移動・マニュアル・ブラウザ例外なしを確認。Netlify CLIの自動buildが失敗したため、`python ci_pipeline.py` で生成後に `netlify deploy --no-build --skip-functions-cache --dir deploy --functions netlify/functions --site <test-site-id>` で配信。`--no-build` と `--context` は併用不可。
+最新Draft: https://6aa143ebc5c96264d31aae3c--hsj-construction-board-test.netlify.app 。配信後の佐藤表示・昼夜選択・マニュアル・API正常応答・ブラウザ例外なしを確認。前Draftではサイネージ・入力（実データ116案件中、9月表示10行）・月移動も確認済み。`python ci_pipeline.py` で生成後に `netlify deploy --no-build --skip-functions-cache --dir deploy --functions netlify/functions --site <test-site-id>` で配信。`--no-build` と `--context` は併用不可。

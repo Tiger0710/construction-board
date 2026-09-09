@@ -68,6 +68,12 @@ export function validateData(data) {
       fail(400, "工事IDが不正または重複しています。");
     ids.add(p.id);
     if (
+      p.default_shift !== undefined &&
+      p.default_shift !== "day" &&
+      p.default_shift !== "night"
+    )
+      fail(400, "工事の基本時間帯は昼または夜を指定してください。");
+    if (
       !validDate(p.start_date) ||
       !validDate(p.end_date) ||
       p.start_date > p.end_date
@@ -175,8 +181,8 @@ export function expandToItems(
       const date = dateString(d),
         dd = data.daily[`${p.id}/${date}`];
       for (const [shift, label, active] of [
-        ["day", "昼", dd ? dd.day !== false : true],
-        ["night", "夜", dd?.night === true],
+        ["day", "昼", dd ? dd.day !== false : p.default_shift !== "night"],
+        ["night", "夜", dd ? dd.night === true : p.default_shift === "night"],
       ]) {
         if (!active) continue;
         const priority = dd?.[`${shift}_priority`] || "";

@@ -107,3 +107,52 @@ test('explicit record without day flag retains the UI implicit active day', () =
   assert.equal(merged.day_work, '作業');
   assert.equal(Merge.preview(data({ 'a/2026-09-01': {} }), ['a', 'b']).conflicts.length, 0);
 });
+test('candidate groups separate defaults while absent and explicit day are equivalent', () => {
+  const projects = [p('legacy'), p('day', undefined, undefined, { default_shift: 'day' }),
+    p('night1', undefined, undefined, { default_shift: 'night' }), p('night2', undefined, undefined, { default_shift: 'night' })];
+  assert.deepEqual(Merge.findCandidates(projects).map(g => g.ids.slice().sort()), [['day', 'legacy'], ['night1', 'night2']]);
+  assert.deepEqual(Merge.findCandidates(projects).map(g => g.projects[0].default_shift), ['day', 'night']);
+  assert.throws(() => Merge.preview(data({}, projects), ['legacy', 'night1']), /昼夜設定が異なる/);
+});
+test('absent and explicit day merge while preserving primary metadata shape', () => {
+  const source = data({}, [p('a'), p('b', undefined, undefined, { default_shift: 'day' })]);
+  const before = structuredClone(source);
+  const legacyPrimary = Merge.merge(source, ['a', 'b']).projects[0];
+  assert.equal(Object.hasOwn(legacyPrimary, 'default_shift'), false);
+  assert.equal(Merge.merge(source, ['b', 'a']).projects[0].default_shift, 'day');
+  assert.deepEqual(source, before);
+});
+test('night default implicit day conflicts with explicit off or legacy daytime', () => {
+  const projects = [p('a', undefined, undefined, { default_shift: 'night' }),
+    p('b', undefined, undefined, { default_shift: 'night' })];
+  for (const explicit of [{ day: false, night: false }, { day: true, night: false }, {}, { day_work: '昼間の作業' }]) {
+    const source = data({ 'a/2026-09-01': explicit }, projects);
+    const plan = Merge.preview(source, ['a', 'b']);
+    assert.equal(plan.conflicts.length, 1);
+    assert.deepEqual(plan.conflicts[0].choices[1].value, { day: false, night: true });
+    assert.equal(plan.conflicts[0].choices[1].implicit, true);
+    assert.throws(() => Merge.merge(source, ['a', 'b']), /選択/);
+    const implicitChosen = Merge.merge(source, ['a', 'b'], { '2026-09-01': 'b' });
+    assert.deepEqual(implicitChosen.daily['a/2026-09-01'], { day: false, night: true });
+    assert.equal(implicitChosen.projects[0].default_shift, 'night');
+    assert.deepEqual(Merge.merge(source, ['a', 'b'], { '2026-09-01': 'a' }).daily['a/2026-09-01'], explicit);
+  }
+});
+test('explicit matching night default collapses without changing entered records', () => {
+  const projects = [p('a', undefined, undefined, { default_shift: 'night' }),
+    p('b', undefined, undefined, { default_shift: 'night' })];
+  const source = data({ 'a/2026-09-01': { day: false, night: true, night_work: '' } }, projects);
+  assert.equal(Merge.preview(source, ['a', 'b']).conflicts.length, 0);
+  assert.deepEqual(Merge.merge(source, ['a', 'b']).daily['a/2026-09-01'], source.daily['a/2026-09-01']);
+  assert.deepEqual(Merge.merge(data({}, projects), ['a', 'b']).daily, {});
+});
+test('night default keeps gaps off and explicit legacy day records unchanged', () => {
+  const source = data({ 'a/2026-08-31': { day_work: '既存の昼作業' } }, [
+    p('a', '2026-08-30', '2026-08-31', { default_shift: 'night' }),
+    p('b', '2026-09-03', '2026-09-04', { default_shift: 'night' })]);
+  const merged = Merge.merge(source, ['a', 'b']);
+  assert.deepEqual(merged.daily['a/2026-08-31'], { day_work: '既存の昼作業' });
+  assert.deepEqual(merged.daily['a/2026-09-01'], { day: false, night: false });
+  assert.deepEqual(merged.daily['a/2026-09-02'], { day: false, night: false });
+  assert.equal(merged.projects[0].default_shift, 'night');
+});

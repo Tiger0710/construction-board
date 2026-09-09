@@ -30,6 +30,10 @@
   function signature(project) {
     return JSON.stringify(FIELDS.map(function (field) { return String(project[field] == null ? '' : project[field]).trim(); }));
   }
+  function defaultShift(project) { return project.default_shift === 'night' ? 'night' : 'day'; }
+  function implicitDaily(project) {
+    return { day: defaultShift(project) === 'day', night: defaultShift(project) === 'night' };
+  }
   function validDate(value) {
     if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
     var time = Date.parse(value + 'T00:00:00Z');
@@ -42,7 +46,7 @@
   function nextDate(ds) { return new Date(Date.parse(ds + 'T00:00:00Z') + 86400000).toISOString().slice(0, 10); }
   function order(a, b) { return a.start_date.localeCompare(b.start_date) || a.id.localeCompare(b.id); }
   function describe(p) {
-    var info = { id: p.id, start_date: p.start_date, end_date: p.end_date };
+    var info = { id: p.id, start_date: p.start_date, end_date: p.end_date, default_shift: defaultShift(p) };
     FIELDS.forEach(function (f) { info[f] = p[f] || ''; });
     return info;
   }
@@ -51,7 +55,7 @@
     (projects || []).forEach(function (p) { if (p) counts.set(p.id, (counts.get(p.id) || 0) + 1); });
     (projects || []).forEach(function (p) {
       if (!validProject(p) || counts.get(p.id) !== 1) return;
-      var key = signature(p);
+      var key = signature(p) + '|' + defaultShift(p);
       if (!buckets.has(key)) buckets.set(key, []);
       buckets.get(key).push(p);
     });
@@ -74,8 +78,7 @@
     });
     return results;
   }
-  function effective(value, implicit) {
-    if (implicit) return { day: true, night: false };
+  function effective(value) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('日別データの形式が不正です');
     // Match the UI/API: absent day means active; only literal true enables night.
     var result = clone(value);
@@ -89,6 +92,7 @@
   function metadata(p) {
     var result = clone(p);
     ['id', 'start_date', 'end_date'].concat(FIELDS).forEach(function (f) { delete result[f]; });
+    result.default_shift = defaultShift(p);
     return stable(result);
   }
   function preview(data, ids) {
@@ -103,6 +107,7 @@
     });
     selected.forEach(function (p) {
       if (signature(p) !== signature(selected[0])) throw new Error('客先・工事件名・担当者・協力会社が異なる工事は統合できません');
+      if (defaultShift(p) !== defaultShift(selected[0])) throw new Error('基本の昼夜設定が異なる工事は統合できません。未入力日の稼働を確認してください');
       if (metadata(p) !== metadata(selected[0])) throw new Error('工事の追加情報が異なります。統合前に内容を確認してください');
     });
     var project = clone(selected[0]);
@@ -116,7 +121,7 @@
       if (!validDate(date)) throw new Error('対象工事の日付キーが不正です: ' + key);
       dates.add(date);
     });
-    // Gaps must remain off instead of acquiring the merged project's implicit day shift.
+    // Gaps must remain off instead of acquiring the merged project's default shift.
     var sorted = selected.slice().sort(order), coveredEnd = sorted[0].end_date;
     sorted.slice(1).forEach(function (p) {
       if (Date.parse(p.start_date) - Date.parse(coveredEnd) > 86400000) {
@@ -130,12 +135,12 @@
       selected.forEach(function (p) {
         var key = p.id + '/' + date, explicit = own(data.daily, key);
         if (!explicit && !(p.start_date <= date && date <= p.end_date)) return;
-        var value = explicit ? clone(data.daily[key]) : { day: true, night: false };
+        var value = explicit ? clone(data.daily[key]) : implicitDaily(p);
         choices.push({ projectId: p.id, start_date: p.start_date, end_date: p.end_date,
           value: value, implicit: !explicit });
       });
       if (!choices.length) { daily[date] = { day: false, night: false }; return; }
-      var values = new Set(choices.map(function (choice) { return stable(effective(choice.value, choice.implicit)); }));
+      var values = new Set(choices.map(function (choice) { return stable(effective(choice.value)); }));
       if (values.size > 1) conflicts.push({ date: date, choices: choices });
       else {
         // Prefer an explicit record so empty-but-present metadata is retained.

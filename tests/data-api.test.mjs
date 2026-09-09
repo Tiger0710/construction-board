@@ -51,6 +51,72 @@ test("long duration expansion bounded to requested dates", () => {
   );
   assert.equal(out.length, 30);
 });
+test("project default shift uses day for legacy or day, night for night across months", () => {
+  for (const [defaultShift, expected] of [
+    [undefined, "昼"],
+    ["day", "昼"],
+    ["night", "夜"],
+  ]) {
+    const p = project("p", "2026-05-31", "2026-06-02");
+    if (defaultShift !== undefined) p.default_shift = defaultShift;
+    const data = { projects: [p], daily: {} };
+    validateData(data);
+    const items = expandToItems(data, "森", "2026-05-31", "2026-06-02");
+    assert.deepEqual(
+      items.map((item) => [item.date, item.work_time]),
+      [
+        ["2026-05-31", expected],
+        ["2026-06-01", expected],
+        ["2026-06-02", expected],
+      ],
+    );
+  }
+});
+test("explicit and partial daily records retain legacy interpretation despite night default", () => {
+  const p = {
+    ...project("p", "2026-06-01", "2026-06-07"),
+    default_shift: "night",
+  };
+  const daily = {
+    "p/2026-06-01": { day: true, night: false },
+    "p/2026-06-02": { day: false, night: true },
+    "p/2026-06-03": { day: false, night: false },
+    "p/2026-06-04": { day: true, night: true },
+    "p/2026-06-05": { day_work: "入力済み" },
+    "p/2026-06-06": {},
+    "p/2026-06-07": { night: true },
+  };
+  assert.deepEqual(
+    expandToItems(
+      { projects: [p], daily },
+      "森",
+      "2026-06-01",
+      "2026-06-07",
+    ).map((item) => [item.date, item.work_time]),
+    [
+      ["2026-06-01", "昼"],
+      ["2026-06-02", "夜"],
+      ["2026-06-04", "昼"],
+      ["2026-06-04", "夜"],
+      ["2026-06-05", "昼"],
+      ["2026-06-06", "昼"],
+      ["2026-06-07", "昼"],
+      ["2026-06-07", "夜"],
+    ],
+  );
+});
+test("default shift accepts only omitted day or night", () => {
+  for (const value of [null, "", "both", "夜", 0, false, {}, []]) {
+    assert.throws(
+      () =>
+        validateData({
+          projects: [{ ...project("p"), default_shift: value }],
+          daily: {},
+        }),
+      (error) => error.status === 400,
+    );
+  }
+});
 test("invalid dates, duplicate IDs and orphan daily are rejected", () => {
   for (const data of [
     { projects: [project("p", "2026-02-30")], daily: {} },
@@ -423,3 +489,67 @@ test("legacy monthly GET returns only original file and original SHA", async () 
     );
   });
 });
+
+test("night default persists through legacy and canonical API read and save scopes", async () => {
+  const data = {
+    projects: [
+      { ...project("p", "2026-05-31", "2026-06-02"), default_shift: "night" },
+    ],
+    daily: {},
+  };
+  for (const canonical of [false, true]) {
+    const path = canonical ? "_projects_森.json" : "_2605_森.json";
+    await withGit(
+      { [path]: { sha: "night-source", data } },
+      {},
+      async ({ calls }) => {
+        const all = JSON.parse((await getAll()).body);
+        assert.equal(all.projects[0].default_shift, "night");
+        const month = JSON.parse(
+          (
+            await handler({
+              httpMethod: "GET",
+              queryStringParameters: { month: "2605", user: "森" },
+            })
+          ).body,
+        );
+        assert.equal(month.projects[0].default_shift, "night");
+        assert.equal((await put(all._revision, all)).statusCode, 200);
+        const saved = JSON.parse(
+          calls.find(
+            (call) => call.path === "git/blobs" && call.method === "POST",
+          ).body.content,
+        );
+        assert.equal(saved.projects[0].default_shift, "night");
+        assert.deepEqual(
+          expandToItems(saved, "森", "2026-05-31", "2026-06-02").map(
+            (item) => item.work_time,
+          ),
+          ["夜", "夜", "夜"],
+        );
+      },
+    );
+  }
+});
+
+test("legacy PUT preserves project night default", async () =>
+  withGit(oldFile(), {}, async ({ calls }) => {
+    const data = {
+      projects: [{ ...project("p"), default_shift: "night" }],
+      daily: {},
+    };
+    const res = await put(undefined, data, {
+      month: "2605",
+      scope: undefined,
+      sha: "may",
+    });
+    assert.equal(res.statusCode, 200);
+    assert.equal(
+      JSON.parse(
+        calls.find(
+          (call) => call.path === "git/blobs" && call.method === "POST",
+        ).body.content,
+      ).projects[0].default_shift,
+      "night",
+    );
+  }));
