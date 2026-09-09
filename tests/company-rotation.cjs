@@ -30,12 +30,12 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
       if (url.hostname !== 'board.test') return route.abort();
       if (url.pathname.startsWith('/.netlify/functions/')) {
         assert.equal(route.request().method(), 'GET', 'No writes during tests');
-        return route.fulfill({ json: url.searchParams.has('signage') ? data : { members: [], projects: [], daily: {} } });
+        return route.fulfill({ json: url.searchParams.has('signage') ? data : { members: [], projects: [], daily: {}, _revision: 'test' } });
       }
       const filename = path.join(root, 'static', url.pathname === '/' ? 'index.html' : url.pathname);
       const ext = path.extname(filename);
       return route.fulfill({ body: fs.readFileSync(filename), contentType:
-        ext === '.html' ? 'text/html; charset=utf-8' : ext === '.css' ? 'text/css' : 'application/json' });
+        ext === '.html' ? 'text/html; charset=utf-8' : ext === '.css' ? 'text/css' : ext === '.js' ? 'application/javascript' : 'application/json' });
     });
     await page.goto('http://board.test/');
     await page.waitForFunction(() => dateGroups.length === 6);
