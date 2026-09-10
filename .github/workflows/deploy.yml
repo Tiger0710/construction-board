@@ -26,6 +26,6 @@ jobs:
         run: python ci_pipeline.py
 
       - name: Deploy to Netlify
-        run: npx netlify-cli deploy --prod --dir deploy --functions netlify/functions --site ${{ secrets.NETLIFY_SITE_ID }}
+        run: npx netlify-cli deploy --prod --no-build --skip-functions-cache --dir deploy --functions netlify/functions --site ${{ secrets.NETLIFY_SITE_ID }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}

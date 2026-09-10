@@ -480,25 +480,12 @@
       <div class="toolbar-actions">
         <button class="save-btn" id="save-btn" disabled onclick="saveData()">保存</button>
         <span class="save-status" id="save-status"></span>
-        <button class="add-proj-btn" id="merge-btn" onclick="openMerge()" disabled>案件をまとめる</button>
         <button class="add-proj-btn" id="add-btn" onclick="openModal()" disabled>+ 案件追加</button>
       </div>
     </div>
   </header>
 
   <main class="main" id="main"></main>
-
-  <div class="modal-overlay hidden" id="merge-modal">
-    <div class="modal" style="width:760px;max-width:95vw">
-      <h2>月別に分かれた案件をまとめる</h2>
-      <div class="modal-body" id="merge-body"></div>
-      <div class="modal-actions">
-        <button class="btn-primary" id="merge-confirm" onclick="confirmMerge()" disabled>1つの案件にまとめる</button>
-        <button class="btn-cancel" onclick="closeMerge()">閉じる</button>
-        <div class="modal-message" id="merge-message" aria-live="polite"></div>
-      </div>
-    </div>
-  </div>
 
   <!-- 案件モーダル -->
   <div class="modal-overlay hidden" id="modal" onclick="if(event.target===this)closeModal()">
@@ -622,7 +609,6 @@
     </div>
   </div>
 
-  <script src="project-merge.js"></script>
   <script>
     // ===== 定数 =====
     var API = "/.netlify/functions/data";
@@ -861,7 +847,7 @@
       var user = state.user;
       state.loading = true;
       state.ready = false;
-      closeModal(); closeDayEditor(); closeMerge();
+      closeModal(); closeDayEditor();
       updateDirtyUI();
       document.getElementById("main").innerHTML = '<div class="loading">読み込み中...</div>';
       try {
@@ -952,7 +938,6 @@
       var btn = document.getElementById("save-btn");
       btn.disabled = !state.dirty || !state.ready || state.saving;
       document.getElementById("add-btn").disabled = !state.ready || state.saving;
-      document.getElementById("merge-btn").disabled = !state.ready || state.saving;
     }
 
     function showStatus(msg, type) {
@@ -1331,102 +1316,7 @@
       markDirty();
     }
 
-    // ===== 隣月案件クリック =====
-    var mergeState = { groups: [], preview: null, version: 0 };
-
-    function openMerge() {
-      if (!state.ready || state.saving) return;
-      mergeState.version = state.editVersion;
-      var y = 2000 + Number(state.month.slice(0, 2)), m = Number(state.month.slice(2));
-      var first = dateStr(y, m, 1), last = dateStr(y, m, new Date(y, m, 0).getDate());
-      mergeState.groups = ProjectMerge.findCandidates(state.data.projects).filter(function(g) {
-        return g.start_date <= last && g.end_date >= first;
-      });
-      document.getElementById("merge-message").textContent = "";
-      document.getElementById("merge-confirm").disabled = true;
-      mergeState.preview = null;
-      var body = document.getElementById("merge-body");
-      if (!mergeState.groups.length) {
-        body.innerHTML = '<p>この月には、内容が一致して期間がつながる案件の候補はありません。</p>';
-      } else {
-        body.innerHTML = '<p>同じ工事の継続分であることを確認してください。別の工事はまとめずに残します。</p>' +
-          '<label for="merge-group">案件の候補</label><select id="merge-group" style="width:100%" onchange="selectMergeGroup()">' +
-          mergeState.groups.map(function(g, i) { return '<option value="' + i + '">' + esc(g.projects[0].client) + ' / ' + esc(g.title) + '（' + esc(g.start_date) + ' ～ ' + esc(g.end_date) + '）</option>'; }).join('') +
-          '</select><div id="merge-projects"></div><div id="merge-details"></div>';
-        selectMergeGroup();
-      }
-      document.getElementById("merge-modal").classList.remove("hidden");
-    }
-
-    function selectMergeGroup() {
-      var group = mergeState.groups[Number(document.getElementById("merge-group").value)];
-      document.getElementById("merge-projects").innerHTML = '<p>まとめる期間を選択</p>' + group.projects.map(function(p) {
-        return '<label style="display:block;margin:8px 0"><input type="checkbox" class="merge-project" checked value="' + esc(p.id) + '" onchange="previewMerge()"> ' + esc(p.start_date) + ' ～ ' + esc(p.end_date) + '</label>';
-      }).join('');
-      previewMerge();
-    }
-
-    function describeDaily(value) {
-      var names = { day: "昼稼働", night: "夜稼働", day_work: "昼・作業", night_work: "夜・作業",
-        day_priority: "昼・重点", night_priority: "夜・重点", day_priority_detail: "昼・重点内容", night_priority_detail: "夜・重点内容",
-        day_our_person: "昼・現場担当", night_our_person: "夜・現場担当", day_safety_person: "昼・安品", night_safety_person: "夜・安品",
-        day_partner_person: "昼・協力担当", night_partner_person: "夜・協力担当" };
-      return Object.keys(value).filter(function(k) { return k !== "_weekend_auto" && value[k] !== "" && value[k] != null; }).map(function(k) {
-        return esc(names[k] || k) + ': ' + esc(typeof value[k] === "boolean" ? (value[k] ? "あり" : "なし") : value[k]);
-      }).join(' / ');
-    }
-
-    function previewMerge() {
-      var ids = Array.from(document.querySelectorAll('.merge-project:checked')).map(function(el) { return el.value; });
-      var details = document.getElementById("merge-details");
-      document.getElementById("merge-confirm").disabled = true;
-      mergeState.preview = null;
-      try {
-        var preview = ProjectMerge.preview(state.data, ids);
-        mergeState.preview = preview;
-        details.innerHTML = '<p>統合後の期間: <strong>' + esc(preview.project.start_date) + ' ～ ' + esc(preview.project.end_date) + '</strong></p>' +
-          (preview.conflicts.length ? '<p>同じ日に異なる入力があります。残す日別入力を選んでください。保存前なら再読み込みで戻せます。</p>' : '<p>日別入力の競合はありません。各期間の入力を引き継ぎます。</p>') +
-          preview.conflicts.map(function(c, i) {
-            return '<fieldset style="margin:12px 0;padding:10px"><legend>' + esc(c.date) + '</legend>' + c.choices.map(function(choice, j) {
-              return '<label style="display:block;margin:10px 0"><input type="radio" name="merge-choice-' + i + '" value="' + esc(choice.projectId) + '" onchange="updateMergeReady()"> ' + esc(choice.start_date) + ' ～ ' + esc(choice.end_date) + (choice.implicit ? '（その日は未入力）' : '') + '<br><span style="font-size:12px">' + describeDaily(choice.value) + '</span></label>';
-            }).join('') + '</fieldset>';
-          }).join('');
-        updateMergeReady();
-      } catch (e) {
-        details.textContent = ids.length < 2 ? "2つ以上の期間を選んでください" : "この組み合わせは統合できません: " + e.message;
-      }
-    }
-
-    function updateMergeReady() {
-      document.getElementById("merge-message").textContent = "";
-      var p = mergeState.preview;
-      document.getElementById("merge-confirm").disabled = !p || p.conflicts.some(function(c, i) {
-        return !document.querySelector('input[name="merge-choice-' + i + '"]:checked');
-      });
-    }
-
-    function confirmMerge() {
-      if (!state.ready || state.saving || !mergeState.preview) return;
-      if (state.editVersion !== mergeState.version) { openMerge(); return; }
-      var resolutions = {};
-      mergeState.preview.conflicts.forEach(function(c, i) {
-        var selected = document.querySelector('input[name="merge-choice-' + i + '"]:checked');
-        if (selected) resolutions[c.date] = selected.value;
-      });
-      try {
-        var merged = ProjectMerge.merge(state.data, mergeState.preview.ids, resolutions);
-        if (!confirm("選んだ期間を1つの工事としてまとめます。よろしいですか？\n反映するには、この後ヘッダーの「保存」を押してください。")) return;
-        state.data = merged;
-        markDirty(); closeMerge(); renderGantt();
-        showStatus("案件をまとめました。保存すると反映されます", "");
-      } catch (e) { document.getElementById("merge-message").textContent = e.message; }
-    }
-
-    function closeMerge() {
-      document.getElementById("merge-modal").classList.add("hidden");
-      mergeState.preview = null;
-    }
-
+    // ===== 案件編集 =====
     function openModal(id) {
       if (!state.ready || state.saving) return;
       state.editingId = id || null;

@@ -58,96 +58,63 @@ const fixture = () => ({ projects: [
     await page.goto('http://board.test/input.html#%E6%A3%AE/2609');
     await page.waitForFunction(() => state.ready && !state.loading);
 
-    await page.locator('#merge-btn').click();
-    check('candidate modal lists two related groups', await page.locator('#merge-group option').count(), 2);
-    check('opening candidates never mutates or saves', await page.evaluate(() => [state.data.projects.length, state.dirty]), [5, false]);
-    await page.locator('.merge-project[value="b"]').uncheck();
-    check('one selected record cannot be merged', await page.locator('#merge-confirm').isDisabled(), true);
-    await page.locator('.merge-project[value="b"]').check();
-    check('nonconflicting periods enable explicit confirmation', await page.locator('#merge-confirm').isEnabled(), true);
-    const original = await page.evaluate(() => JSON.stringify(state.data));
-    page.once('dialog', dialog => dialog.dismiss());
-    await page.locator('#merge-confirm').click();
-    check('cancel confirmation preserves complete data', await page.evaluate(() => JSON.stringify(state.data)), original);
-    check('confirmation cancellation keeps preview open', await page.locator('#merge-modal').isVisible(), true);
-
-    await page.locator('#merge-group').selectOption('1');
-    check('changing candidate resets preview and requires conflict choice', await page.evaluate(() => [mergeState.preview.primaryId,
-      mergeState.preview.conflicts.length, document.getElementById('merge-confirm').disabled]), ['off', 1, true]);
-    check('conflict explains implicit default and explicit off', await page.locator('#merge-details').innerText().then(t =>
-      [t.includes('2026-09-01'), t.includes('その日は未入力'), t.includes('昼稼働: なし'), t.includes('昼稼働: あり')]), [true, true, true, true]);
-    await page.evaluate(() => confirmMerge());
-    check('direct confirm without radio is safely rejected', await page.evaluate(() => [state.data.projects.length,
-      document.getElementById('merge-message').textContent.includes('選択')]), [5, true]);
-    await page.locator('input[name="merge-choice-0"][value="off"]').check();
-    check('conflict choice enables confirmation', await page.locator('#merge-confirm').isEnabled(), true);
-    const qa = path.join(root, '.netlify', 'qa');
-    fs.mkdirSync(qa, { recursive: true });
-    await page.screenshot({ path: path.join(qa, 'merge.png') });
-    await page.setViewportSize({ width: 390, height: 844 });
-    check('small viewport keeps merge controls within screen', await page.locator('#merge-modal .modal').evaluate(el => {
-      const r = el.getBoundingClientRect();
-      return r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight;
-    }), true);
-    await page.locator('#merge-confirm').scrollIntoViewIfNeeded();
-    check('small viewport confirm is reachable', await page.locator('#merge-confirm').isVisible(), true);
-    await page.screenshot({ path: path.join(qa, 'merge-mobile.png') });
-    page.once('dialog', dialog => dialog.accept());
-    await page.locator('#merge-confirm').click();
-    check('selected explicit off wins without changing unrelated daily records', await page.evaluate(() => [state.data.projects.length,
-      state.data.daily['off/2026-09-01'], state.data.daily['other/2026-09-03'], state.dirty]),
-    [4, { day: false, night: false }, fixture().daily['other/2026-09-03'], true]);
-    check('local merge does not automatically write', writes.length, 0);
-
-    const readCount = reads.length;
-    await page.evaluate(() => changeMonth(1));
-    check('month navigation retains unsaved merged project with no reload', await page.evaluate(() => [state.month, state.dirty,
-      state.data.projects.some(p => p.id === 'on'), state.data.daily['off/2026-09-01'].day]), ['2610', true, false, false]);
-    check('month navigation does not read replacement data', reads.length, readCount);
-    await page.evaluate(() => changeMonth(-1));
-    await page.evaluate(() => saveData());
-    check('explicit save uses all-month scope and expected revision', writes.map(w => [w.scope, w.revision, w.data.projects.length]), [['all', 'merge-r1', 4]]);
-    await page.evaluate(() => loadData(state.month));
-    check('off selection survives save/reload', await page.evaluate(() => [state.data.projects.length, state.data.daily['off/2026-09-01'].day, state.dirty]), [4, false, false]);
-
-    await page.setViewportSize({ width: 1366, height: 900 });
-    await page.locator('#merge-btn').click();
-    page.once('dialog', dialog => dialog.accept());
-    await page.locator('#merge-confirm').click();
-    check('nonconflicting merge preserves month endpoints and all day/night details', await page.evaluate(() => {
-      const p = state.data.projects.find(p => p.id === 'a');
-      return [p.start_date, p.end_date, state.data.projects.some(p => p.id === 'b'),
-        state.data.daily['a/2026-08-31'], state.data.daily['a/2026-09-02']];
-    }), ['2026-08-30', '2026-09-03', false, fixture().daily['a/2026-08-31'], fixture().daily['b/2026-09-02']]);
+    check('routine input has no merge button or modal', await page.locator('#merge-btn, #merge-modal').count(), 0);
+    check('routine input has no merge script or callable merge UI', await page.evaluate(() => [
+      document.querySelectorAll('script[src="project-merge.js"]').length,
+      typeof ProjectMerge, typeof openMerge, typeof confirmMerge, typeof mergeState
+    ]), [0, 'undefined', 'undefined', 'undefined', 'undefined']);
+    check('loading does not automatically consolidate data', await page.evaluate(() => [state.data.projects.length, state.dirty]), [5, false]);
+    check('loading does not write', writes.length, 0);
 
     await page.evaluate(() => {
       openModal();
-      const vals = { 'm-client': '検証客先', 'm-title': '月またぎ連続工事', 'm-our': '森', 'm-safety': '神邊',
-        'm-partner': '協力会社', 'm-partner-person': '猪股', 'm-start': '2026-09-04', 'm-end': '2026-09-10' };
-      Object.entries(vals).forEach(([id, value]) => { document.getElementById(id).value = value; });
+      const source = state.data.projects.find(p => p.id === 'b');
+      const fields = { client: 'm-client', title: 'm-title', our_person: 'm-our', safety_person: 'm-safety',
+        partner: 'm-partner', partner_person: 'm-partner-person' };
+      Object.entries(fields).forEach(([key, id]) => { document.getElementById(id).value = source[key]; });
+      document.getElementById('m-start').value = '2026-09-04';
+      document.getElementById('m-end').value = '2026-10-10';
     });
     let duplicateMessage = '';
     page.once('dialog', dialog => { duplicateMessage = dialog.message(); return dialog.dismiss(); });
     await page.evaluate(() => saveProject());
-    check('related next-period registration warns and cancel opens existing project', await page.evaluate(() => [state.editingId,
-      document.getElementById('m-start').value, document.getElementById('m-end').value, state.data.projects.length]), ['a', '2026-08-30', '2026-09-03', 3]);
-    check('duplicate warning explains continued-project editing', duplicateMessage.includes('継続工事') && duplicateMessage.includes('既存案件を編集'), true);
-    await page.evaluate(() => closeModal());
-
-    backend = fixture(); revision = 'reset-r1';
-    await page.evaluate(() => { state.dirty = false; return loadData(state.month); });
-    await page.locator('#merge-btn').click();
-    await page.locator('#merge-group').selectOption('1');
-    await page.locator('input[name="merge-choice-0"][value="on"]').check();
-    page.once('dialog', dialog => dialog.accept());
-    await page.locator('#merge-confirm').click();
-    check('choosing implicit on is preserved explicitly after consolidation', await page.evaluate(() => state.data.daily['off/2026-09-01']), { day: true, night: false });
-
-    await page.locator('#merge-btn').click();
-    await page.evaluate(() => { state.data.daily['other/2026-09-04'] = { day: true, day_work: '新しい変更' }; markDirty(); });
-    await page.evaluate(() => confirmMerge());
-    check('stale preview refreshes instead of applying over newer edits', await page.evaluate(() => [state.data.projects.length,
-      state.data.daily['other/2026-09-04'].day_work, mergeState.version === state.editVersion]), [4, '新しい変更', true]);
+    check('continued registration warns and cancel opens existing project', await page.evaluate(() => [state.editingId,
+      document.getElementById('m-start').value, document.getElementById('m-end').value, state.data.projects.length]),
+      ['b', '2026-09-01', '2026-09-03', 5]);
+    check('duplicate warning is shown', duplicateMessage.length > 0, true);
+    await page.evaluate(() => {
+      document.getElementById('m-end').value = '2026-10-10';
+      document.getElementById('m-weekend-policy').value = 'work';
+      saveProject();
+      openDayEditor('b', '2026-10-01');
+      onDmField('night_work', 'October continuation');
+      closeDayEditor();
+    });
+    check('editing existing period preserves identity and entered shifts', await page.evaluate(() => [state.data.projects.length,
+      state.data.projects.find(p => p.id === 'b').end_date, state.data.daily['a/2026-08-31'], state.data.daily['b/2026-09-02'], state.dirty]),
+      [5, '2026-10-10', fixture().daily['a/2026-08-31'], fixture().daily['b/2026-09-02'], true]);
+    const readCount = reads.length;
+    await page.evaluate(() => changeMonth(1));
+    check('month navigation retains unsaved period and daily input', await page.evaluate(() => [state.month, state.dirty,
+      state.data.projects.find(p => p.id === 'b').end_date, state.data.daily['b/2026-10-01'].night_work]),
+      ['2610', true, '2026-10-10', 'October continuation']);
+    check('month navigation does not reload unsaved input', reads.length, readCount);
+    check('same project stays editable in following month', await page.evaluate(() => {
+      openModal('b'); return [state.editingId, document.getElementById('m-end').value];
+    }), ['b', '2026-10-10']);
+    await page.evaluate(() => { closeModal(); return saveData(); });
+    check('explicit save uses all-month scope and revision', writes.map(w => [w.scope, w.revision, w.data.projects.length]), [['all', 'merge-r1', 5]]);
+    await page.evaluate(() => loadData(state.month));
+    check('save and reload preserve following-month details', await page.evaluate(() => [state.data.projects.length,
+      state.data.projects.find(p => p.id === 'b').end_date, state.data.daily['b/2026-10-01'].night_work, state.dirty]),
+      [5, '2026-10-10', 'October continuation', false]);
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.evaluate(() => openModal('b'));
+    check('small viewport keeps normal edit modal in bounds', await page.locator('#modal .modal').evaluate(el => {
+      const r = el.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth;
+    }), true);
+    check('default shift and weekend inputs remain available', await page.evaluate(() => [
+      document.getElementById('m-default-shift').value, document.getElementById('m-weekend-policy').value]), ['day', 'work']);
     check('no browser runtime errors', errors, []);
     console.log(`${count} PASS, 0 FAIL`);
   } finally { await browser.close(); }
