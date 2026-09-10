@@ -1146,13 +1146,15 @@
     },
     {
       "client": "KINSI",
-      "title": "ユアエルム八千代KDDI　EOSL",
+      "title": "ユアエルム八千代台KDDI　EOSL",
       "our_person": "楊",
       "safety_person": "保科",
       "partner": "スリーライズ",
       "partner_person": "宮澤",
       "start_date": "2026-09-07",
       "end_date": "2026-09-30",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "t2kpwni3"
     },
     {
