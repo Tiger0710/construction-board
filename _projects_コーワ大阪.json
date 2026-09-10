@@ -2799,8 +2799,8 @@
     "qvrxzdqn/2026-09-25": {
       "day": true,
       "day_work": "装置撤去取付、配線、整理、端末処理",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_priority": "有",
+      "day_priority_detail": "装置取替",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
