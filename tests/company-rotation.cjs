@@ -47,7 +47,7 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
       g.items.every(i => companyOfMember(i.user).id === g.company.id) && g.totalPages === 2)), true);
     // More than 10 pages: the 5-minute refresh must not send the display back to HSJ.
     await page.clock.runFor(10 * 30000 + 1000);
-    check('automatic rotation passes refresh and reaches Koyo', await page.locator('#header-company').textContent(), '光洋');
+    check('automatic rotation passes refresh and reaches Koyo', await page.locator('#header-company').textContent(), '光洋エンジニアリング');
     check('global totals retained', await page.locator('#total-count').textContent(), '72');
     check('new members route to Koyo; HSJ Mori unchanged', await page.evaluate(() =>
       ['森', '神邊', '猪股', '日向野', '森_吉村'].map(m => companyOfMember(m).id)), ['koyo', 'koyo', 'koyo', 'koyo', 'hsj']);

@@ -277,7 +277,7 @@
 
     // ===== ヘッダー日付表示更新 =====
     function updateHeaderForGroup(group) {
-      document.getElementById("header-company").textContent = group.company.short;
+      document.getElementById("header-company").textContent = group.company.name;
       var todayEl = document.getElementById("header-today");
       if (!todayEl) return;
       var labelClass = group.label === "明日" ? "header-today-label label-tomorrow" : "header-today-label";
