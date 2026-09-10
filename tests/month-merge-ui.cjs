@@ -68,6 +68,25 @@ const fixture = () => ({ projects: [
 
     await page.evaluate(() => {
       openModal();
+      const source = state.data.projects.find(p => p.id === 'other');
+      const fields = { client: 'm-client', title: 'm-title', our_person: 'm-our', safety_person: 'm-safety',
+        partner: 'm-partner', partner_person: 'm-partner-person' };
+      Object.entries(fields).forEach(([key, id]) => { document.getElementById(id).value = source[key]; });
+      document.getElementById('m-start').value = '2026-08-30';
+      document.getElementById('m-end').value = '2026-08-31';
+    });
+    let precedingWarning = '';
+    const dismissPreceding = dialog => { precedingWarning = dialog.message(); return dialog.dismiss(); };
+    page.on('dialog', dismissPreceding);
+    await page.evaluate(() => saveProject());
+    page.off('dialog', dismissPreceding);
+    check('preceding adjacent period warns and cancel opens existing next-month project', await page.evaluate(() => [
+      state.editingId, state.data.projects.length, document.getElementById('m-start').value]), ['other', 5, '2026-09-01']);
+    check('preceding-period warning is shown', precedingWarning.length > 0, true);
+    await page.evaluate(() => closeModal());
+
+    await page.evaluate(() => {
+      openModal();
       const source = state.data.projects.find(p => p.id === 'b');
       const fields = { client: 'm-client', title: 'm-title', our_person: 'm-our', safety_person: 'm-safety',
         partner: 'm-partner', partner_person: 'm-partner-person' };

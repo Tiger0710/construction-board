@@ -1419,7 +1419,7 @@
         var related = state.data.projects.find(function(p) {
           return ["client", "title", "our_person", "safety_person", "partner", "partner_person"].every(function(k) {
             return String(p[k] || "").trim() === String(projData[k] || "").trim();
-          }) && p.start_date <= endDate && getNextCalendarDate(p.end_date) >= startDate;
+          }) && p.start_date <= getNextCalendarDate(endDate) && getNextCalendarDate(p.end_date) >= startDate;
         });
         if (related && !confirm("同じ内容の案件（" + related.start_date + " ～ " + related.end_date + "）があります。\n継続工事の場合はキャンセルすると既存案件を編集できます。\n別の工事として追加しますか？")) {
           openModal(related.id); return;

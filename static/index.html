@@ -56,6 +56,7 @@
       <span class="footer-live-dot"></span>
       最終更新 <span id="update-time" class="footer-value">--:--:--</span>
     </div>
+    <span id="connection-status" role="status" aria-live="polite" hidden></span>
     <div class="footer-center" id="page-indicator"></div>
     <div class="footer-right">
       全社合計 <span id="total-count" class="footer-value">0</span> 件
@@ -81,6 +82,8 @@
     var groupCycleCount = 0;
     var pageRotateTimer = null;
     var pageTransitionTimer = null;
+    var lastBoardData = null;
+    var renderedDate = null;
 
     var WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -130,19 +133,28 @@
 
     // ===== データ取得 =====
     async function fetchData() {
+      var controller = new AbortController();
+      var timeout = setTimeout(function() { controller.abort(); }, 30000);
       try {
-        var res = await fetch(API_URL + "&_t=" + Date.now(), { cache: "no-store" });
+        var res = await fetch(API_URL + "&_t=" + Date.now(), { cache: "no-store", signal: controller.signal });
         if (!res.ok) throw new Error("HTTP " + res.status);
         var data = await res.json();
+        if (!data || !Array.isArray(data.items) || data.error) throw new Error("Invalid schedule response");
+        delete data._stale;
         try { localStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) {}
         return data;
       } catch (e) {
         console.error("Fetch error:", e);
+        if (lastBoardData && !lastBoardData.error && Array.isArray(lastBoardData.items)) {
+          return Object.assign({}, lastBoardData, { _stale: true });
+        }
         try {
-          var cached = localStorage.getItem(CACHE_KEY);
-          if (cached) return JSON.parse(cached);
+          var cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+          if (cached && !cached.error && Array.isArray(cached.items)) return Object.assign({}, cached, { _stale: true });
         } catch (e2) {}
         return { items: [], error: "データを取得できません" };
+      } finally {
+        clearTimeout(timeout);
       }
     }
 
@@ -154,6 +166,11 @@
         var mm = String(now.getMinutes()).padStart(2, "0");
         var ss = String(now.getSeconds()).padStart(2, "0");
         document.getElementById("clock").textContent = hh + ":" + mm + ":" + ss;
+        // 日付は通信の成功・5分周期を待たず、取得済み予定から切り替える。
+        if (lastBoardData && renderedDate !== getLiveToday()) {
+          stopAllTimers();
+          renderBoard(lastBoardData);
+        }
       }
       update();
       setInterval(update, 1000);
@@ -302,12 +319,19 @@
 
       var todayStr = getLiveToday();
       var tomorrowStr = getLiveTomorrow();
+      lastBoardData = data;
+      renderedDate = todayStr;
+      var connectionStatus = document.getElementById("connection-status");
+      connectionStatus.hidden = !data._stale;
+      connectionStatus.textContent = data._stale ? "通信エラー：前回取得した予定を表示中" : "";
+      document.querySelector(".board-footer").classList.toggle("is-stale", !!data._stale);
       updateSummary(data, todayStr, tomorrowStr);
 
       if (data.error) {
         dateGroups = [];
         currentGroupIdx = currentPage = 0;
         document.getElementById("header-company").textContent = "";
+        document.getElementById("header-today").textContent = "";
         body.innerHTML =
           '<div class="board-message">' +
             '<div class="board-message-icon">&#9888;</div>' +
@@ -324,6 +348,7 @@
         dateGroups = [];
         currentGroupIdx = currentPage = 0;
         document.getElementById("header-company").textContent = "";
+        document.getElementById("header-today").textContent = "";
         body.innerHTML =
           '<div class="board-message">' +
             '<div class="board-message-icon">&#128736;</div>' +

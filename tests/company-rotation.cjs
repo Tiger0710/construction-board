@@ -25,11 +25,13 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
     const items = ['手島', 'コーワ東京', '森'].flatMap(user =>
       [today, tomorrow].flatMap(date => Array.from({ length: 12 }, (_, n) => item(user, date, n))));
     const data = { items, updated_at: '2026-09-09T03:00:00Z' };
+    let dataUnavailable = false;
     await page.route('**/*', async route => {
       const url = new URL(route.request().url());
       if (url.hostname !== 'board.test') return route.abort();
       if (url.pathname.startsWith('/.netlify/functions/')) {
         assert.equal(route.request().method(), 'GET', 'No writes during tests');
+        if (url.searchParams.has('signage') && dataUnavailable) return route.fulfill({ status: 503, json: { error: 'unavailable' } });
         return route.fulfill({ json: url.searchParams.has('signage') ? data : { members: [], projects: [], daily: {}, _revision: 'test' } });
       }
       const filename = path.join(root, 'static', url.pathname === '/' ? 'index.html' : url.pathname);
@@ -62,7 +64,7 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
     }, data), ['koyo', 1]);
     await page.evaluate(data => { renderBoard(data); stopAllTimers(); }, data);
     fs.mkdirSync(path.join(root, '.netlify/qa'), { recursive: true });
-    for (const width of [1920, 1366]) {
+    for (const width of [1920, 1366, 1024]) {
       await page.setViewportSize({ width, height: width === 1920 ? 1080 : 768 });
       await page.evaluate(() => { stopAllTimers(); currentPage = 0; renderCurrentGroupPage(); });
       check('header and rows fit ' + width, await page.evaluate(() => {
@@ -75,6 +77,48 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
       }), true);
       await page.screenshot({ path: path.join(root, '.netlify/qa/company-' + width + '.png'), animations: 'disabled' });
     }
+    await page.clock.setSystemTime(new Date('2026-09-09T23:59:59+09:00'));
+    await page.clock.runFor(2000);
+    check('midnight updates dates without waiting for refresh', await page.evaluate(() => ({
+      date: dateGroups[currentGroupIdx].date, label: dateGroups[currentGroupIdx].label,
+      header: document.getElementById('header-today').textContent,
+      todayCount: document.getElementById('summary-today').textContent,
+      tomorrowCount: document.getElementById('summary-tomorrow').textContent
+    })), { date: tomorrow, label: '本日', header: '本日9/10 木曜日', todayCount: '36', tomorrowCount: '0' });
+    dataUnavailable = true;
+    await page.evaluate(() => forceReload());
+    check('outage retains cached schedules with visible warning', await page.evaluate(() => ({
+      rows: document.querySelectorAll('.board-row').length > 0,
+      warning: document.getElementById('connection-status').textContent,
+      visible: !document.getElementById('connection-status').hidden
+    })), { rows: true, warning: '通信エラー：前回取得した予定を表示中', visible: true });
+    check('offline footer fits 1024 without covering schedules', await page.evaluate(() => {
+      const elements = [...document.querySelector('.board-footer').children].filter(e => !e.hidden);
+      const rects = elements.map(e => e.getBoundingClientRect());
+      return rects.every((r, i) => r.left >= 0 && r.right <= innerWidth &&
+        (i === 0 || rects[i - 1].right <= r.left));
+    }), true);
+    await page.reload();
+    await page.waitForFunction(() => !document.getElementById('connection-status').hidden);
+    check('offline reload uses persisted cache', await page.locator('.board-row').count() > 0, true);
+    dataUnavailable = false;
+    await page.evaluate(() => forceReload());
+    check('recovery clears cached warning', await page.locator('#connection-status').isHidden(), true);
+    await page.evaluate(() => {
+      window.savedFetch = window.fetch;
+      window.fetch = function(url, options) {
+        return new Promise((resolve, reject) => options.signal.addEventListener('abort',
+          () => reject(new DOMException('Timed out', 'AbortError')), { once: true }));
+      };
+      window.pendingTimeoutCheck = fetchData().then(data => renderBoard(data));
+    });
+    await page.clock.runFor(30001);
+    await page.evaluate(() => { window.fetch = window.savedFetch; return window.pendingTimeoutCheck; });
+    check('timeout retains schedules and reports stale data', await page.evaluate(() =>
+      !document.getElementById('connection-status').hidden && document.querySelectorAll('.board-row').length > 0), true);
+    await page.evaluate(() => forceReload());
+    check('recovery after timeout clears warning', await page.locator('#connection-status').isHidden(), true);
+
     check('empty state clears groups', await page.evaluate(() => { renderBoard({ items: [] }); return dateGroups.length; }), 0);
     await page.goto('http://board.test/input.html');
     await page.waitForFunction(() => typeof KNOWN_MEMBERS !== 'undefined' && KNOWN_MEMBERS.includes('神邊'));
