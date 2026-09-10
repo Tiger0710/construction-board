@@ -1,0 +1,22 @@
+{
+  "projects": [
+    {
+      "id": "month-smoke",
+      "client": "動作検証",
+      "title": "月またぎ保存検証",
+      "our_person": "検証",
+      "start_date": "2098-12-30",
+      "end_date": "2099-01-03",
+      "default_shift": "night",
+      "weekend_policy": "work"
+    }
+  ],
+  "daily": {
+    "month-smoke/2098-12-31": {
+      "day": true,
+      "night": true,
+      "day_work": "年末作業",
+      "night_work": "夜確認"
+    }
+  }
+}
