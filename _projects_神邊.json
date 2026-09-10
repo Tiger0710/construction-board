@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "client": "テスト",
+      "title": "テスト",
+      "our_person": "神邊",
+      "safety_person": "清水",
+      "partner": "テスト",
+      "partner_person": "",
+      "start_date": "2026-10-01",
+      "end_date": "2026-10-02",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "f4uxd3id"
+    }
+  ],
+  "daily": {}
+}
