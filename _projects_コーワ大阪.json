@@ -24,13 +24,15 @@
     },
     {
       "client": "コムシスモバイル",
-      "title": "MS京都新田33-09A6他6",
+      "title": "MS京都新田33-09A6他7",
       "our_person": "名加",
       "safety_person": "二ノ宮",
       "partner": "高橋",
       "partner_person": "",
       "start_date": "2026-09-02",
       "end_date": "2026-09-04",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "84uq2rie"
     },
     {
@@ -101,13 +103,15 @@
     },
     {
       "client": "コムシスモバイル",
-      "title": "MS日本橋北館54-0B08他2",
+      "title": "MS日本橋北館54-0B08他3",
       "our_person": "山本",
       "safety_person": "西村",
       "partner": "直営",
       "partner_person": "",
       "start_date": "2026-09-15",
       "end_date": "2026-09-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "u17nnq1a"
     },
     {
