@@ -31,6 +31,7 @@
     return JSON.stringify(FIELDS.map(function (field) { return String(project[field] == null ? '' : project[field]).trim(); }));
   }
   function defaultShift(project) { return project.default_shift === 'night' ? 'night' : 'day'; }
+  function weekendPolicy(project) { return project.weekend_policy === 'work' ? 'work' : 'off'; }
   function implicitDaily(project) {
     return { day: defaultShift(project) === 'day', night: defaultShift(project) === 'night' };
   }
@@ -46,7 +47,8 @@
   function nextDate(ds) { return new Date(Date.parse(ds + 'T00:00:00Z') + 86400000).toISOString().slice(0, 10); }
   function order(a, b) { return a.start_date.localeCompare(b.start_date) || a.id.localeCompare(b.id); }
   function describe(p) {
-    var info = { id: p.id, start_date: p.start_date, end_date: p.end_date, default_shift: defaultShift(p) };
+    var info = { id: p.id, start_date: p.start_date, end_date: p.end_date,
+      default_shift: defaultShift(p), weekend_policy: weekendPolicy(p) };
     FIELDS.forEach(function (f) { info[f] = p[f] || ''; });
     return info;
   }
@@ -55,7 +57,7 @@
     (projects || []).forEach(function (p) { if (p) counts.set(p.id, (counts.get(p.id) || 0) + 1); });
     (projects || []).forEach(function (p) {
       if (!validProject(p) || counts.get(p.id) !== 1) return;
-      var key = signature(p) + '|' + defaultShift(p);
+      var key = signature(p) + '|' + defaultShift(p) + '|' + weekendPolicy(p);
       if (!buckets.has(key)) buckets.set(key, []);
       buckets.get(key).push(p);
     });
@@ -82,6 +84,7 @@
     if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('日別データの形式が不正です');
     // Match the UI/API: absent day means active; only literal true enables night.
     var result = clone(value);
+    delete result._weekend_auto;
     result.day = value.day !== false;
     result.night = value.night === true;
     TEXT_FIELDS.forEach(function (field) {
@@ -93,6 +96,7 @@
     var result = clone(p);
     ['id', 'start_date', 'end_date'].concat(FIELDS).forEach(function (f) { delete result[f]; });
     result.default_shift = defaultShift(p);
+    result.weekend_policy = weekendPolicy(p);
     return stable(result);
   }
   function preview(data, ids) {
@@ -108,6 +112,7 @@
     selected.forEach(function (p) {
       if (signature(p) !== signature(selected[0])) throw new Error('客先・工事件名・担当者・協力会社が異なる工事は統合できません');
       if (defaultShift(p) !== defaultShift(selected[0])) throw new Error('基本の昼夜設定が異なる工事は統合できません。未入力日の稼働を確認してください');
+      if (weekendPolicy(p) !== weekendPolicy(selected[0])) throw new Error('土日の稼働設定が異なる工事は統合できません。設定を確認してください');
       if (metadata(p) !== metadata(selected[0])) throw new Error('工事の追加情報が異なります。統合前に内容を確認してください');
     });
     var project = clone(selected[0]);
@@ -150,6 +155,7 @@
         explicitChoices.forEach(function (c) { Object.keys(c.value).forEach(function (k) {
           if (!own(result, k)) result[k] = clone(c.value[k]);
         }); });
+        delete result._weekend_auto;
         daily[date] = result;
       }
     });
@@ -170,7 +176,13 @@
     Object.keys(result.daily).forEach(function (key) {
       if (selectedIds.has(key.slice(0, key.indexOf('/')))) delete result.daily[key];
     });
-    Object.keys(plan.daily).forEach(function (date) { result.daily[plan.primaryId + '/' + date] = clone(plan.daily[date]); });
+    Object.keys(plan.daily).forEach(function (date) {
+      var value = clone(plan.daily[date]);
+      // User-confirmed consolidation fixes selected days explicitly; a later
+      // weekend-policy change must not erase them as generated defaults.
+      delete value._weekend_auto;
+      result.daily[plan.primaryId + '/' + date] = value;
+    });
     return result;
   }
   return { findCandidates: findCandidates, preview: preview, merge: merge };

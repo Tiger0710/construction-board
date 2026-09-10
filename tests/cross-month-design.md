@@ -12,6 +12,8 @@
 
 ## 保存・互換性
 
+2026-09-10: 案件の「土日の扱い」で `weekend_policy:off/work` を選択。新規の既定はoff。保存時に未入力の土日へ休みを作る場合は `_weekend_auto:off` を付け、workへの変更時にその自動設定だけを除去する。日次エディタで触れた時点でマーカーを除去し、日別の明示設定を優先する。以前からあるマーカーなしの休みは自動/手入力の区別ができないため保持する。workでは未入力の土日も案件の昼夜デフォルトで稼働。期間延長にも同じ方針を適用する。統合した日次データはマーカーを除去して明示設定とし、異なる土日ポリシーの案件は混ぜない。
+
 - `GET ?scope=all&month=YYMM&user=NAME`: 担当者の全期間 `{projects,daily,_revision,_warnings}`。
 - 初回は `_YYMM_NAME.json` の全月を読み込む。初回保存で `_projects_NAME.json` に集約し、旧月別ファイルはバックアップとして残す。GETではファイルを作らない。
 - 同じIDの旧月別記録は期間を統合し、基本情報は後の月を採用。同日の日次差分は該当月のデータを優先して警告表示する。実在の旧データ検証ではこの衝突は0件。
@@ -41,10 +43,10 @@ node tests/default-shift.cjs
 git diff --check
 ```
 
-単体・統合45件、会社別表示14項目、月またぎ編集12項目、統合画面24項目、佐藤表示・昼夜デフォルト15項目、合計110項目PASS。ブラウザテストはPlaywright＋Chrome、モックAPIを使用。
+単体・統合52件、会社別表示14項目、月またぎ編集12項目、統合画面24項目、佐藤表示・昼夜・土日設定25項目、合計127項目PASS。ブラウザテストはPlaywright＋Chrome、モックAPIを使用。
 
 実データの形式検証: 担当別26ファイル・7担当の全月統合後・旧集約1ファイルがすべてPASS。元データは未変更。
 
-実際のGit書込と関数配信は、テストsiteのDraftと `DATA_BRANCH=test` を使い、専用の合成担当者で初回移行・翌月保存・再読込・古いrevisionと旧画面の拒否・夜デフォルトの保持など13項目PASS。作成した合成担当者ファイル2つは検証後に同じtestブランチから削除済み。本番反映前はDraftで利用者が操作確認する。
+実際のGit書込と関数配信は、テストsiteのDraftと `DATA_BRANCH=test` を使い、専用の合成担当者で初回移行・翌月保存・再読込・古いrevisionと旧画面の拒否・夜デフォルトの保持など14項目PASS。作成した合成担当者ファイル2つは検証後に同じtestブランチから削除済み。本番反映前はDraftで利用者が操作確認する。
 
-最新Draft: https://6aa143ebc5c96264d31aae3c--hsj-construction-board-test.netlify.app 。配信後の佐藤表示・昼夜選択・マニュアル・API正常応答・ブラウザ例外なしを確認。前Draftではサイネージ・入力（実データ116案件中、9月表示10行）・月移動も確認済み。`python ci_pipeline.py` で生成後に `netlify deploy --no-build --skip-functions-cache --dir deploy --functions netlify/functions --site <test-site-id>` で配信。`--no-build` と `--context` は併用不可。
+最新Draft: https://6aa2112f1ed3c75e6d6afa00--hsj-construction-board-test.netlify.app 。配信後の佐藤表示・昼夜選択・マニュアル・API正常応答・ブラウザ例外なしを確認。前Draftではサイネージ・入力（実データ116案件中、9月表示10行）・月移動も確認済み。`python ci_pipeline.py` で生成後に `netlify deploy --no-build --skip-functions-cache --dir deploy --functions netlify/functions --site <test-site-id>` で配信。`--no-build` と `--context` は併用不可。

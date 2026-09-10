@@ -528,11 +528,15 @@
         <div class="form-group">
           <label for="m-default-shift">基本の作業時間</label>
           <select id="m-default-shift"><option value="day">昼</option><option value="night">夜</option></select>
-          <p style="font-size:12px;color:#666;margin-top:6px">未入力の日に適用します。日ごとに設定した昼夜・休みは変更されません。土日は自動で休みになります。</p>
+          <p style="font-size:12px;color:#666;margin-top:6px">未入力の日に適用します。日ごとに設定した昼夜・休みは変更されません。</p>
+        </div>
+        <div class="form-group">
+          <label for="m-weekend-policy">土日の扱い</label>
+          <select id="m-weekend-policy"><option value="off">土日は休み</option><option value="work">土日も稼働</option></select>
+          <p style="font-size:12px;color:#666;margin-top:6px">「土日も稼働」は基本の作業時間を使います。この設定で自動作成した休みは切り替えられます。日別に入力済みの設定や、以前からある休みは保持します。</p>
         </div>
       </div>
       <div class="modal-actions">
-        <button class="btn-secondary hidden" id="modal-weekends-off" onclick="applyWeekendsOffFromModal()">土日を休みにする</button>
         <button class="btn-primary" onclick="saveProject()">保存</button>
         <button class="btn-danger hidden" id="modal-delete" onclick="deleteProject()">削除</button>
         <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
@@ -792,10 +796,11 @@
           night_our_person: "", night_safety_person: "", night_partner_person: ""
         };
       }
+      delete state.data.daily[key]._weekend_auto;
       return state.data.daily[key];
     }
 
-    function applyWeekendsOff(projId, startDate, endDate) {
+    function applyWeekendPolicy(projId, startDate, endDate, policy) {
       var startParts = startDate.split("-");
       var endParts = endDate.split("-");
       var current = new Date(+startParts[0], +startParts[1]-1, +startParts[2]);
@@ -807,8 +812,14 @@
         if (dow === 0 || dow === 6) {
           var ds = dateStr(current.getFullYear(), current.getMonth()+1, current.getDate());
           var key = projId + "/" + ds;
-          if (!Object.prototype.hasOwnProperty.call(state.data.daily, key)) {
+          if (policy === "work") {
+            if (state.data.daily[key] && state.data.daily[key]._weekend_auto === "off") {
+              delete state.data.daily[key];
+              applied++;
+            }
+          } else if (!Object.prototype.hasOwnProperty.call(state.data.daily, key)) {
             state.data.daily[key] = {
+              _weekend_auto: "off",
               day: false, day_work: "", day_priority: "", day_priority_detail: "",
               day_our_person: "", day_safety_person: "", day_partner_person: "",
               night: false, night_work: "", night_priority: "", night_priority_detail: "",
@@ -1360,7 +1371,7 @@
         day_priority: "昼・重点", night_priority: "夜・重点", day_priority_detail: "昼・重点内容", night_priority_detail: "夜・重点内容",
         day_our_person: "昼・現場担当", night_our_person: "夜・現場担当", day_safety_person: "昼・安品", night_safety_person: "夜・安品",
         day_partner_person: "昼・協力担当", night_partner_person: "夜・協力担当" };
-      return Object.keys(value).filter(function(k) { return value[k] !== "" && value[k] != null; }).map(function(k) {
+      return Object.keys(value).filter(function(k) { return k !== "_weekend_auto" && value[k] !== "" && value[k] != null; }).map(function(k) {
         return esc(names[k] || k) + ': ' + esc(typeof value[k] === "boolean" ? (value[k] ? "あり" : "なし") : value[k]);
       }).join(' / ');
     }
@@ -1422,7 +1433,6 @@
       var modal = document.getElementById("modal");
       var title = document.getElementById("modal-title");
       var delBtn = document.getElementById("modal-delete");
-      var weekendsBtn = document.getElementById("modal-weekends-off");
       document.getElementById("modal-message").textContent = "";
 
       if (id) {
@@ -1430,7 +1440,6 @@
         if (!proj) return;
         title.textContent = "案件編集";
         delBtn.classList.remove("hidden");
-        weekendsBtn.classList.remove("hidden");
         document.getElementById("m-client").value = proj.client || "";
         document.getElementById("m-title").value = proj.title || "";
         document.getElementById("m-our").value = proj.our_person || "";
@@ -1440,10 +1449,10 @@
         document.getElementById("m-start").value = proj.start_date || "";
         document.getElementById("m-end").value = proj.end_date || "";
         document.getElementById("m-default-shift").value = proj.default_shift || "day";
+        document.getElementById("m-weekend-policy").value = proj.weekend_policy || "off";
       } else {
         title.textContent = "案件追加";
         delBtn.classList.add("hidden");
-        weekendsBtn.classList.add("hidden");
         var yy = parseInt(state.month.slice(0,2));
         var mm = parseInt(state.month.slice(2,4));
         var y = 2000 + yy;
@@ -1456,6 +1465,7 @@
         document.getElementById("m-start").value = y + "-" + String(mm).padStart(2,"0") + "-01";
         document.getElementById("m-end").value = y + "-" + String(mm).padStart(2,"0") + "-" + String(new Date(y,mm,0).getDate()).padStart(2,"0");
         document.getElementById("m-default-shift").value = "day";
+        document.getElementById("m-weekend-policy").value = "off";
       }
       applyUserFixedFields(!id);
       modal.classList.remove("hidden");
@@ -1490,24 +1500,6 @@
       state.editingId = null;
     }
 
-    function applyWeekendsOffFromModal() {
-      if (!state.editingId) return;
-      var startDate = document.getElementById("m-start").value;
-      var endDate = document.getElementById("m-end").value;
-      if (!startDate || !endDate) { alert("開始日と終了日は必須です"); return; }
-      if (!document.getElementById("m-start").checkValidity() || !document.getElementById("m-end").checkValidity()) { alert("日付は2000年から2099年の範囲で入力してください"); return; }
-      if (startDate > endDate) { alert("終了日は開始日以降にしてください"); return; }
-
-      var applied = applyWeekendsOff(state.editingId, startDate, endDate);
-      if (applied > 0) {
-        markDirty();
-        renderGantt();
-        document.getElementById("modal-message").textContent = "土日 " + applied + "日を休みにしました";
-      } else {
-        document.getElementById("modal-message").textContent = "休みにする土日はありません（すべて入力済み）";
-      }
-    }
-
     function saveProject() {
       if (!state.ready || state.saving) return;
       var client = document.getElementById("m-client").value.trim();
@@ -1526,7 +1518,8 @@
         partner: document.getElementById("m-partner").value.trim(),
         partner_person: document.getElementById("m-partner-person").value.trim(),
         start_date: startDate, end_date: endDate,
-        default_shift: document.getElementById("m-default-shift").value
+        default_shift: document.getElementById("m-default-shift").value,
+        weekend_policy: document.getElementById("m-weekend-policy").value
       };
 
       if (state.editingId) {
@@ -1544,7 +1537,7 @@
         projData.id = genId();
         state.data.projects.push(projData);
       }
-      applyWeekendsOff(projData.id, startDate, endDate);
+      applyWeekendPolicy(projData.id, startDate, endDate, projData.weekend_policy);
       markDirty(); closeModal(); renderGantt();
     }
 

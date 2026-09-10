@@ -14,6 +14,82 @@ const project = (id, start = "2026-05-29", end = "2026-09-02") => ({
   start_date: start,
   end_date: end,
 });
+test("weekend policy accepts only omitted off or work", () => {
+  for (const value of [undefined, "off", "work"]) {
+    const p = project("p");
+    if (value !== undefined) p.weekend_policy = value;
+    assert.doesNotThrow(() => validateData({ projects: [p], daily: {} }));
+  }
+  for (const value of [null, "", "day", "休み", 0, false, {}, []]) {
+    assert.throws(
+      () =>
+        validateData({
+          projects: [{ ...project("p"), weekend_policy: value }],
+          daily: {},
+        }),
+      (error) => error.status === 400,
+    );
+  }
+});
+
+test("weekend policy does not override explicit daily or synthesize absent days in API", () => {
+  for (const policy of ["off", "work"]) {
+    const p = {
+      ...project("p", "2026-06-06", "2026-06-07"),
+      weekend_policy: policy,
+    };
+    const daily = {
+      "p/2026-06-06": { day: false, night: true, night_work: "明示設定" },
+    };
+    assert.deepEqual(
+      expandToItems(
+        { projects: [p], daily },
+        "森",
+        "2026-06-06",
+        "2026-06-07",
+      ).map((item) => [item.date, item.work_time]),
+      [
+        ["2026-06-06", "夜"],
+        ["2026-06-07", "昼"],
+      ],
+    );
+  }
+});
+
+test("weekend policy and generated off marker persist without changing explicit daily", async () => {
+  for (const canonical of [false, true]) {
+    const path = canonical ? "_projects_森.json" : "_2606_森.json";
+    const data = {
+      projects: [
+        { ...project("p", "2026-06-05", "2026-06-08"), weekend_policy: "off" },
+      ],
+      daily: {
+        "p/2026-06-06": { day: false, night: false, _weekend_auto: "off" },
+        "p/2026-06-07": { day: true, night: true, day_work: "明示設定" },
+      },
+    };
+    await withGit(
+      { [path]: { sha: "weekend-source", data } },
+      {},
+      async ({ calls }) => {
+        const loaded = JSON.parse((await getAll()).body);
+        assert.equal(loaded.projects[0].weekend_policy, "off");
+        assert.deepEqual(loaded.daily, data.daily);
+        assert.equal((await put(loaded._revision, loaded)).statusCode, 200);
+        const saved = JSON.parse(
+          calls.find(
+            (call) => call.path === "git/blobs" && call.method === "POST",
+          ).body.content,
+        );
+        assert.deepEqual(saved, data);
+        assert.equal(
+          expandToItems(saved, "森", "2026-06-06", "2026-06-07").length,
+          2,
+        );
+      },
+    );
+  }
+});
 test("historical same ID reconciles once, distinct IDs remain; owning month daily wins", () => {
   const out = mergeSources([
     {

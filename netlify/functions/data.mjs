@@ -68,6 +68,12 @@ export function validateData(data) {
       fail(400, "工事IDが不正または重複しています。");
     ids.add(p.id);
     if (
+      p.weekend_policy !== undefined &&
+      p.weekend_policy !== "off" &&
+      p.weekend_policy !== "work"
+    )
+      fail(400, "土日の設定は休みまたは稼働を指定してください。");
+    if (
       p.default_shift !== undefined &&
       p.default_shift !== "day" &&
       p.default_shift !== "night"

@@ -156,3 +156,48 @@ test('night default keeps gaps off and explicit legacy day records unchanged', (
   assert.deepEqual(merged.daily['a/2026-09-02'], { day: false, night: false });
   assert.equal(merged.projects[0].default_shift, 'night');
 });
+test('weekend candidate compatibility treats absent/off alike and separates work', () => {
+  const projects = [p('legacy'), p('off', undefined, undefined, { weekend_policy: 'off' }),
+    p('work1', undefined, undefined, { weekend_policy: 'work' }),
+    p('work2', undefined, undefined, { weekend_policy: 'work' })];
+  assert.deepEqual(Merge.findCandidates(projects).map(g => g.ids.slice().sort()), [['legacy', 'off'], ['work1', 'work2']]);
+  assert.deepEqual(Merge.findCandidates(projects).map(g => g.projects[0].weekend_policy), ['off', 'work']);
+  assert.throws(() => Merge.preview(data({}, projects), ['legacy', 'work1']), /土日の稼働設定が異なる/);
+  assert.equal(Object.hasOwn(Merge.merge(data({}, projects), ['legacy', 'off']).projects.find(p => p.id === 'legacy'), 'weekend_policy'), false);
+  assert.equal(Merge.merge(data({}, projects), ['off', 'legacy']).projects.find(p => p.id === 'off').weekend_policy, 'off');
+});
+test('identical automatic/explicit weekend off has no conflict and becomes explicit', () => {
+  const source = data({
+    'a/2026-08-30': { day: false, night: false, _weekend_auto: 'off' },
+    'b/2026-08-30': { day: false, night: false },
+    'other/2026-08-30': { day: false, night: false, _weekend_auto: 'off' }
+  }, [p('a'), p('b'), p('other')]);
+  const before = structuredClone(source);
+  const plan = Merge.preview(source, ['a', 'b']);
+  assert.equal(plan.conflicts.length, 0);
+  assert.deepEqual(plan.daily['2026-08-30'], { day: false, night: false });
+  const merged = Merge.merge(source, ['a', 'b']);
+  assert.deepEqual(merged.daily['a/2026-08-30'], { day: false, night: false });
+  assert.deepEqual(merged.daily['other/2026-08-30'], source.daily['other/2026-08-30']);
+  assert.deepEqual(source, before);
+});
+test('selected conflict and out-of-period auto markers are stripped without losing details', () => {
+  const source = data({
+    'a/2026-08-30': { day: false, night: false, _weekend_auto: 'off', day_work: '指定休み', custom: '保持' },
+    'a/2026-07-05': { day: false, night: false, _weekend_auto: 'off', day_priority_detail: '保持' }
+  });
+  assert.equal(Merge.preview(source, ['a', 'b']).conflicts.length, 1);
+  const merged = Merge.merge(source, ['a', 'b'], { '2026-08-30': 'a' });
+  assert.deepEqual(merged.daily['a/2026-08-30'], { day: false, night: false, day_work: '指定休み', custom: '保持' });
+  assert.deepEqual(merged.daily['a/2026-07-05'], { day: false, night: false, day_priority_detail: '保持' });
+  assert.equal(source.daily['a/2026-08-30']._weekend_auto, 'off');
+});
+test('work-policy night projects retain implicit weekends', () => {
+  const projects = [p('a', undefined, undefined, { default_shift: 'night', weekend_policy: 'work' }),
+    p('b', undefined, undefined, { default_shift: 'night', weekend_policy: 'work' })];
+  assert.deepEqual(Merge.merge(data({}, projects), ['a', 'b']).daily, {});
+  assert.equal(Merge.merge(data({}, projects), ['a', 'b']).projects[0].weekend_policy, 'work');
+  const source = data({ 'a/2026-08-30': { day: false, night: false, _weekend_auto: 'off' } }, projects);
+  const plan = Merge.preview(source, ['a', 'b']);
+  assert.deepEqual(plan.conflicts[0].choices[1].value, { day: false, night: true });
+});
