@@ -16037,12 +16037,12 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "配管撤去・複合ケーブル撤去",
+      "night_work": "B1F～B4F駐車場　配管撤去・複合ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "内田・久保田",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_our_person": "内田",
+      "night_safety_person": "清水",
+      "night_partner_person": "松谷"
     },
     "jz0cmmha/2026-09-15": {
       "day": false,
@@ -16053,12 +16053,12 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "配管撤去・複合ケーブル撤去",
+      "night_work": "B1F～B4F駐車場　配管撤去・複合ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "内田・久保田",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_our_person": "内田",
+      "night_safety_person": "清水",
+      "night_partner_person": "松谷"
     },
     "jz0cmmha/2026-09-16": {
       "day": false,
@@ -16069,12 +16069,12 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "配管撤去・複合ケーブル撤去",
+      "night_work": "B1F～B4F駐車場　配管撤去・複合ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "内田・久保田",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_our_person": "内田",
+      "night_safety_person": "清水",
+      "night_partner_person": "松谷"
     },
     "jz0cmmha/2026-09-17": {
       "day": false,
@@ -16085,12 +16085,12 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "配管撤去・複合ケーブル撤去",
+      "night_work": "B1F～B4F駐車場　配管撤去・複合ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "内田・久保田",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_our_person": "内田",
+      "night_safety_person": "清水",
+      "night_partner_person": "松谷"
     },
     "jz0cmmha/2026-09-18": {
       "day": false,
@@ -16101,12 +16101,12 @@
       "day_safety_person": "",
       "day_partner_person": "",
       "night": true,
-      "night_work": "配管撤去・複合ケーブル撤去",
+      "night_work": "B1F～B4F駐車場　配管撤去・複合ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "内田・久保田",
-      "night_safety_person": "",
-      "night_partner_person": ""
+      "night_our_person": "内田",
+      "night_safety_person": "清水",
+      "night_partner_person": "松谷"
     },
     "jz0cmmha/2026-09-19": {
       "_weekend_auto": "off",
