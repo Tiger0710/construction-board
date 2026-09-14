@@ -2748,6 +2748,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "tfvmk461"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ヒロセホールディングス株式会社稲敷工場・茨城営業所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-09-28",
+      "end_date": "2026-09-28",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "kop21h0i"
     }
   ],
   "daily": {
