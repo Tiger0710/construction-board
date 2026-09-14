@@ -1226,6 +1226,19 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "m62kk9ri"
+    },
+    {
+      "client": "きんでん",
+      "title": "東京メトロPHS撤去工事_G外苑前駅",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "和光電設",
+      "partner_person": "松田",
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-14",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "p4y0rx1u"
     }
   ],
   "daily": {
