@@ -2722,6 +2722,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "p1aaa63x"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ａｕショップ服部",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-09-25",
+      "end_date": "2026-09-25",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "93xnr4zy"
     }
   ],
   "daily": {
