@@ -2694,6 +2694,19 @@
       "start_date": "2026-09-26",
       "end_date": "2026-09-26",
       "id": "n574b50j"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：キユーピー株式会社キユーピータマゴ三田工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-09-15",
+      "end_date": "2026-09-15",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "7qbzuld7"
     }
   ],
   "daily": {
