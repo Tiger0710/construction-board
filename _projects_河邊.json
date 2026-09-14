@@ -87,6 +87,32 @@
       "start_date": "2026-08-17",
       "end_date": "2026-08-18",
       "id": "v8t37lxn"
+    },
+    {
+      "client": "NECネッツエスアイ株式会社",
+      "title": "市ヶ谷駐屯地　静脈認証設置作業",
+      "our_person": "田中(青)",
+      "safety_person": "高橋TK",
+      "partner": "ITE",
+      "partner_person": "今井　猛虎",
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "1tmqp4go"
+    },
+    {
+      "client": "アイング",
+      "title": "そごう千葉店　催事場配線作業",
+      "our_person": "鹿島",
+      "safety_person": "高橋TK",
+      "partner": "萩原通信",
+      "partner_person": "小川　智史",
+      "start_date": "2026-09-16",
+      "end_date": "2026-09-17",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "kb5k47me"
     }
   ],
   "daily": {
