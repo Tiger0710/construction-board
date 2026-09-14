@@ -2707,6 +2707,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "7qbzuld7"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：一芽印刷株式会社倉庫",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-09-16",
+      "end_date": "2026-09-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "tjpbgsli"
     }
   ],
   "daily": {
@@ -3715,6 +3728,22 @@
       "day_work": "ケーブル敷設　機器設置",
       "day_priority": "",
       "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "7qbzuld7/2026-09-15": {
+      "day": true,
+      "day_work": "ケーブル敷設、機器設置",
+      "day_priority": "有",
+      "day_priority_detail": "分電盤作業",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
