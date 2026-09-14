@@ -1239,6 +1239,19 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "p4y0rx1u"
+    },
+    {
+      "client": "きんでん",
+      "title": "東京メトロPHS撤去工事_G神田駅",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "和光電設",
+      "partner_person": "松田",
+      "start_date": "2026-09-16",
+      "end_date": "2026-09-16",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "hzexa5d2"
     }
   ],
   "daily": {
@@ -16186,6 +16199,38 @@
       "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "p4y0rx1u/2026-09-14": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "PHS設備撤去に伴う調査、脚立使用・点検口開閉有",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "松田",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "hzexa5d2/2026-09-16": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "PHS設備撤去に伴う写真撮影",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "松田",
       "night_safety_person": "",
       "night_partner_person": ""
     }
