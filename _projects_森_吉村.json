@@ -2631,17 +2631,6 @@
     },
     {
       "client": "KNSI",
-      "title": "小電力：東邦通信工業株式会社本社",
-      "our_person": "森",
-      "safety_person": "髙橋",
-      "partner": "リフェクト",
-      "partner_person": "山﨑",
-      "start_date": "2026-09-17",
-      "end_date": "2026-09-17",
-      "id": "r51bpse7"
-    },
-    {
-      "client": "KNSI",
       "title": "小電力：キユーピー株式会社つくば鶏卵加工",
       "our_person": "森",
       "safety_person": "髙橋",
@@ -2703,7 +2692,7 @@
       "partner": "PND",
       "partner_person": "廣田",
       "start_date": "2026-09-15",
-      "end_date": "2026-09-15",
+      "end_date": "2026-09-18",
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "7qbzuld7"
@@ -2720,6 +2709,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "tjpbgsli"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社コスモス薬品三木末広店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-09-25",
+      "end_date": "2026-09-25",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "p1aaa63x"
     }
   ],
   "daily": {
