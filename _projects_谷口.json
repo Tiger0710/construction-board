@@ -4454,6 +4454,32 @@
       "start_date": "2026-09-30",
       "end_date": "2026-09-30",
       "id": "0pascvdw"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会一関文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "シージェイシステム",
+      "partner_person": "小関",
+      "start_date": "2026-09-29",
+      "end_date": "2026-09-29",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "mp6ave8f"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会盛岡文化会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "シージェイシステム",
+      "partner_person": "小関",
+      "start_date": "2026-09-29",
+      "end_date": "2026-09-29",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "xfrx9wbb"
     }
   ],
   "daily": {
