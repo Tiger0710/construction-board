@@ -1134,7 +1134,7 @@
       "id": "08mj5xbd"
     },
     {
-      "client": "きんでん",
+      "client": "小田急エンジニアリング",
       "title": "ビナウォーク1番館SB屋外工事",
       "our_person": "増田",
       "safety_person": "平野",
@@ -1142,6 +1142,8 @@
       "partner_person": "遠藤",
       "start_date": "2026-09-04",
       "end_date": "2026-09-15",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "sn20oyla"
     },
     {
