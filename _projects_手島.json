@@ -12447,7 +12447,7 @@
       "night": true,
       "night_work": "足場組立解体",
       "night_priority": "有",
-      "night_priority_detail": "ローリングタワー２段",
+      "night_priority_detail": "足場組立解体",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
