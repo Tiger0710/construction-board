@@ -12181,11 +12181,11 @@
       "night_partner_person": ""
     },
     "t2kpwni3/2026-09-15": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "GPS接続",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "",
+      "day_our_person": "楊",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
