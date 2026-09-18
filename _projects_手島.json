@@ -16314,10 +16314,10 @@
     },
     "qxr0zi6e/2026-09-26": {
       "day": true,
-      "day_work": "ケーブル敷設",
+      "day_work": "共用部ケーブル敷設",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "",
+      "day_our_person": "川本",
       "day_safety_person": "",
       "day_partner_person": "",
       "night": false,
@@ -16329,7 +16329,7 @@
       "night_partner_person": ""
     },
     "qxr0zi6e/2026-09-27": {
-      "day": true,
+      "day": false,
       "day_work": "ケーブル敷設",
       "day_priority": "",
       "day_priority_detail": "",
