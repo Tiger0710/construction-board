@@ -64,10 +64,12 @@
       "title": "PBTS設営／撤去　（川崎市制多摩川花火）",
       "our_person": "秋元",
       "safety_person": "",
-      "partner": "",
+      "partner": "大澤、渋谷",
       "partner_person": "",
       "start_date": "2026-10-01",
       "end_date": "2026-10-05",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "d21d34wj"
     },
     {
