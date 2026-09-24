@@ -42,11 +42,11 @@
       "title": "小田急新宿駅支障移転工事",
       "our_person": "北田",
       "safety_person": "",
-      "partner": "直営",
+      "partner": "直営　朴",
       "partner_person": "",
       "start_date": "2026-09-28",
       "end_date": "2026-10-09",
-      "default_shift": "day",
+      "default_shift": "night",
       "weekend_policy": "off",
       "id": "5uop5x0n"
     },
