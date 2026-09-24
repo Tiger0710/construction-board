@@ -261,6 +261,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "ity75i3u"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "仮）三国",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-10-14",
+      "end_date": "2026-10-14",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "ljiq3pcw"
     }
   ],
   "daily": {
