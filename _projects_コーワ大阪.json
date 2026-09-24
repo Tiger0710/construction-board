@@ -313,6 +313,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "1wh9vmjy"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "仮)西七条名倉",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-10-30",
+      "end_date": "2026-10-30",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "3t0dl0jf"
     }
   ],
   "daily": {
