@@ -2761,6 +2761,45 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "kop21h0i"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：大森機械工業株式会社さくら工房",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-09-25",
+      "end_date": "2026-09-25",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "k6ufxx2j"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：三井不動産リアルティ株式会社三井のリハウス志村坂上センター",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-09-24",
+      "end_date": "2026-09-24",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "w3xln239"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社協栄本社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-09-24",
+      "end_date": "2026-09-24",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "ad0w3ynr"
     }
   ],
   "daily": {
