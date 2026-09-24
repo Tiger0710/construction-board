@@ -2800,6 +2800,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "ad0w3ynr"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社ダイト　ダイトテクス工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-09-30",
+      "end_date": "2026-09-30",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "0hnpsjjg"
     }
   ],
   "daily": {
