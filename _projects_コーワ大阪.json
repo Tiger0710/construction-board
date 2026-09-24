@@ -277,7 +277,7 @@
     },
     {
       "client": "コムシスモバイル",
-      "title": "仮)RPNTT大阪新町新",
+      "title": "仮)RPNTT大阪新町新ECU06BB01",
       "our_person": "山本",
       "safety_person": "西村",
       "partner": "直営",
@@ -287,6 +287,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "wx89rxb9"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "仮)RPNTT阿倍野ECU03BB01",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-10-22",
+      "end_date": "2026-10-23",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "stv0aumn"
     }
   ],
   "daily": {
