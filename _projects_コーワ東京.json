@@ -1,7 +1,7 @@
 {
   "projects": [
     {
-      "client": "コムシスモバイル",
+      "client": "コムシスモバイル（ドコモ）",
       "title": "川崎北木月時刻源２CSR　新設（無）（25P2）",
       "our_person": "秋元",
       "safety_person": "",
@@ -9,10 +9,12 @@
       "partner_person": "",
       "start_date": "2026-09-07",
       "end_date": "2026-09-10",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "pm57dbdf"
     },
     {
-      "client": "コムシスモバイル",
+      "client": "コムシスモバイル（ドコモ）",
       "title": "大森ベルポートb集約有　整備-00F5",
       "our_person": "小泉",
       "safety_person": "",
@@ -47,7 +49,7 @@
       "id": "5uop5x0n"
     },
     {
-      "client": "コムシスモバイル",
+      "client": "コムシスモバイル（ドコモ）",
       "title": "DCM川崎　MH-GH第一　新設（2899）",
       "our_person": "秋元",
       "safety_person": "",
