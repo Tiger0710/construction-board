@@ -1507,7 +1507,7 @@
       "night_partner_person": ""
     },
     "vwrk57o0/2026-10-01": {
-      "day": true,
+      "day": false,
       "day_work": "搬入、立架、機器搭載",
       "day_priority": "",
       "day_priority_detail": "",
@@ -1524,7 +1524,7 @@
     },
     "vwrk57o0/2026-10-02": {
       "day": true,
-      "day_work": "各種ケーブル配線、端末処理",
+      "day_work": "搬入、立架、機器搭載",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -2053,9 +2053,8 @@
       "night_partner_person": ""
     },
     "vwrk57o0/2026-10-03": {
-      "_weekend_auto": "off",
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -2070,9 +2069,8 @@
       "night_partner_person": ""
     },
     "vwrk57o0/2026-10-04": {
-      "_weekend_auto": "off",
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
