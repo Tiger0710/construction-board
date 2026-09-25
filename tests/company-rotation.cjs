@@ -22,7 +22,7 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
     const item = (user, date, n = 0) => ({ user, date, title: '通信設備更新工事 ' + n,
       client: 'テスト客先', our_person: user, safety_person: '安全担当', partner: '協力会社',
       partner_person: '担当者', work_content: '機器設置・動作確認', work_time: n % 2 ? '夜' : '昼' });
-    const items = ['手島', 'コーワ東京', '森'].flatMap(user =>
+    const items = ['手島', 'コーワ東京', '光洋'].flatMap(user =>
       [today, tomorrow].flatMap(date => Array.from({ length: 12 }, (_, n) => item(user, date, n))));
     const data = { items, updated_at: '2026-09-09T03:00:00Z' };
     let dataUnavailable = false;
@@ -49,10 +49,10 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
     await page.clock.runFor(10 * 30000 + 1000);
     check('automatic rotation passes refresh and reaches Koyo', await page.locator('#header-company').textContent(), '光洋エンジニアリング');
     check('global totals retained', await page.locator('#total-count').textContent(), '72');
-    check('new members route to Koyo; HSJ Mori unchanged', await page.evaluate(() =>
-      ['森', '神邊', '猪股', '日向野', '森_吉村'].map(m => companyOfMember(m).id)), ['koyo', 'koyo', 'koyo', 'koyo', 'hsj']);
+    check('Koyo has single member; retired names fall to other; HSJ Mori unchanged', await page.evaluate(() =>
+      ['光洋', '森', '神邊', '猪股', '日向野', '森_吉村'].map(m => companyOfMember(m).id)), ['koyo', 'other', 'other', 'other', 'other', 'hsj']);
     check('empty company skipped and unknown retained', await page.evaluate(({ today, tomorrow }) =>
-      buildDateGroups([{ user: '神邊', date: tomorrow }, { user: '不明', date: today }, { user: '', date: today }], today, tomorrow)
+      buildDateGroups([{ user: '光洋', date: tomorrow }, { user: '不明', date: today }, { user: '', date: today }], today, tomorrow)
         .map(g => [g.company.id, g.items.length]), { today, tomorrow }), [['koyo', 1], ['other', 2]]);
     check('month boundary and fallback dates', await page.evaluate(() =>
       buildDateGroups([{ user: '森', date: '2026-10-01' }, { user: '森', date: '2026-09-30' }], '2026-09-09', '2026-09-10')
@@ -121,9 +121,9 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
 
     check('empty state clears groups', await page.evaluate(() => { renderBoard({ items: [] }); return dateGroups.length; }), 0);
     await page.goto('http://board.test/input.html');
-    await page.waitForFunction(() => typeof KNOWN_MEMBERS !== 'undefined' && KNOWN_MEMBERS.includes('神邊'));
+    await page.waitForFunction(() => typeof KNOWN_MEMBERS !== 'undefined' && KNOWN_MEMBERS.includes('光洋'));
     check('input fallback matches organization', await page.evaluate(() => DEFAULT_ORG), org);
-    check('input Koyo roster', await page.evaluate(() => membersOfCompany('koyo')), ['光洋', '森', '神邊', '猪股', '日向野']);
+    check('input Koyo roster', await page.evaluate(() => membersOfCompany('koyo')), ['光洋']);
     await page.screenshot({ path: path.join(root, '.netlify/qa/input.png') });
     check('browser runtime errors', errors, []);
     console.log(`${passed} PASS, 0 FAIL`);
