@@ -4548,7 +4548,7 @@
     },
     {
       "client": "NESIC",
-      "title": "創価学会山梨平和会館",
+      "title": "創価学会山梨平和会館　ＣＳＣコントローラー交換他工事",
       "our_person": "谷口",
       "safety_person": "保科",
       "partner": "サンテム",
@@ -4566,8 +4566,8 @@
       "safety_person": "保科",
       "partner": "サンテム",
       "partner_person": "加藤",
-      "start_date": "2026-10-13",
-      "end_date": "2026-10-13",
+      "start_date": "2026-10-14",
+      "end_date": "2026-10-14",
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "9tegxpef"
@@ -4714,6 +4714,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "8rbaq031"
+    },
+    {
+      "client": "NESIC",
+      "title": "創価学会南アルプス平和会館　ＣＳＣコントローラー交換他工事",
+      "our_person": "谷口",
+      "safety_person": "保科",
+      "partner": "サンテム",
+      "partner_person": "加藤",
+      "start_date": "2026-10-13",
+      "end_date": "2026-10-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "fp4rlgx0"
     }
   ],
   "daily": {
