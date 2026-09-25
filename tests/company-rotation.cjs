@@ -49,6 +49,15 @@ const org = JSON.parse(fs.readFileSync(path.join(root, 'static/org.json'), 'utf8
     await page.clock.runFor(10 * 30000 + 1000);
     check('automatic rotation passes refresh and reaches Koyo', await page.locator('#header-company').textContent(), '光洋エンジニアリング');
     check('global totals retained', await page.locator('#total-count').textContent(), '72');
+    check('page indicator shown on every screen', await page.evaluate(() => {
+      const seen = [];
+      dateGroups.forEach((g, gi) => { for (let p = 0; p < g.totalPages; p++) { currentGroupIdx = gi; currentPage = p; renderCurrentGroupPage(); seen.push(document.getElementById('page-indicator').textContent); } });
+      return seen;
+    }), ['1 / 2', '2 / 2', '1 / 2', '2 / 2', '1 / 2', '2 / 2', '1 / 2', '2 / 2', '1 / 2', '2 / 2', '1 / 2', '2 / 2']);
+    check('single-page group still shows 1 / 1', await page.evaluate(() => {
+      const saved = dateGroups; dateGroups = [{ company: saved[0].company, date: saved[0].date, label: saved[0].label, items: saved[0].items.slice(0, 2), totalPages: 1 }];
+      currentGroupIdx = 0; currentPage = 0; renderCurrentGroupPage(); const text = document.getElementById('page-indicator').textContent; dateGroups = saved; currentGroupIdx = 4; currentPage = 0; renderCurrentGroupPage(); return text;
+    }), '1 / 1');
     check('Koyo has single member; retired names fall to other; HSJ Mori unchanged', await page.evaluate(() =>
       ['光洋', '森', '神邊', '猪股', '日向野', '森_吉村'].map(m => companyOfMember(m).id)), ['koyo', 'other', 'other', 'other', 'other', 'hsj']);
     check('empty company skipped and unknown retained', await page.evaluate(({ today, tomorrow }) =>

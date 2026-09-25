@@ -466,11 +466,8 @@
       var indicator = document.getElementById("page-indicator");
       var group = dateGroups[currentGroupIdx];
       if (!group) { indicator.textContent = ""; return; }
-      if (group.totalPages > 1) {
-        indicator.textContent = (currentPage + 1) + " / " + group.totalPages;
-      } else {
-        indicator.textContent = "";
-      }
+      // 全画面で常にページ位置を表示（1ページの画面でも "1 / 1"）。画面ごとに出たり消えたりしない
+      indicator.textContent = (currentPage + 1) + " / " + Math.max(1, group.totalPages || 1);
     }
 
     // ===== フッター更新 =====
