@@ -2839,6 +2839,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "qwihgkrg"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：金澤醤油豚骨８番らーめん姫路駅前店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-09-30",
+      "end_date": "2026-09-30",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "oooqseko"
     }
   ],
   "daily": {
