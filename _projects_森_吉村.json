@@ -2904,6 +2904,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "e5sk57e4"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：富士フイルムホールディングス株式会社ＦＢＪ京都銀行茨木ビル",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-05",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "y7i3y7jk"
     }
   ],
   "daily": {
