@@ -2956,6 +2956,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "cl1gdh72"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：マニュライフ生命保険株式会社関西支社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-08",
+      "end_date": "2026-10-08",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "m6q8cq2g"
     }
   ],
   "daily": {
