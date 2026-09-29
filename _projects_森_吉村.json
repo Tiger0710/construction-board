@@ -2943,6 +2943,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "2isnxqm4"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：アラヤ特殊金属株式会社大阪ステンレスセンター",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-07",
+      "end_date": "2026-10-07",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "cl1gdh72"
     }
   ],
   "daily": {
