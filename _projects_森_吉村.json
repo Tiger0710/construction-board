@@ -2969,6 +2969,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "m6q8cq2g"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社コスモス薬品千代田赤岩店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-09",
+      "end_date": "2026-10-09",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "8mbql4r2"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社コスモス薬品下妻小島店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-13",
+      "end_date": "2026-10-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "z938eml4"
     }
   ],
   "daily": {
