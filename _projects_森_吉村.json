@@ -4250,8 +4250,7 @@
       "night_partner_person": ""
     },
     "g37tz3yv/2026-10-17": {
-      "_weekend_auto": "off",
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
