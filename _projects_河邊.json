@@ -113,6 +113,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "kb5k47me"
+    },
+    {
+      "client": "アイング",
+      "title": "そごう千葉　SBリピーター対策",
+      "our_person": "田中",
+      "safety_person": "高橋TK",
+      "partner": "萩原通信",
+      "partner_person": "小川",
+      "start_date": "2026-09-29",
+      "end_date": "2026-09-30",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "vnmy995l"
     }
   ],
   "daily": {
