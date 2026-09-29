@@ -2891,6 +2891,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "stl7ghfh"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社アマダ本社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-05",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "e5sk57e4"
     }
   ],
   "daily": {
