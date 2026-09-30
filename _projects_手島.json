@@ -1177,10 +1177,12 @@
       "title": "踏切照明工事是正作業",
       "our_person": "川本",
       "safety_person": "",
-      "partner": "考勇電設",
+      "partner": "孝勇電設",
       "partner_person": "松谷",
       "start_date": "2026-09-09",
       "end_date": "2026-09-09",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "efykdqmw"
     },
     {
@@ -1210,7 +1212,7 @@
       "title": "小田急ｻｻﾞﾝﾀﾜｰﾄﾞｺﾓJTOEWERﾘﾌﾟﾚｲｽ撤去工事",
       "our_person": "増田",
       "safety_person": "清水",
-      "partner": "考勇電設",
+      "partner": "孝勇電設",
       "partner_person": "松谷",
       "start_date": "2026-09-07",
       "end_date": "2026-10-20",
