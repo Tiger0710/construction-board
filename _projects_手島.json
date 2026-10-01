@@ -1156,7 +1156,7 @@
       "partner": "スリーライズ",
       "partner_person": "宮澤",
       "start_date": "2026-09-07",
-      "end_date": "2026-10-08",
+      "end_date": "2026-09-30",
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "t2kpwni3"
@@ -17605,7 +17605,7 @@
       "night_partner_person": ""
     },
     "t2kpwni3/2026-10-08": {
-      "day": true,
+      "day": false,
       "day_work": "産廃、撤去品回収(HSJ事務所)",
       "day_priority": "",
       "day_priority_detail": "",
