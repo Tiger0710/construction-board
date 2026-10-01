@@ -352,6 +352,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "etw64vud"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "RPNTT南港ECU03BB01-0D11他1",
+      "our_person": "名加",
+      "safety_person": "",
+      "partner": "高橋",
+      "partner_person": "",
+      "start_date": "2026-10-13",
+      "end_date": "2026-10-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "izf8z1ki"
     }
   ],
   "daily": {
