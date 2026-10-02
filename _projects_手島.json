@@ -11659,14 +11659,14 @@
       "night_partner_person": "松谷"
     },
     "sn20oyla/2026-09-04": {
-      "day": true,
+      "day": false,
       "day_work": "足場解体、アンカー補修",
       "day_priority": "",
       "day_priority_detail": "",
-      "day_our_person": "奥濱",
-      "day_safety_person": "清水",
+      "day_our_person": "",
+      "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "資材搬入",
       "night_priority": "",
       "night_priority_detail": "",
