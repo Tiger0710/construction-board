@@ -1646,8 +1646,8 @@
     "d21d34wj/2026-10-01": {
       "day": true,
       "day_work": "PBTS設営",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_priority": "有",
+      "day_priority_detail": "高所作業",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
@@ -1678,8 +1678,8 @@
     "d21d34wj/2026-10-05": {
       "day": true,
       "day_work": "PBTS撤去",
-      "day_priority": "",
-      "day_priority_detail": "",
+      "day_priority": "有",
+      "day_priority_detail": "高所作業",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
