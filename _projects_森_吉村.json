@@ -3047,6 +3047,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "g37tz3yv"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：大森機械工業株式会社長岡旧工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-06",
+      "end_date": "2026-10-06",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "r2rkqabz"
     }
   ],
   "daily": {
