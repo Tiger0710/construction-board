@@ -3099,6 +3099,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "qp35mac0"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：社会医療法人ペガサス馬場記念病院",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-09",
+      "end_date": "2026-10-09",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "ac0297sa"
     }
   ],
   "daily": {
