@@ -3112,6 +3112,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "ac0297sa"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：鉄板焼ステーキ樹直",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-13",
+      "end_date": "2026-10-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "mxow1aqv"
     }
   ],
   "daily": {
