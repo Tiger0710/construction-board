@@ -3125,6 +3125,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "mxow1aqv"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：白光株式会社東京営業所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-16",
+      "end_date": "2026-10-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "od4tyjxl"
     }
   ],
   "daily": {
