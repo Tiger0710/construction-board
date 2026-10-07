@@ -133,7 +133,7 @@
     {
       "client": "コムシスモバイル（JMCIA）",
       "title": "東京メトロ　（現場調査）",
-      "our_person": "小泉",
+      "our_person": "北田",
       "safety_person": "平野",
       "partner": "",
       "partner_person": "",
@@ -159,9 +159,9 @@
     {
       "client": "グローバル ワン（トーエネック）",
       "title": "ソフトバンク（OPEN　3.5G撤去工事）",
-      "our_person": "秋元",
+      "our_person": "北田",
       "safety_person": "平野",
-      "partner": "大澤",
+      "partner": "朴",
       "partner_person": "",
       "start_date": "2026-10-19",
       "end_date": "2026-11-20",
@@ -2879,7 +2879,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
@@ -2895,7 +2895,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
@@ -2911,7 +2911,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
@@ -2927,7 +2927,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
@@ -2943,7 +2943,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
@@ -5673,7 +5673,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-19": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5689,7 +5689,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-20": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5705,7 +5705,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-21": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5721,7 +5721,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-22": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5737,7 +5737,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-23": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5753,7 +5753,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-26": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5769,7 +5769,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-27": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5785,7 +5785,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-28": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5801,7 +5801,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-29": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -5817,7 +5817,7 @@
       "night_partner_person": ""
     },
     "2y7kh8y9/2026-10-30": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
