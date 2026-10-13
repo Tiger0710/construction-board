@@ -1,8 +1,8 @@
 {
   "projects": [
     {
-      "client": "防衛省",
-      "title": "【 海 自 】 NPG -2276 ( 徳島 ) - 点 SR 設 置 工 事",
+      "client": "NESIC",
+      "title": "【 海自 】NPG -2276 (徳島)-点SR設置工事",
       "our_person": "古城",
       "safety_person": "保科",
       "partner": "両義",
@@ -105,7 +105,7 @@
       "id": "f3c85t23"
     },
     {
-      "client": "ソフトバンク",
+      "client": "NESIC",
       "title": "ENW26-045_【法人統合網】10Gアクセス設備増強工事(北池袋)",
       "our_person": "大津",
       "safety_person": "保科",
@@ -118,7 +118,7 @@
       "id": "qkrjp7o7"
     },
     {
-      "client": "小田急電鉄株式会社",
+      "client": "NESIC",
       "title": "小田急インフラネットワーク機器更改（運輸司令所ラック移設）",
       "our_person": "吉村",
       "safety_person": "保科",
@@ -131,7 +131,7 @@
       "id": "i33cjibk"
     },
     {
-      "client": "成田国際空港",
+      "client": "NESIC",
       "title": "成田デジタルサイネージ 1PTB・2PTB受信カード交換",
       "our_person": "露崎",
       "safety_person": "保科",
@@ -144,7 +144,7 @@
       "id": "xa3ihj6o"
     },
     {
-      "client": "京王電鉄株式会社",
+      "client": "NESIC",
       "title": "列車無線設備更新（基地局設置その13）（旧初台）",
       "our_person": "露崎",
       "safety_person": "保科",
@@ -170,7 +170,7 @@
       "id": "kj2a963h"
     },
     {
-      "client": "ソフトバンク",
+      "client": "NESIC",
       "title": "NW26-006（DC終端）ＮＲＩ＿横浜第二データセンター工事",
       "our_person": "寺西",
       "safety_person": "保科",
