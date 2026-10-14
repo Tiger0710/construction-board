@@ -158,11 +158,13 @@
       "client": "KNSI",
       "title": "小電力：佐竹鉄工株式会社本社工場　施工",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "PND",
       "partner_person": "廣田",
       "start_date": "2026-04-16",
       "end_date": "2026-04-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "r6ayrtcz"
     },
     {
