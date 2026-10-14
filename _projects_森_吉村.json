@@ -66,15 +66,17 @@
       "id": "a86ec089"
     },
     {
-      "id": "002bbbdf",
       "client": "KNSI",
       "title": "小電力：ウメキタテラス　調査",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "",
       "partner_person": "",
       "start_date": "2026-04-13",
-      "end_date": "2026-04-13"
+      "end_date": "2026-04-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "002bbbdf"
     },
     {
       "id": "d0c8ddb2",
