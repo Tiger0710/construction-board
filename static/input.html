@@ -617,7 +617,7 @@
     var KNOWN_MEMBERS = [];
     var apiMembers = [];
 
-    // 担当者ごとの固定フィールド（新規/編集時に自動入力＆readonly）
+    // 担当者ごとの初期値（新規追加時のみ自動入力。修正可）
     var USER_FIXED_FIELDS = {
       "森_吉村": { client: "KNSI", our_person: "森", safety_person: "髙橋" },
       "谷口":   { client: "NESIC", safety_person: "保科" }
@@ -1362,9 +1362,9 @@
     }
 
     // 担当者ごとのデフォルト値をフォームに適用
-    //  - 新規/編集どちらでも常にデフォルト値を入れる（既存値は上書き）
+    //  - 新規追加時のみデフォルト値を入れる。編集時は保存済みの値をそのまま表示する
+    //    （編集時に上書きすると、変更済みの担当者が再保存で初期値に戻ってしまうため）
     //  - readonlyにはせず、ユーザーはその場で自由に修正可
-    //  - 編集時に修正せずそのまま保存すると既存データも自然にデフォルトで上書きされる
     function applyUserFixedFields(isNew) {
       var fixed = USER_FIXED_FIELDS[state.user] || {};
       Object.keys(FIXED_FIELD_INPUT_MAP).forEach(function(field) {
@@ -1373,7 +1373,7 @@
         var existingHint = el.parentElement.querySelector(".fixed-hint");
         if (existingHint) existingHint.remove();
         el.readOnly = false;
-        if (fixed[field] === undefined) return;
+        if (!isNew || fixed[field] === undefined) return;
         el.value = fixed[field];
         var label = el.parentElement.querySelector("label");
         if (label) {
