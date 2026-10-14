@@ -116,15 +116,17 @@
       "id": "4974df10"
     },
     {
-      "id": "e0ba42f1",
       "client": "KNSI",
       "title": "小電力：東京電力リニューアブルパワー株式会社水上発電所　施工",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "(株)アスロード",
       "partner_person": "",
       "start_date": "2026-04-14",
-      "end_date": "2026-04-14"
+      "end_date": "2026-04-14",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "e0ba42f1"
     },
     {
       "id": "b79a72c3",
