@@ -145,11 +145,13 @@
       "client": "KNSI",
       "title": "小電力：株式会社ロジスティクス・ネットワーク東扇島物流センター　施工",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "リフェクト",
       "partner_person": "山﨑",
       "start_date": "2026-04-16",
       "end_date": "2026-04-17",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "j6abt8s7"
     },
     {
