@@ -1,15 +1,17 @@
 {
   "projects": [
     {
-      "id": "e230361b",
       "client": "KNSI",
       "title": "小電力：株式会社アマダ本社　本社棟　調査",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "(株)アスロード",
       "partner_person": "大村",
       "start_date": "2026-04-13",
-      "end_date": "2026-04-14"
+      "end_date": "2026-04-14",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "e230361b"
     },
     {
       "id": "d77acc9e",
