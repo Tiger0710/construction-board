@@ -171,11 +171,13 @@
       "client": "KNSI",
       "title": "小電力：株式会社コスモス薬品富士見店　施工",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "アスロード",
       "partner_person": "大村",
       "start_date": "2026-04-16",
       "end_date": "2026-04-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
       "id": "976y3wcz"
     },
     {
