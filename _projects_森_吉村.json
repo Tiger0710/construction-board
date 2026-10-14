@@ -27,15 +27,17 @@
       "id": "d77acc9e"
     },
     {
-      "id": "dba502c3",
       "client": "KNSI",
       "title": "小電力：東京電力ホールディングス株式会社東京電力パワーグリッド水道橋変電所　調査",
       "our_person": "森",
-      "safety_person": "髙橋",
+      "safety_person": "保科",
       "partner": "(株)アスロード",
       "partner_person": "大村",
       "start_date": "2026-04-13",
-      "end_date": "2026-04-13"
+      "end_date": "2026-04-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "dba502c3"
     },
     {
       "id": "d9f321be",
