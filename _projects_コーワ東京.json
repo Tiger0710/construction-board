@@ -7023,7 +7023,7 @@
       "night_partner_person": ""
     },
     "w6e46ppa/2026-11-03": {
-      "day": true,
+      "day": false,
       "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
@@ -7039,8 +7039,8 @@
       "night_partner_person": ""
     },
     "w6e46ppa/2026-11-04": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
