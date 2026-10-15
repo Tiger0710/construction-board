@@ -3205,6 +3205,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "jjg5edtk"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：三井不動産リアルティ株式会社三井のリハウス梅田西センター保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-16",
+      "end_date": "2026-10-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "151nvmtd"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社コスモス薬品三木末広店　保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-16",
+      "end_date": "2026-10-16",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "mkqc5rv8"
     }
   ],
   "daily": {
