@@ -181,6 +181,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "9kkicpvd"
+    },
+    {
+      "client": "NECネッツエスアイ株式会社",
+      "title": "府中4号館屋上設備撤去工事",
+      "our_person": "田中",
+      "safety_person": "高橋TK",
+      "partner": "ITE",
+      "partner_person": "今井",
+      "start_date": "2026-10-18",
+      "end_date": "2026-10-30",
+      "default_shift": "day",
+      "weekend_policy": "work",
+      "id": "mo0ec40h"
     }
   ],
   "daily": {
