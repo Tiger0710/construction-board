@@ -19745,7 +19745,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "22F～25F　ケーブル撤去",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
