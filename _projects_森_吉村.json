@@ -3257,6 +3257,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "hd6b9i50"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：神鋼鋼線工業株式会社ロープ製造所二色浜地区工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-20",
+      "end_date": "2026-10-20",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "2ggf5yz8"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社竹中工務店第一生命五反田ビルディング新築工事",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-20",
+      "end_date": "2026-10-20",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "52xctdk4"
     }
   ],
   "daily": {
