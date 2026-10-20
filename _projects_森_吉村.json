@@ -3283,6 +3283,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "52xctdk4"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社関通ＭＥＧＡ物流センター",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-21",
+      "end_date": "2026-10-21",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "im83agdz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ローソン三木福井店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-21",
+      "end_date": "2026-10-21",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "9gy9f01z"
     }
   ],
   "daily": {
