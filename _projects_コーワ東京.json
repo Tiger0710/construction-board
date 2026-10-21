@@ -9820,9 +9820,8 @@
       "night_partner_person": ""
     },
     "y5qa7r65/2026-11-28": {
-      "_weekend_auto": "off",
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -10038,8 +10037,8 @@
       "night_partner_person": ""
     },
     "y5qa7r65/2026-11-24": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -10054,8 +10053,8 @@
       "night_partner_person": ""
     },
     "y5qa7r65/2026-11-25": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "搬入、立架、機器搭載",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -10070,8 +10069,8 @@
       "night_partner_person": ""
     },
     "y5qa7r65/2026-11-26": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
@@ -10102,8 +10101,8 @@
       "night_partner_person": ""
     },
     "y5qa7r65/2026-11-30": {
-      "day": false,
-      "day_work": "",
+      "day": true,
+      "day_work": "各種ケーブル配線、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
