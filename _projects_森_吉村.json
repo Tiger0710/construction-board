@@ -3374,6 +3374,45 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "qf38q0jn"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：大森機械工業株式会社長岡工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-10-28",
+      "end_date": "2026-10-28",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "w5xo9rz6"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：日本生命保険相互会社北大阪支社　撤去",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-28",
+      "end_date": "2026-10-28",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "uqmfx4ew"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社京都銀行茨木ローン営業部",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-10-29",
+      "end_date": "2026-10-29",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "861wo8dp"
     }
   ],
   "daily": {
