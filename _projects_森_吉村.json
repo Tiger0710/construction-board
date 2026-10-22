@@ -3413,6 +3413,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "861wo8dp"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社マーストーケンソリューション本社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-10-30",
+      "end_date": "2026-10-30",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "6sct73xd"
     }
   ],
   "daily": {
