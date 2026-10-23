@@ -5350,7 +5350,7 @@
       "night_partner_person": ""
     },
     "etw64vud/2026-11-06": {
-      "day": false,
+      "day": true,
       "day_work": "装置取付、配線、整理、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
@@ -6826,7 +6826,7 @@
       "night_partner_person": ""
     },
     "etw64vud/2026-11-11": {
-      "day": true,
+      "day": false,
       "day_work": "装置取付、配線、整理、端末処理",
       "day_priority": "",
       "day_priority_detail": "",
