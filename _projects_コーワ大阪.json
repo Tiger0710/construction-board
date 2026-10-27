@@ -445,6 +445,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "soejpjvp"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "仮）J/聖天下二丁目-03A4",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-11-04",
+      "end_date": "2026-11-04",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "x451rxw6"
     }
   ],
   "daily": {
