@@ -432,6 +432,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "mxfbanev"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "仮）J/MS天王寺39-01X1",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-11-04",
+      "end_date": "2026-11-04",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "soejpjvp"
     }
   ],
   "daily": {
