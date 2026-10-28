@@ -124,8 +124,8 @@
       "safety_person": "平野",
       "partner": "星",
       "partner_person": "",
-      "start_date": "2026-12-14",
-      "end_date": "2026-12-25",
+      "start_date": "2026-12-21",
+      "end_date": "2026-12-23",
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "0a9nucu4"
@@ -280,8 +280,8 @@
       "safety_person": "平野",
       "partner": "大澤",
       "partner_person": "",
-      "start_date": "2026-12-21",
-      "end_date": "2026-12-25",
+      "start_date": "2026-12-14",
+      "end_date": "2026-12-18",
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "k7nh3zzu"
