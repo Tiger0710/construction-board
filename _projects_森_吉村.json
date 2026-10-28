@@ -3478,6 +3478,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "a81wwpr0"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：日活株式会社日活調布撮影所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-11-02",
+      "end_date": "2026-11-02",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "ljv0uh6c"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：大葉セラム株式会社本社　保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "リフェクト",
+      "partner_person": "山﨑",
+      "start_date": "2026-11-05",
+      "end_date": "2026-11-05",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "qz93uzl3"
     }
   ],
   "daily": {
