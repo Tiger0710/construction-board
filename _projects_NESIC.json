@@ -4590,7 +4590,7 @@
       "night_partner_person": ""
     },
     "4hl1y6av/2026-11-03": {
-      "day": true,
+      "day": false,
       "day_work": "ケーブル・機器撤去",
       "day_priority": "有",
       "day_priority_detail": "高所作業・活線近傍作業",
