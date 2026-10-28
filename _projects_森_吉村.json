@@ -3504,6 +3504,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "qz93uzl3"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：社会福祉法人恩賜財団済生会大阪府済生会茨木病院",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-06",
+      "end_date": "2026-11-06",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "x2ibw8rx"
     }
   ],
   "daily": {
