@@ -311,6 +311,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "y5qa7r65"
+    },
+    {
+      "client": "コムシスモバイル（ドコモ）",
+      "title": "神奈川リピータ工事",
+      "our_person": "小泉",
+      "safety_person": "平野",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-25",
+      "end_date": "2026-11-25",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "6a58us07"
     }
   ],
   "daily": {
