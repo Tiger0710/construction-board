@@ -7908,7 +7908,7 @@
       "night_partner_person": ""
     },
     "3t0dl0jf/2026-11-06": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -7956,7 +7956,7 @@
       "night_partner_person": ""
     },
     "3t0dl0jf/2026-11-11": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
