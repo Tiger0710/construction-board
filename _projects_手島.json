@@ -1570,6 +1570,19 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "p8astcve"
+    },
+    {
+      "client": "きんでん",
+      "title": "東京メトロPHS撤去工事",
+      "our_person": "増田",
+      "safety_person": "平野",
+      "partner": "和光電設",
+      "partner_person": "松田",
+      "start_date": "2026-11-04",
+      "end_date": "2026-11-06",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "8bv5xes4"
     }
   ],
   "daily": {
@@ -23260,6 +23273,54 @@
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
       "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "8bv5xes4/2026-11-04": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "半蔵門線押上駅：電源離線作業",
+      "night_priority": "有",
+      "night_priority_detail": "撤去作業・活線近傍",
+      "night_our_person": "松田",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "8bv5xes4/2026-11-05": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "東西線日本橋駅：機器回り・アンテナ撤去・ケーブル撤去",
+      "night_priority": "有",
+      "night_priority_detail": "撤去作業",
+      "night_our_person": "松田",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "8bv5xes4/2026-11-06": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "東西線日本橋駅：機器回り・アンテナ撤去・ケーブル撤去",
+      "night_priority": "有",
+      "night_priority_detail": "撤去作業",
+      "night_our_person": "松田",
       "night_safety_person": "",
       "night_partner_person": ""
     }
