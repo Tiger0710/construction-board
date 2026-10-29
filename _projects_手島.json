@@ -22070,7 +22070,7 @@
       "night": true,
       "night_work": "点検口作成",
       "night_priority": "有",
-      "night_priority_detail": "立ち馬作業",
+      "night_priority_detail": "高所作業（立ち馬）",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -22102,7 +22102,7 @@
       "night": true,
       "night_work": "点検口作成",
       "night_priority": "有",
-      "night_priority_detail": "立ち馬作業",
+      "night_priority_detail": "高所作業（立ち馬）",
       "night_our_person": "",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -22118,7 +22118,7 @@
       "night": true,
       "night_work": "点検口作成",
       "night_priority": "有",
-      "night_priority_detail": "立ち馬作業",
+      "night_priority_detail": "高所作業（立ち馬）",
       "night_our_person": "増田",
       "night_safety_person": "",
       "night_partner_person": ""
@@ -22134,7 +22134,7 @@
       "night": true,
       "night_work": "点検口作成",
       "night_priority": "有",
-      "night_priority_detail": "立ち馬作業",
+      "night_priority_detail": "高所作業（立ち馬）",
       "night_our_person": "増田",
       "night_safety_person": "",
       "night_partner_person": ""
