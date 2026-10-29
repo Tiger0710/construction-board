@@ -1564,7 +1564,7 @@
       "our_person": "増田",
       "safety_person": "清水",
       "partner": "アイティーウェア湘南/SKK",
-      "partner_person": "",
+      "partner_person": "本間",
       "start_date": "2026-11-05",
       "end_date": "2026-11-10",
       "default_shift": "night",
@@ -23256,7 +23256,7 @@
       "night_work": "ケーブル撤去作業",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "",
+      "night_our_person": "本間",
       "night_safety_person": "",
       "night_partner_person": ""
     },
@@ -23272,7 +23272,7 @@
       "night_work": "ケーブル撤去作業",
       "night_priority": "有",
       "night_priority_detail": "撤去作業",
-      "night_our_person": "",
+      "night_our_person": "本間",
       "night_safety_person": "",
       "night_partner_person": ""
     },
