@@ -22985,7 +22985,7 @@
       "night_partner_person": ""
     },
     "mtpbknq8/2026-11-02": {
-      "day": true,
+      "day": false,
       "day_work": "アンテナ・分配器取付・無線機受領",
       "day_priority": "",
       "day_priority_detail": "",
@@ -23001,7 +23001,7 @@
       "night_partner_person": ""
     },
     "mtpbknq8/2026-11-03": {
-      "day": true,
+      "day": false,
       "day_work": "アンテナ・分配器取付・無線機取付",
       "day_priority": "",
       "day_priority_detail": "",
