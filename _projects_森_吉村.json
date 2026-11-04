@@ -3608,6 +3608,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "qc7upwvh"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：くら寿司 上本町店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-12",
+      "end_date": "2026-11-12",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "2zv274z9"
     }
   ],
   "daily": {
