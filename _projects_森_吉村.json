@@ -3569,6 +3569,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "v897s23h"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ＧＲエンジニアリング株式会社カネカ鹿島工場東地区内ＧＲエンジニアリング事務所",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-11-11",
+      "end_date": "2026-11-11",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "o5jqjftz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社ヤオコー　ロッテスクエア武蔵浦和店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-11-11",
+      "end_date": "2026-11-11",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "vuf2eu0x"
     }
   ],
   "daily": {
