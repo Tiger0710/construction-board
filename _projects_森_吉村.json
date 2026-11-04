@@ -3618,9 +3618,22 @@
       "partner_person": "廣田",
       "start_date": "2026-11-12",
       "end_date": "2026-11-12",
-      "default_shift": "day",
+      "default_shift": "night",
       "weekend_policy": "off",
       "id": "2zv274z9"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社ヤオコー　ロッテスクエア武蔵浦和店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-11-12",
+      "end_date": "2026-11-12",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "rcqhif9v"
     }
   ],
   "daily": {
