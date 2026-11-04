@@ -22154,7 +22154,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "点検口作成",
       "night_priority": "有",
       "night_priority_detail": "高所作業（立ち馬）",
