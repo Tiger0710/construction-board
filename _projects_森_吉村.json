@@ -3634,6 +3634,19 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "rcqhif9v"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：Ｓｈｅｌｏ’ｓ　Ｃｒａｆｔ　ｃａｆｅ　＆　ｄｉｎｉｎｇ　Ｓｈｅｌｏ’ｓ　Ｃｒａｆｔ　伏見店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-13",
+      "end_date": "2026-11-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "if3we4yj"
     }
   ],
   "daily": {
