@@ -363,6 +363,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "i8cb203n"
+    },
+    {
+      "client": "コムシスモバイル（JMCIA）",
+      "title": "東京メトロ現場調査",
+      "our_person": "小泉",
+      "safety_person": "平野",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-25",
+      "end_date": "2026-11-26",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "qyk0hw4k"
     }
   ],
   "daily": {
@@ -3573,7 +3586,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "アンテナ撤去",
       "night_priority": "",
       "night_priority_detail": "",
