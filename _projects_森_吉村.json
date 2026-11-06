@@ -5126,8 +5126,7 @@
       "night_partner_person": ""
     },
     "9upyam7g/2026-11-14": {
-      "_weekend_auto": "off",
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
