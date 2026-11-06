@@ -376,6 +376,45 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "lx4ufk4i"
+    },
+    {
+      "client": "NESIC",
+      "title": "【DP】【NW役務】ｱｺﾑ様向けLAN環境構築　YBP-W",
+      "our_person": "廣島",
+      "safety_person": "保科",
+      "partner": "三恵システム",
+      "partner_person": "長嶺",
+      "start_date": "2026-11-19",
+      "end_date": "2026-11-19",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "uc4vk8ur"
+    },
+    {
+      "client": "NESIC",
+      "title": "【DP】【NW役務】ｱｺﾑ様向けLAN環境構築　センバフロント",
+      "our_person": "廣島",
+      "safety_person": "保科",
+      "partner": "三恵システム",
+      "partner_person": "長嶺",
+      "start_date": "2026-11-24",
+      "end_date": "2026-11-24",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "vyihop19"
+    },
+    {
+      "client": "NESIC",
+      "title": "【DP】【NW役務】ｱｺﾑ様向けLAN環境構築　OBP",
+      "our_person": "廣島",
+      "safety_person": "保科",
+      "partner": "三恵システム",
+      "partner_person": "長嶺",
+      "start_date": "2026-11-25",
+      "end_date": "2026-11-25",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "rky4nxy4"
     }
   ],
   "daily": {
@@ -4979,6 +5018,38 @@
       "night_partner_person": ""
     },
     "lx4ufk4i/2026-11-18": {
+      "day": true,
+      "day_work": "ケーブル配線",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "vyihop19/2026-11-24": {
+      "day": true,
+      "day_work": "ケーブル配線",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "vyihop19/2026-11-25": {
       "day": true,
       "day_work": "ケーブル配線",
       "day_priority": "",
