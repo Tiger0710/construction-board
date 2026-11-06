@@ -484,6 +484,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "93ehzqj3"
+    },
+    {
+      "client": "ミライト・ワン",
+      "title": "シティ！ワカヤマ",
+      "our_person": "梅田",
+      "safety_person": "梅田",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "z7w2c8ak"
     }
   ],
   "daily": {
