@@ -376,6 +376,19 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "qyk0hw4k"
+    },
+    {
+      "client": "コムシスモバイル（JMCIA）",
+      "title": "横浜高速鉄道みなとみらい駅～馬車道駅間",
+      "our_person": "小泉",
+      "safety_person": "平野",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-30",
+      "end_date": "2026-11-30",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "9i6n9okf"
     }
   ],
   "daily": {
