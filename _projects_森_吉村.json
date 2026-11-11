@@ -3660,6 +3660,45 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "9upyam7g"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：株式会社東洋信号通信社千葉港グループ",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-11-11",
+      "end_date": "2026-11-11",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "wfdt02cv"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ｒｅｓｉｄｅｎｃｅ．０　Ｔｈｅ　Ｃｌｕｂ",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-11",
+      "end_date": "2026-11-11",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "qufwhfcv"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：オーケー長吉店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-11",
+      "end_date": "2026-11-11",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "sxeyrfqz"
     }
   ],
   "daily": {
@@ -5200,6 +5239,22 @@
       "night": true,
       "night_work": "ケーブル敷設、機器設置、分電盤作業",
       "night_priority": "有",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "sxeyrfqz/2026-11-11": {
+      "day": true,
+      "day_work": "ケーブル敷設、機器設置",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": true,
+      "night_work": "",
+      "night_priority": "",
       "night_priority_detail": "",
       "night_our_person": "",
       "night_safety_person": "",
