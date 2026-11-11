@@ -3699,6 +3699,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "sxeyrfqz"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：京ｔｏ串ｔｏ揚 和紋 京都駅前店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-13",
+      "end_date": "2026-11-13",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "w3pvk97r"
     }
   ],
   "daily": {
