@@ -268,23 +268,10 @@
       "partner": "グローライズ",
       "partner_person": "内村",
       "start_date": "2026-11-09",
-      "end_date": "2026-11-13",
+      "end_date": "2026-11-11",
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "4lounccl"
-    },
-    {
-      "client": "NESIC",
-      "title": "埼玉県熊谷市上奈良字名前淵1100-1、1105-1コミッショニング支援",
-      "our_person": "森",
-      "safety_person": "保科",
-      "partner": "グローライズ",
-      "partner_person": "内村",
-      "start_date": "2026-11-23",
-      "end_date": "2026-11-27",
-      "default_shift": "day",
-      "weekend_policy": "off",
-      "id": "gmzo387q"
     },
     {
       "client": "NESIC",
@@ -4929,22 +4916,6 @@
       "night_partner_person": ""
     },
     "4lounccl/2026-11-09": {
-      "day": true,
-      "day_work": "点検作業支援（導通、検電、検相）",
-      "day_priority": "",
-      "day_priority_detail": "",
-      "day_our_person": "",
-      "day_safety_person": "",
-      "day_partner_person": "",
-      "night": false,
-      "night_work": "",
-      "night_priority": "",
-      "night_priority_detail": "",
-      "night_our_person": "",
-      "night_safety_person": "",
-      "night_partner_person": ""
-    },
-    "gmzo387q/2026-11-23": {
       "day": true,
       "day_work": "点検作業支援（導通、検電、検相）",
       "day_priority": "",
