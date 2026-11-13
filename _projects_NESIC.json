@@ -506,6 +506,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "iervz0tg"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　多賀城（宮城県）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "光エンジニアリング",
+      "partner_person": "野藤",
+      "start_date": "2026-11-17",
+      "end_date": "2026-11-17",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "t1qwq08d"
     }
   ],
   "daily": {
