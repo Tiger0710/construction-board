@@ -480,6 +480,32 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "rp4prwvw"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　霞目（宮城県）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ITE",
+      "partner_person": "敷地",
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-16",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "2thggvq0"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　旭川（北海道）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "大屋",
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-17",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "iervz0tg"
     }
   ],
   "daily": {
