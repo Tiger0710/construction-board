@@ -566,9 +566,9 @@
       "safety_person": "保科",
       "partner": "",
       "partner_person": "",
-      "start_date": "2026-11-01",
-      "end_date": "2026-11-30",
-      "default_shift": "day",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "default_shift": "night",
       "weekend_policy": "off",
       "id": "y9534js9"
     }
