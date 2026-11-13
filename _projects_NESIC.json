@@ -467,6 +467,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "vnz9swui"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　反町（宮城県）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ITE",
+      "partner_person": "敷地",
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-16",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "rp4prwvw"
     }
   ],
   "daily": {
