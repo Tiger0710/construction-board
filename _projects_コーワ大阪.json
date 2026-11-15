@@ -549,6 +549,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "tzwto24h"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "西成千本北-04J3他1",
+      "our_person": "山本",
+      "safety_person": "二ノ宮",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "qbpuefnh"
     }
   ],
   "daily": {
