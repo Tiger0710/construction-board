@@ -536,6 +536,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "3bbhizty"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "J/MS吹田PTP1-0A47 他17件",
+      "our_person": "名加",
+      "safety_person": "二ノ宮",
+      "partner": "高橋",
+      "partner_person": "",
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-19",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "tzwto24h"
     }
   ],
   "daily": {
