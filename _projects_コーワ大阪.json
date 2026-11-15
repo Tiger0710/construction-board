@@ -474,7 +474,7 @@
     },
     {
       "client": "コムシスモバイル",
-      "title": "MS淡路SW4-0795他4",
+      "title": "MS淡路SW4-0795他7",
       "our_person": "山本",
       "safety_person": "西村",
       "partner": "直営",
@@ -9416,7 +9416,7 @@
       "night_partner_person": ""
     },
     "93ehzqj3/2026-11-18": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -9432,7 +9432,7 @@
       "night_partner_person": ""
     },
     "93ehzqj3/2026-11-19": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
