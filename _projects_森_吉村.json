@@ -3790,6 +3790,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "qu01zlxr"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：一般財団法人日本予防医学協会本部　保守",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "OTS",
+      "partner_person": "高田",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "hx32jkq5"
     }
   ],
   "daily": {
