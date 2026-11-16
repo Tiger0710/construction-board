@@ -3764,6 +3764,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "bmgvkx9c"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ミキフーズサプライ株式会社　本社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-11-17",
+      "end_date": "2026-11-17",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "5dfggje7"
     }
   ],
   "daily": {
