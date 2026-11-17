@@ -575,6 +575,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "7u7pmnlp"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "MS亀岡-0147他2",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-25",
+      "end_date": "2026-11-26",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "88x5dt66"
     }
   ],
   "daily": {
