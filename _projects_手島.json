@@ -24922,7 +24922,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "機器回り取付・ラック内ケーブル配線/接続",
       "night_priority": "",
       "night_priority_detail": "",
