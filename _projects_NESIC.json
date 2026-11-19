@@ -701,6 +701,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "s3uz5rht"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　福島（福島県）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ITE",
+      "partner_person": "敷地",
+      "start_date": "2026-11-24",
+      "end_date": "2026-11-24",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "cl6zhctv"
     }
   ],
   "daily": {
