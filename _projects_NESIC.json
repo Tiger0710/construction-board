@@ -740,6 +740,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "lxoegd26"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　真駒内（北海道）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ノーザンコムテック",
+      "partner_person": "大屋",
+      "start_date": "2026-11-24",
+      "end_date": "2026-11-27",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "qco87roh"
     }
   ],
   "daily": {
