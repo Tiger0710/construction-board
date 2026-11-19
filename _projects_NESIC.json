@@ -8264,14 +8264,14 @@
       "night_partner_person": ""
     },
     "j1mzt6fs/2026-11-25": {
-      "day": true,
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": false,
+      "night": true,
       "night_work": "",
       "night_priority": "",
       "night_priority_detail": "",
