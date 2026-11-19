@@ -266,7 +266,7 @@
     },
     {
       "client": "コムシスモバイル",
-      "title": "J/三国-0006他3",
+      "title": "三国-0006他3",
       "our_person": "山本",
       "safety_person": "西村",
       "partner": "直営",
@@ -6071,7 +6071,7 @@
       "night_partner_person": ""
     },
     "ljiq3pcw/2026-12-15": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -6087,7 +6087,7 @@
       "night_partner_person": ""
     },
     "ljiq3pcw/2026-12-16": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
@@ -6103,7 +6103,7 @@
       "night_partner_person": ""
     },
     "ljiq3pcw/2026-12-17": {
-      "day": false,
+      "day": true,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
