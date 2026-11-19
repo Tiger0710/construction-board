@@ -636,6 +636,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "otxbtevj"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　福岡（福岡）",
+      "our_person": "大坂",
+      "safety_person": "保科",
+      "partner": "通信企画",
+      "partner_person": "亀川",
+      "start_date": "2026-11-24",
+      "end_date": "2026-11-24",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "3ltd34rk"
     }
   ],
   "daily": {
