@@ -688,6 +688,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "j1mzt6fs"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　東千歳（北海道）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "光エンジ",
+      "partner_person": "野藤",
+      "start_date": "2026-11-24",
+      "end_date": "2026-11-24",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "s3uz5rht"
     }
   ],
   "daily": {
