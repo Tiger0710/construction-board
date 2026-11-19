@@ -623,6 +623,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "i6kzxv04"
+    },
+    {
+      "client": "NESIC",
+      "title": "DJ01 R8　撤去工事(府中)",
+      "our_person": "河邊",
+      "safety_person": "保科",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2027-01-07",
+      "end_date": "2027-01-15",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "otxbtevj"
     }
   ],
   "daily": {
@@ -7954,6 +7967,40 @@
       "night_partner_person": ""
     },
     "zfe20g5f/2026-11-27": {
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "otxbtevj/2027-01-09": {
+      "_weekend_auto": "off",
+      "day": false,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "otxbtevj/2027-01-10": {
+      "_weekend_auto": "off",
       "day": false,
       "day_work": "",
       "day_priority": "",
