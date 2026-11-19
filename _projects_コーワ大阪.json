@@ -640,6 +640,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "mo48i9jm"
+    },
+    {
+      "client": "コムシスモバイル",
+      "title": "MS初芝-0E13",
+      "our_person": "山本",
+      "safety_person": "西村",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-12-08",
+      "end_date": "2026-12-08",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "bmwlz65q"
     }
   ],
   "daily": {
