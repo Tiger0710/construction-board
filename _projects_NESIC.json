@@ -714,6 +714,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "cl6zhctv"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　青森（青森県）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "光エンジニアリング",
+      "partner_person": "野藤",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-27",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "1ulphmfj"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　郡山（福島県）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ITE",
+      "partner_person": "敷地",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-26",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "lxoegd26"
     }
   ],
   "daily": {
