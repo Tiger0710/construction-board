@@ -584,6 +584,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "zfe20g5f"
+    },
+    {
+      "client": "NESIC",
+      "title": "DJ01 R8　撤去工事(府中)",
+      "our_person": "河邊",
+      "safety_person": "保科",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-27",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "8r3a22fx"
     }
   ],
   "daily": {
