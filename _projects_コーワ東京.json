@@ -366,13 +366,13 @@
     },
     {
       "client": "コムシスモバイル（JMCIA）",
-      "title": "東京メトロ現場調査",
+      "title": "東京メトロ）千川駅（PIM干渉波対策の現場調査）",
       "our_person": "小泉",
       "safety_person": "平野",
       "partner": "",
       "partner_person": "",
       "start_date": "2026-11-25",
-      "end_date": "2026-11-26",
+      "end_date": "2026-11-25",
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "qyk0hw4k"
@@ -415,6 +415,58 @@
       "default_shift": "night",
       "weekend_policy": "off",
       "id": "mc9l06th"
+    },
+    {
+      "client": "コムシスモバイル（JMCIA）",
+      "title": "東京メトロ）秋葉原駅（PIM干渉波の現場調査）",
+      "our_person": "小泉",
+      "safety_person": "平野",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-12-07",
+      "end_date": "2026-12-07",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "iv6tuwud"
+    },
+    {
+      "client": "コムシスモバイル（JMCIA）",
+      "title": "東京メトロ）小伝馬町駅（PIM干渉波対策の現場調査）",
+      "our_person": "",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-12-08",
+      "end_date": "2026-12-08",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "grts0ubl"
+    },
+    {
+      "client": "コムシスモバイル（JMCIA）",
+      "title": "東京メトロ）神田駅（PIM干渉波対策の現場調査）",
+      "our_person": "",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-12-09",
+      "end_date": "2026-12-09",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "so7t2h4w"
+    },
+    {
+      "client": "コムシスモバイル（JMCIA）",
+      "title": "東京メトロ）要町駅（PIM干渉波対策の現場調査）",
+      "our_person": "",
+      "safety_person": "",
+      "partner": "",
+      "partner_person": "",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-26",
+      "default_shift": "night",
+      "weekend_policy": "off",
+      "id": "efbil3u0"
     }
   ],
   "daily": {
