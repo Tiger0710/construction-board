@@ -3933,6 +3933,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "jaikhxbw"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：鎌ケ谷市粟野保育園",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "アスロード",
+      "partner_person": "大村",
+      "start_date": "2026-11-30",
+      "end_date": "2026-11-30",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "po209teq"
     }
   ],
   "daily": {
