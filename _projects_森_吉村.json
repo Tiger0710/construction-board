@@ -3920,6 +3920,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "rtye6lg5"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：白光株式会社本社",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-12-19",
+      "end_date": "2026-12-19",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "jaikhxbw"
     }
   ],
   "daily": {
@@ -5667,6 +5680,23 @@
     },
     "qhlsf171/2026-11-22": {
       "day": true,
+      "day_work": "",
+      "day_priority": "",
+      "day_priority_detail": "",
+      "day_our_person": "",
+      "day_safety_person": "",
+      "day_partner_person": "",
+      "night": false,
+      "night_work": "",
+      "night_priority": "",
+      "night_priority_detail": "",
+      "night_our_person": "",
+      "night_safety_person": "",
+      "night_partner_person": ""
+    },
+    "jaikhxbw/2026-12-19": {
+      "_weekend_auto": "off",
+      "day": false,
       "day_work": "",
       "day_priority": "",
       "day_priority_detail": "",
