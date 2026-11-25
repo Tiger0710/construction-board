@@ -592,6 +592,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "dlaq7ewj"
+    },
+    {
+      "client": "サンワコムシス",
+      "title": "飯田橋駅　UQ保守作業",
+      "our_person": "神邊",
+      "safety_person": "清水",
+      "partner": "直営",
+      "partner_person": "",
+      "start_date": "2026-12-03",
+      "end_date": "2026-12-03",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "jk2im4hb"
     }
   ],
   "daily": {
