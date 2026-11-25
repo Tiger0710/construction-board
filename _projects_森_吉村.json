@@ -3842,6 +3842,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "i5jabech"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：前田工繊株式会社能登川工場",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-25",
+      "end_date": "2026-11-26",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "x1vj320c"
     }
   ],
   "daily": {
