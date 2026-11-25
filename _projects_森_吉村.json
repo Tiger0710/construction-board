@@ -3855,6 +3855,32 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "x1vj320c"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：ザ・ヴェランダ",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-26",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "zmz1f3f5"
+    },
+    {
+      "client": "KNSI",
+      "title": "小電力：マルアイジェイムス山店",
+      "our_person": "森",
+      "safety_person": "髙橋",
+      "partner": "PND",
+      "partner_person": "廣田",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-26",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "zusd6ax8"
     }
   ],
   "daily": {
