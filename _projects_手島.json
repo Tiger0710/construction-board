@@ -24884,7 +24884,7 @@
       "day_our_person": "",
       "day_safety_person": "",
       "day_partner_person": "",
-      "night": true,
+      "night": false,
       "night_work": "最終仕上げ・ケーブル測定・資材搬出",
       "night_priority": "",
       "night_priority_detail": "",
@@ -24893,7 +24893,7 @@
       "night_partner_person": ""
     },
     "xzdheowb/2026-11-27": {
-      "day": true,
+      "day": false,
       "day_work": "楽天TI（インテグ）",
       "day_priority": "",
       "day_priority_detail": "",
