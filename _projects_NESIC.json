@@ -818,6 +818,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "iz2ryj08"
+    },
+    {
+      "client": "NESIC",
+      "title": "SNMS　十条（東京都）",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "ITE",
+      "partner_person": "敷地",
+      "start_date": "2026-11-30",
+      "end_date": "2026-12-02",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "u5mrwmqs"
     }
   ],
   "daily": {
