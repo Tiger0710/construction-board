@@ -792,6 +792,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "8hpm6vx0"
+    },
+    {
+      "client": "NESIC",
+      "title": "【空自】DJ01 R8借上換装 設置調整　横田",
+      "our_person": "西潟",
+      "safety_person": "保科",
+      "partner": "CTS",
+      "partner_person": "藤原",
+      "start_date": "2026-12-02",
+      "end_date": "2026-12-04",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "ncptvve7"
     }
   ],
   "daily": {
