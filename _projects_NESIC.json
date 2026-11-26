@@ -779,6 +779,19 @@
       "default_shift": "day",
       "weekend_policy": "off",
       "id": "l753lstd"
+    },
+    {
+      "client": "NESIC",
+      "title": "IDDN仙台エア漏れ",
+      "our_person": "河邊",
+      "safety_person": "保科",
+      "partner": "KCC",
+      "partner_person": "小森谷",
+      "start_date": "2026-11-30",
+      "end_date": "2026-12-04",
+      "default_shift": "day",
+      "weekend_policy": "off",
+      "id": "8hpm6vx0"
     }
   ],
   "daily": {
